@@ -1,0 +1,3 @@
+development: redis://@{redis.host}:@{redis.port}
+test: redis://@{redis.host}:@{redis.port}
+production: redis://@{redis.host}:@{redis.port}

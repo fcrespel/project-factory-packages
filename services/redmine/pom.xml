@@ -1,0 +1,215 @@
+<!--
+  #[
+  Project Factory Services - Redmine
+  ##
+  Copyright (C) 2013 - 2015 Project Factory team and contributors
+  ##
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  #]
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>fr.project-factory.packages.services</groupId>
+		<artifactId>services</artifactId>
+		<version>3.3.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>redmine</artifactId>
+	<version>2.6.6-2-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Project Factory Services - Redmine</name>
+	<description>Redmine Project Management</description>
+	
+	<properties>
+		<package.disabled>${redmine.disabled}</package.disabled>
+		<package.src.url>http://www.redmine.org/releases</package.src.url>
+		<package.src.file>redmine-${package.version}.tar.gz</package.src.file>
+		<package.dependencies>
+			${package.prefix}-system-httpd,
+			${package.prefix}-system-mysql,
+			${package.prefix}-service-portal,
+			${system.package.libxml2-devel},
+			${system.package.libxslt-devel},
+			${system.package.imagemagick},
+			${system.package.imagemagick-devel}
+		</package.dependencies>
+		<package.rpm.dependencies>
+			${package.dependencies},
+			${package.prefix}-system-ruby >= 3.2.0
+		</package.rpm.dependencies>
+		<package.deb.dependencies>
+			${package.dependencies},
+			${package.prefix}-system-ruby (>= 3.2.0)
+		</package.deb.dependencies>
+		<redmine.db.name>${product.id}_redmine</redmine.db.name>
+		<redmine.db.user>${product.id}_redmine</redmine.db.user>
+		<redmine.bundler.exclude>development:test</redmine.bundler.exclude>
+		<redmine.lang>fr</redmine.lang>
+		<redmine.plugins>
+			hooks_manager=http://projects.andriylesyuk.com/attachments/download/607/hooks_manager-1.0.1.tar.bz2
+			redmine_code_review=https://bitbucket.org/haru_iida/redmine_code_review/get/0.6.5.tar.bz2
+			redmine_dashboard=https://github.com/jgraichen/redmine_dashboard/releases/download/v2.6.1/redmine_dashboard-v2.6.1.zip
+			redmine_embedded_flash=https://github.com/fcrespel/redmine_embedded_flash/archive/1.0.0.zip
+			redmine_hudson=https://bitbucket.org/nobiinu_and/redmine_hudson/get/b5b671e47727.tar.bz2
+			redmine_ldap_sync=https://github.com/thorin/redmine_ldap_sync/archive/2.0.6.zip
+			redmine_lightbox2=https://github.com/paginagmbh/redmine_lightbox2/archive/v0.1.3.zip
+			redmine_monitoring_controlling=https://github.com/alexmonteiro/Redmine-Monitoring-Controlling/archive/3eaf10245ba73ddd8f67f4cc8c6b8a18c18300fe.zip
+			redmine_omniauth_cas=https://github.com/fcrespel/redmine_omniauth_cas/archive/6f6affe47ef5c7918c2c38cb8e1c8facefbfd9d6.zip
+			redmine_private_wiki=https://github.com/f0y/redmine_private_wiki/archive/f36984dea8eb48443127c4626d5e248108e366a6.zip
+			redmine_scm=http://projects.andriylesyuk.com/attachments/download/486/redmine_scm-0.4.3.tar.bz2
+			redmine_testlinklink=http://iij.dl.sourceforge.jp/rp-testlinklink/57441/rp-testlinklink-1.0.0.zip
+			redmine_wiki_extensions=https://bitbucket.org/haru_iida/redmine_wiki_extensions/get/0.6.5.tar.bz2
+		</redmine.plugins>
+	</properties>
+	
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>rpm-maven-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>package-rpm</id>
+							<configuration>
+								<mappings combine.children="append">
+									<mapping>
+										<directory>${package.app}/files</directory>
+										<sources>
+											<softlinkSource>
+												<location>${package.data}/files</location>
+											</softlinkSource>
+										</sources>
+									</mapping>
+									<mapping>
+										<directory>${package.app}/log</directory>
+										<sources>
+											<softlinkSource>
+												<location>${package.log}</location>
+											</softlinkSource>
+										</sources>
+									</mapping>
+								</mappings>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.vafer</groupId>
+					<artifactId>jdeb</artifactId>
+					<executions>
+						<execution>
+							<id>package-deb</id>
+							<configuration>
+								<dataSet combine.children="append">
+									<data>
+										<type>link</type>
+										<linkName>${package.app}/files</linkName>
+										<linkTarget>${package.data}/files</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+									<data>
+										<type>link</type>
+										<linkName>${package.app}/log</linkName>
+										<linkTarget>${package.log}</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+								</dataSet>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>process-resources-extract</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<skip>${package.disabled}</skip>
+							<target>
+								<taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="maven.plugin.classpath" />
+								<untar compression="gzip"
+									src="${project.downloaded.directory}/${package.src.file}"
+									dest="${project.app.directory}">
+									<patternset>
+										<exclude name="*/files/**" />
+										<exclude name="*/log/**" />
+									</patternset>
+									<cutdirsmapper dirs="1" />
+								</untar>
+								<for list="${redmine.plugins}" delimiter="&#9;&#10; " trim="true" param="redmine.plugin">
+									<sequential>
+										<propertyregex property="redmine.plugin.name" override="true" input="@{redmine.plugin}" regexp="^([^=]+)=(.+)$" select="\1" />
+										<propertyregex property="redmine.plugin.url" override="true" input="@{redmine.plugin}" regexp="^([^=]+)=(.+)$" select="\2" />
+										<propertyregex property="redmine.plugin.ext" override="true" input="@{redmine.plugin}" regexp="\.(zip|tar\.gz|tar\.bz2)$" select="\1" />
+										<echo message="==> Installing Redmine plugin ${redmine.plugin.name} (url=${redmine.plugin.url}, ext=${redmine.plugin.ext})" />
+										<get src="${redmine.plugin.url}" dest="${project.downloaded.directory}/${redmine.plugin.name}.${redmine.plugin.ext}" />
+										<switch value="${redmine.plugin.ext}">
+											<case value="zip">
+												<unzip
+													src="${project.downloaded.directory}/${redmine.plugin.name}.${redmine.plugin.ext}"
+													dest="${project.app.directory}/plugins/${redmine.plugin.name}">
+													<cutdirsmapper dirs="1" />
+												</unzip>
+											</case>
+											<case value="tar.gz">
+												<untar compression="gzip"
+													src="${project.downloaded.directory}/${redmine.plugin.name}.${redmine.plugin.ext}"
+													dest="${project.app.directory}/plugins/${redmine.plugin.name}">
+													<cutdirsmapper dirs="1" />
+												</untar>
+											</case>
+											<case value="tar.bz2">
+												<untar compression="bzip2"
+													src="${project.downloaded.directory}/${redmine.plugin.name}.${redmine.plugin.ext}"
+													dest="${project.app.directory}/plugins/${redmine.plugin.name}">
+													<cutdirsmapper dirs="1" />
+												</untar>
+											</case>
+										</switch>
+									</sequential>
+								</for>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

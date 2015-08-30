@@ -1,0 +1,37 @@
+# French strings go here for Rails i18n
+fr:
+  tokens_name: Jetons
+  permission_view_tokens: Voir les Jetons
+  project_module_tokens: Jetons
+  
+  label_contract_information: Informations contractuelles
+  label_contract_start_date: Date de début du contrat
+  label_qualifying_period: Durée de la période probatoire
+  label_month: mois
+  
+  label_tokens_information: Informations liées aux jetons
+  label_tokens_bought: Jetons achetés
+  label_tokens_consumed: Jetons consommés
+  label_tokens_remaining: Jetons restants
+  label_change_tokens_bought: Modifier le nombre de jeton achetés
+  
+  label_invoice_information: Informations liées à la facturation
+  label_invoice_currency: €
+  label_cost: Coût du jeton
+  label_change_cost: Modifier le coût du jeton  
+  
+  label_issue_id: ID demande
+  label_issue_description: Description
+  label_last_update_date: Mise à jour
+  label_issue_tracker: Tracker
+  label_issue_priority: Priorité
+  
+  label_var_lab_title: Configuration des champs personnalisés
+  label_var_lab_desc: Définissez les noms des champs personnalisés à utiliser pour gérer les jetons.
+  label_var_lab_tokens_consumed: Jetons consommés
+  label_var_lab_tokens_cost: Coût du jeton
+  label_var_lab_contract_start_date: Date de début du contrat
+  label_var_lab_qualifying_period: Durée période probatoire
+  label_var_lab_tokens_bought: Jetons achetés
+
+  label_show_issues: Afficher la liste de demandes

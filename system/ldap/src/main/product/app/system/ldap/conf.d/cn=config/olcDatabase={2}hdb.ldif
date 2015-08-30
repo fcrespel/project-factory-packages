@@ -1,0 +1,35 @@
+dn: olcDatabase={2}hdb
+objectClass: olcDatabaseConfig
+objectClass: olcHdbConfig
+olcDatabase: {2}hdb
+olcDbDirectory: @{package.data}
+olcSuffix: @{ldap.base.dn}
+olcAccess: {0}to attrs=userPassword by self write by group.exact="@{ldap.group.rdn.attr}=@{product.group.admins},@{ldap.groups.dn}" write by * auth
+olcAccess: {1}to attrs=shadowLastChange by self write by * read
+olcAccess: {2}to attrs=userPKCS12 by self read by * none
+olcAccess: {3}to dn.subtree="@{ldap.groups.dn}" by group.exact="@{ldap.group.rdn.attr}=@{product.group.admins},@{ldap.groups.dn}" write by * read
+olcAccess: {4}to dn.subtree="@{ldap.users.dn}" by group.exact="@{ldap.group.rdn.attr}=@{product.group.admins},@{ldap.groups.dn}" write by * read
+olcAccess: {5}to * by * read
+olcRootDN: @{ldap.root.dn}
+olcRootPW: %{LDAP_ROOT_PASSWORD_SSHA}
+olcDbCacheSize: 10000
+olcDbCheckpoint: 1024 5
+olcDbIDLcacheSize: 30000
+olcDbIndex: objectclass eq
+olcDbIndex: uidNumber eq
+olcDbIndex: gidNumber eq
+olcDbIndex: member eq
+olcDbIndex: memberUid eq
+olcDbIndex: mail eq
+olcDbIndex: cn eq,sub
+olcDbIndex: displayName eq,sub
+olcDbIndex: uid eq,sub
+olcDbIndex: sn eq,sub
+olcDbIndex: givenName eq,sub
+structuralObjectClass: olcHdbConfig
+entryUUID: 5c063484-a252-1031-90a1-7f7c004e5e48
+creatorsName: cn=config
+createTimestamp: 20120101000000Z
+entryCSN: 20120101000000.000000Z#000000#000#000000
+modifiersName: cn=config
+modifyTimestamp: 20120101000000Z

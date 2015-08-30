@@ -1,0 +1,7 @@
+/*
+ * Project Factory Redmine Theme
+ * By Fabien Crespel (fabien@crespel.net)
+ */
+
+@import url(../../../stylesheets/application.css);
+@import url(/portal/themes/current/css/redmine.css);

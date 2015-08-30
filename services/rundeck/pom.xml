@@ -1,0 +1,184 @@
+<!--
+  #[
+  Project Factory Services - Rundeck
+  ##
+  Copyright (C) 2013 - 2015 Project Factory team and contributors
+  ##
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  #]
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>fr.project-factory.packages.services</groupId>
+		<artifactId>services</artifactId>
+		<version>3.3.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>rundeck</artifactId>
+	<version>2.5.2-2-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Project Factory Services - Rundeck</name>
+	<description>Rundeck Job Scheduler and Runbook Automation</description>
+
+	<properties>
+		<package.disabled>${rundeck.disabled}</package.disabled>
+		<package.root>${package.data}</package.root>
+		<package.src.url>http://download.rundeck.org/war</package.src.url>
+		<package.src.file>rundeck-${package.version}.war</package.src.file>
+		<package.src.bundle>${package.bundle.tomcat}</package.src.bundle>
+		<package.bind>${rundeck.bind}</package.bind>
+		<package.port.shutdown>${rundeck.port.shutdown}</package.port.shutdown>
+		<package.port.ajp>${rundeck.port.ajp}</package.port.ajp>
+		<package.port.http>${rundeck.port.http}</package.port.http>
+		<package.java.opts>${rundeck.java.opts} -Drundeck.config.location=${package.data}/etc/rundeck-config.properties</package.java.opts>
+		<package.dependencies>
+			${package.prefix}-system-httpd,
+			${package.prefix}-system-mysql,
+			${package.prefix}-service-portal
+		</package.dependencies>
+		<rundeck.db.name>${product.id}_rundeck</rundeck.db.name>
+		<rundeck.db.user>${product.id}_rundeck</rundeck.db.user>
+	</properties>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>rpm-maven-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>package-rpm</id>
+							<configuration>
+								<mappings combine.children="append">
+									<mapping>
+										<directory>${package.app}/logs</directory>
+										<sources>
+											<softlinkSource>
+												<location>${package.log}</location>
+											</softlinkSource>
+										</sources>
+									</mapping>
+									<mapping>
+										<directory>${package.data}/tools/lib</directory>
+										<sources>
+											<softlinkSource>
+												<location>${package.app}/webapps/${project.artifactId}/WEB-INF/lib</location>
+											</softlinkSource>
+										</sources>
+									</mapping>
+									<mapping>
+										<directory>${system.init}</directory>
+										<sources>
+											<softlinkSource>
+												<location>${product.bin}/init.d/${project.artifactId}.sh</location>
+												<destination>${package.service}</destination>
+											</softlinkSource>
+										</sources>
+									</mapping>
+								</mappings>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.vafer</groupId>
+					<artifactId>jdeb</artifactId>
+					<executions>
+						<execution>
+							<id>package-deb</id>
+							<configuration>
+								<dataSet combine.children="append">
+									<data>
+										<type>link</type>
+										<linkName>${package.app}/logs</linkName>
+										<linkTarget>${package.log}</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+									<data>
+										<type>link</type>
+										<linkName>${package.data}/tools/lib</linkName>
+										<linkTarget>${package.app}/webapps/${project.artifactId}/WEB-INF/lib</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+									<data>
+										<type>link</type>
+										<linkName>${system.init}/${package.service}</linkName>
+										<linkTarget>${product.bin}/init.d/${project.artifactId}.sh</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+								</dataSet>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>process-resources-extract</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<skip>${package.disabled}</skip>
+							<target>
+								<unzip
+									src="${project.downloaded.directory}/${package.src.file}"
+									dest="${project.app.directory}/webapps/${project.artifactId}">
+								</unzip>
+								<unzip
+									src="${project.app.directory}/webapps/${project.artifactId}/WEB-INF/lib/rundeck-core-${package.version}.jar"
+									dest="${project.data.directory}/tools/bin">
+									<patternset>
+										<include name="com/dtolabs/rundeck/core/cli/templates/**" />
+										<exclude name="**/rd-setup" />
+										<exclude name="**/*.bat" />
+									</patternset>
+									<cutdirsmapper dirs="6" />
+								</unzip>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

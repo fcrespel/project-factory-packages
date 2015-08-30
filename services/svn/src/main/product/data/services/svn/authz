@@ -1,0 +1,22 @@
+# Subversion authorization file
+# http://svnbook.red-bean.com/nightly/en/svn.serverconfig.pathbasedauthz.html
+
+[/]
+@sys-ro = r
+@sys-rw = rw
+@@{product.group.users} = r
+@@{product.group.admins} = rw
+
+### INSERT NEW REPOSITORIES HERE - DO NOT DELETE THIS LINE ###
+
+
+[groups]
+sys-ro = @{bot.user}
+sys-rw = @{root.user}
+### INSERT NEW GROUPS HERE - DO NOT DELETE THIS LINE ###
+
+
+### Start generated content: LDAP Groups to Subversion Authz Groups Bridge (initial version) ###
+@{product.group.users} = @{root.user}, @{bot.user}
+@{product.group.admins} = @{root.user}
+### End generated content: LDAP Groups to Subversion Authz Groups Bridge ###

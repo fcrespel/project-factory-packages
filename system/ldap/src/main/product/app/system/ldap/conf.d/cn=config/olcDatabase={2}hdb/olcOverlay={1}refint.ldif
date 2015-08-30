@@ -1,0 +1,12 @@
+dn: olcOverlay={1}refint
+objectClass: olcRefintConfig
+olcOverlay: {1}refint
+olcRefintAttribute: @{ldap.group.member.attr}
+olcRefintNothing: @{ldap.user.rdn.attr}=@{root.user},@{ldap.users.dn}
+structuralObjectClass: olcRefintConfig
+entryUUID: 42521176-2415-1032-95f9-43849eb58ed2
+creatorsName: cn=config
+createTimestamp: 20120101000000Z
+entryCSN: 20120101000000.000000Z#000000#000#000000
+modifiersName: cn=config
+modifyTimestamp: 20120101000000Z

@@ -1,0 +1,6 @@
+#set( $PRODUCT_HOME = ${project.properties.getProperty('product.home')} )
+# Home page configuration
+
+#if( ${PRODUCT_HOME} != "" )
+Redirect /index.html ${PRODUCT_HOME}
+#end

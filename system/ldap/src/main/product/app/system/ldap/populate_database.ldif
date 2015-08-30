@@ -1,0 +1,66 @@
+dn: @{ldap.base.dn}
+objectClass: top
+objectClass: @{ldap.base.class}
+objectclass: organization
+o: @{ldap.base.rdn.value}
+@{ldap.base.rdn.attr}: @{ldap.base.rdn.value}
+
+dn: @{ldap.users.dn}
+objectClass: @{ldap.users.class}
+@{ldap.users.rdn.attr}: @{ldap.users.rdn.value}
+
+dn: @{ldap.groups.dn}
+objectClass: @{ldap.groups.class}
+@{ldap.groups.rdn.attr}: @{ldap.groups.rdn.value}
+
+dn: @{ldap.user.rdn.attr}=@{root.user},@{ldap.users.dn}
+objectClass: @{ldap.user.class}
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: posixAccount
+uid: @{root.user}
+cn: @{root.user}
+gidNumber: 0
+uidNumber: 0
+homeDirectory: /root
+givenName: System
+sn: Administrator
+displayName: System Administrator
+mail: @{root.user}@@{product.domain}
+userPassword: %{ROOT_PASSWORD_SSHA}
+
+dn: @{ldap.user.rdn.attr}=@{bot.user},@{ldap.users.dn}
+objectClass: @{ldap.user.class}
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+uid: @{bot.user}
+cn: @{bot.user}
+givenName: System
+sn: Bot
+displayName: System Bot
+mail: @{bot.user}@@{product.domain}
+userPassword: %{BOT_PASSWORD_SSHA}
+
+dn: @{ldap.group.rdn.attr}=@{product.group.admins},@{ldap.groups.dn}
+objectClass: @{ldap.group.class}
+objectClass: top
+cn: @{product.group.admins}
+member: @{ldap.user.rdn.attr}=@{root.user},@{ldap.users.dn}
+description: @{product.name} Admins
+
+dn: @{ldap.group.rdn.attr}=@{product.group.supervisors},@{ldap.groups.dn}
+objectClass: @{ldap.group.class}
+objectClass: top
+cn: @{product.group.supervisors}
+member: @{ldap.user.rdn.attr}=@{root.user},@{ldap.users.dn}
+description: @{product.name} Supervisors
+
+dn: @{ldap.group.rdn.attr}=@{product.group.users},@{ldap.groups.dn}
+objectClass: @{ldap.group.class}
+objectClass: top
+cn: @{product.group.users}
+member: @{ldap.user.rdn.attr}=@{root.user},@{ldap.users.dn}
+member: @{ldap.user.rdn.attr}=@{bot.user},@{ldap.users.dn}
+description: @{product.name} Users

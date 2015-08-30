@@ -1,0 +1,200 @@
+#set( $PRODUCT_DOMAIN = ${project.properties.getProperty('product.domain')} )
+#set( $PACKAGE_APP = ${project.properties.getProperty('package.app')} )
+#set( $PACKAGE_DATA = ${project.properties.getProperty('package.data')} )
+#set( $PACKAGE_USER = ${project.properties.getProperty('package.user')} )
+#set( $PACKAGE_GROUP = ${project.properties.getProperty('package.group')} )
+#set( $ROOT_USER = ${project.properties.getProperty('root.user')} )
+#set( $HTTPD_BIND = ${project.properties.getProperty('httpd.bind')} )
+#set( $HTTPD_PORT_HTTP = ${project.properties.getProperty('httpd.port.http')} )
+#set( $HTTPD_PORT_HTTPS = ${project.properties.getProperty('httpd.port.https')} )
+#set( $HTTPD_HSTS_ENABLED = ${project.properties.getProperty('httpd.hsts.enabled')} )
+#set( $HTTPD_MODULES = ${project.properties.getProperty('httpd.modules')} )
+#set( $SYSTEM_HTTPD_APP_MODULES = ${project.properties.getProperty('system.httpd.app.modules')} )
+#set( $SYSTEM_HTTPD_APP_MODULES_BUILTIN = ${project.properties.getProperty('system.httpd.app.modules.builtin')} )
+# httpd configuration file
+
+ServerRoot "${PACKAGE_APP}"
+PidFile run/httpd.pid
+
+Timeout 60
+KeepAlive On
+MaxKeepAliveRequests 100
+KeepAliveTimeout 15
+
+<IfModule prefork.c>
+StartServers       8
+MinSpareServers    5
+MaxSpareServers   20
+ServerLimit      256
+MaxClients       256
+MaxRequestsPerChild  4000
+</IfModule>
+
+<IfModule worker.c>
+StartServers         4
+MaxClients         300
+MinSpareThreads     25
+MaxSpareThreads     75 
+ThreadsPerChild     25
+MaxRequestsPerChild  0
+</IfModule>
+
+# Dynamic modules
+#set( $modules_enabled = $HTTPD_MODULES.split('[, ]+') )
+#set( $modules_builtin = $SYSTEM_HTTPD_APP_MODULES_BUILTIN.split('[, ]+') )
+#foreach( $module in $modules_enabled )
+#if( !$modules_builtin.contains($module) )
+LoadModule ${module}_module ${SYSTEM_HTTPD_APP_MODULES}/mod_${module}.so
+#end
+#end
+
+# External configuration files
+Include conf.d/*.conf
+
+# User/group httpd will run as
+User ${PACKAGE_USER}
+Group ${PACKAGE_GROUP}
+
+# Main server configuration
+ServerAdmin ${ROOT_USER}@${PRODUCT_DOMAIN}
+ServerName ${PRODUCT_DOMAIN}
+ServerTokens Minor
+ServerSignature On
+UseCanonicalName Off
+TraceEnable off
+DocumentRoot "${PACKAGE_DATA}/www/html"
+
+# Logs configuration
+HostnameLookups Off
+ErrorLog logs/error_log
+LogLevel warn
+<IfVersion < 2.4>
+	LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+	LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined_proxy
+	SetEnvIf X-Forwarded-For ".+" IS_FORWARDED
+	CustomLog logs/access_log combined env=!IS_FORWARDED
+	CustomLog logs/access_log combined_proxy env=IS_FORWARDED
+</IfVersion>
+<IfVersion >= 2.4>
+	LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+	CustomLog logs/access_log combined
+	RemoteIPHeader X-Forwarded-For
+</IfVersion>
+
+# Server status configuration
+<Location /server-status>
+	SetHandler server-status
+	<IfVersion < 2.4>
+		Order allow,deny
+		Allow from localhost 127.0.0.1
+		Deny from env=IS_FORWARDED
+	</IfVersion>
+	<IfVersion >= 2.4>
+		<RequireAll>
+			Require local
+		</RequireAll>
+	</IfVersion>
+</Location>
+
+# Directories configuration
+DirectoryIndex index.html
+<Directory />
+	Options FollowSymLinks
+	AllowOverride None
+	<IfVersion < 2.4>
+		Order allow,deny
+		Deny from all
+	</IfVersion>
+	<IfVersion >= 2.4>
+		Require all denied
+	</IfVersion>
+</Directory>
+<Directory "${PACKAGE_DATA}/www/html">
+	Options FollowSymLinks
+	AllowOverride None
+	<IfVersion < 2.4>
+		Order allow,deny
+		Allow from all
+	</IfVersion>
+	<IfVersion >= 2.4>
+		Require all granted
+	</IfVersion>
+</Directory>
+
+# Access file configuration
+AccessFileName .htaccess
+<Files ~ "^\.ht">
+	<IfVersion < 2.4>
+		Order allow,deny
+		Deny from all
+		Satisfy All
+	</IfVersion>
+	<IfVersion >= 2.4>
+		Require all denied
+	</IfVersion>
+</Files>
+
+# MIME configuration
+TypesConfig /etc/mime.types
+AddDefaultCharset UTF-8
+AddHandler type-map var
+AddType application/x-compress .Z
+AddType application/x-gzip .gz .tgz
+AddType application/x-x509-ca-cert .crt
+AddType application/x-pkcs7-crl .crl
+AddType text/html .shtml
+AddOutputFilter INCLUDES .shtml
+MIMEMagicFile conf/magic
+<IfVersion < 2.4>
+	DefaultType text/plain
+</IfVersion>
+
+# Brower-specific hacks
+BrowserMatch "Mozilla/2" nokeepalive
+BrowserMatch "MSIE 4\.0b2;" nokeepalive downgrade-1.0 force-response-1.0
+BrowserMatch "RealPlayer 4\.0" force-response-1.0
+BrowserMatch "Java/1\.0" force-response-1.0
+BrowserMatch "JDK/1\.0" force-response-1.0
+BrowserMatch "Microsoft Data Access Internet Publishing Provider" redirect-carefully
+BrowserMatch "MS FrontPage" redirect-carefully
+BrowserMatch "^WebDrive" redirect-carefully
+BrowserMatch "^WebDAVFS/1.[0123]" redirect-carefully
+BrowserMatch "^gnome-vfs/1.0" redirect-carefully
+BrowserMatch "^XML Spy" redirect-carefully
+BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
+
+# HTTP port and VirtualHost
+#if( ${HTTPD_BIND} != "" )
+Listen ${HTTPD_BIND}:${HTTPD_PORT_HTTP}
+#else
+Listen ${HTTPD_PORT_HTTP}
+#end
+<VirtualHost *:${HTTPD_PORT_HTTP}>
+	ServerName http://${PRODUCT_DOMAIN}:80
+	<IfVersion < 2.4>
+		Include conf/maintenance?conf
+	</IfVersion>
+	<IfVersion >= 2.4>
+		IncludeOptional conf/maintenance?conf
+	</IfVersion>
+</VirtualHost>
+
+# HTTPS port and VirtualHost
+#if( ${HTTPD_BIND} != "" )
+Listen ${HTTPD_BIND}:${HTTPD_PORT_HTTPS}
+#else
+Listen ${HTTPD_PORT_HTTPS}
+#end
+<VirtualHost *:${HTTPD_PORT_HTTPS}>
+	ServerName https://${PRODUCT_DOMAIN}:443
+	SetEnvIf X-Forwarded-Proto ^https$ HTTPS=on
+#if( ${HTTPD_HSTS_ENABLED} == "1" || ${HTTPD_HSTS_ENABLED} == "true" )
+	Header set Strict-Transport-Security max-age=31536000
+#end
+	<IfVersion < 2.4>
+		Include conf/maintenance?conf
+	</IfVersion>
+	<IfVersion >= 2.4>
+		IncludeOptional conf/maintenance?conf
+	</IfVersion>
+</VirtualHost>

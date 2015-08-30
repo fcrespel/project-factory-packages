@@ -1,0 +1,88 @@
+<!--
+  #[
+  Project Factory Services - TestLink
+  ##
+  Copyright (C) 2013 - 2015 Project Factory team and contributors
+  ##
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  #]
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>fr.project-factory.packages.services</groupId>
+		<artifactId>services</artifactId>
+		<version>3.3.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>testlink</artifactId>
+	<version>1.9.9-2-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Project Factory Services - TestLink</name>
+	<description>TestLink test management</description>
+	
+	<properties>
+		<package.disabled>${testlink.disabled}</package.disabled>
+		<package.src.url>http://downloads.sourceforge.net/project/testlink/TestLink%201.9/TestLink%20${package.version}</package.src.url>
+		<package.src.file>testlink-${package.version}.tar.gz</package.src.file>
+		<package.dependencies>
+			${package.prefix}-system-httpd,
+			${package.prefix}-system-php,
+			${package.prefix}-system-mysql,
+			${package.prefix}-service-portal
+		</package.dependencies>
+		<testlink.db.name>${product.id}_testlink</testlink.db.name>
+		<testlink.db.user>${product.id}_testlink</testlink.db.user>
+	</properties>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>process-resources-extract</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<skip>${package.disabled}</skip>
+							<target>
+								<untar compression="gzip"
+									src="${project.downloaded.directory}/${package.src.file}"
+									dest="${project.app.directory}">
+									<patternset>
+										<exclude name="*/*/upload_area/**" />
+										<exclude name="*/*/logs/**" />
+									</patternset>
+									<cutdirsmapper dirs="2" />
+								</untar>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

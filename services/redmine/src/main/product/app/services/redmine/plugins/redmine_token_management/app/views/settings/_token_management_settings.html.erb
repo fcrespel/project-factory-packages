@@ -1,0 +1,30 @@
+<fieldset class="box">
+  <legend><%= l(:label_var_lab_title) %></legend>
+  <p><em><%= l(:label_var_lab_desc) %></em></p>
+  <p>
+    <%= content_tag(:label, l(:label_var_lab_tokens_consumed)) %>
+    <%= text_field_tag 'settings[var_lab_tokens_consumed]', @settings['var_lab_tokens_consumed'], { :size => 50 } %>
+  </p>
+  <p>
+    <%= content_tag(:label, l(:label_var_lab_tokens_cost)) %>
+    <%= text_field_tag 'settings[var_lab_tokens_cost]', @settings['var_lab_tokens_cost'], { :size => 50 } %>
+  </p>
+  <p>
+    <%= content_tag(:label, l(:label_var_lab_contract_start_date)) %>
+    <%= text_field_tag 'settings[var_lab_contract_start_date]', @settings['var_lab_contract_start_date'], { :size => 50 } %>
+  </p>
+  <p>
+    <%= content_tag(:label, l(:label_var_lab_qualifying_period)) %>
+    <%= text_field_tag 'settings[var_lab_qualifying_period]', @settings['var_lab_qualifying_period'], { :size => 50 } %>
+  </p>
+  <p>
+    <%= content_tag(:label, l(:label_var_lab_tokens_bought)) %>
+    <%= text_field_tag 'settings[var_lab_tokens_bought]', @settings['var_lab_tokens_bought'], { :size => 50 } %>
+  </p>
+  <p>
+    <%= content_tag(:label, l(:label_show_issues)) %>
+    <%= check_box_tag 'settings[show_issues]', true, @settings['show_issues'] %>
+  </p>
+</fieldset>
+
+<%= javascript_tag "$('#settings div.tabular').removeClass('box');" %>

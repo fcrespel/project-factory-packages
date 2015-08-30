@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hudson.tasks.Maven_-DescriptorImpl>
+  <helpRedirect/>
+  <installations>
+    <hudson.tasks.Maven_-MavenInstallation>
+      <name>maven2</name>
+      <home>@{product.app}/system/maven2</home>
+      <properties/>
+    </hudson.tasks.Maven_-MavenInstallation>
+    <hudson.tasks.Maven_-MavenInstallation>
+      <name>maven3</name>
+      <home>@{product.app}/system/maven3</home>
+      <properties/>
+    </hudson.tasks.Maven_-MavenInstallation>
+  </installations>
+</hudson.tasks.Maven_-DescriptorImpl>

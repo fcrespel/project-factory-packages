@@ -1,0 +1,91 @@
+#set( $PRODUCT_DOMAIN = ${project.properties.getProperty('product.domain')} )
+#set( $PRODUCT_DOMAIN_ALIAS = ${project.properties.getProperty('product.domain.alias')} )
+#set( $PRODUCT_SCHEME = ${project.properties.getProperty('product.scheme')} )
+#set( $ROOT_USER = ${project.properties.getProperty('root.user')} )
+#set( $HTTPD_HOST = ${project.properties.getProperty('httpd.host')} )
+#set( $HTTPD_PORT_HTTP = ${project.properties.getProperty('httpd.port.http')} )
+#set( $HTTPD_PORT_HTTPS = ${project.properties.getProperty('httpd.port.https')} )
+#set( $HTTPD_VHOST_HOST = ${project.properties.getProperty('httpd.vhost.host')} )
+#set( $HTTPD_VHOST_PORT_HTTP = ${project.properties.getProperty('httpd.vhost.port.http')} )
+#set( $HTTPD_VHOST_PORT_HTTPS = ${project.properties.getProperty('httpd.vhost.port.https')} )
+#set( $HTTPD_APP = ${project.properties.getProperty('package.app')} )
+#set( $HTTPD_LOG = ${project.properties.getProperty('package.log')} )
+#set( $hosts = $HTTPD_VHOST_HOST.split('[, ]+') )
+# ${PRODUCT_DOMAIN} VirtualHost configuration
+
+<IfVersion < 2.4>
+#foreach( $host in $hosts )
+	NameVirtualHost $host:${HTTPD_VHOST_PORT_HTTP}
+#end
+</IfVersion>
+<VirtualHost#foreach( $host in $hosts ) $host:${HTTPD_VHOST_PORT_HTTP}#end>
+	ServerName ${PRODUCT_DOMAIN}
+#if( ${PRODUCT_DOMAIN_ALIAS} != "" )
+	ServerAlias ${PRODUCT_DOMAIN_ALIAS}
+#end
+	ServerAdmin ${ROOT_USER}@${PRODUCT_DOMAIN}
+
+	KeepAlive On
+	ProxyPreserveHost On
+	ProxyRequests Off
+	TraceEnable off
+
+#if( ${PRODUCT_SCHEME} == "https" )
+	Redirect permanent / https://${PRODUCT_DOMAIN}/
+#else
+	RequestHeader set X-Forwarded-Proto "http"
+	SetEnv proxy-sendchunked 1
+	ProxyPass / http://${HTTPD_HOST}:${HTTPD_PORT_HTTP}/
+	ProxyPassReverse / http://${HTTPD_HOST}:${HTTPD_PORT_HTTP}/
+#end
+
+	ErrorLog ${HTTPD_LOG}/proxy_error_log
+	CustomLog ${HTTPD_LOG}/proxy_access_log combined
+</VirtualHost>
+
+<IfModule mod_ssl.c>
+<IfVersion < 2.4>
+#foreach( $host in $hosts )
+	NameVirtualHost $host:${HTTPD_VHOST_PORT_HTTPS}
+#end
+</IfVersion>
+<VirtualHost#foreach( $host in $hosts ) $host:${HTTPD_VHOST_PORT_HTTPS}#end>
+	ServerName ${PRODUCT_DOMAIN}
+#if( ${PRODUCT_DOMAIN_ALIAS} != "" )
+	ServerAlias ${PRODUCT_DOMAIN_ALIAS}
+#end
+	ServerAdmin ${ROOT_USER}@${PRODUCT_DOMAIN}
+
+	KeepAlive On
+	ProxyPreserveHost On
+	ProxyRequests Off
+	TraceEnable off
+
+	RequestHeader set X-Forwarded-Proto "https"
+	SetEnv proxy-sendchunked 1
+	ProxyPass / http://${HTTPD_HOST}:${HTTPD_PORT_HTTPS}/
+	ProxyPassReverse / http://${HTTPD_HOST}:${HTTPD_PORT_HTTPS}/
+
+	ErrorLog ${HTTPD_LOG}/proxy_error_log
+	CustomLog ${HTTPD_LOG}/proxy_access_log combined
+
+	SSLEngine on
+	SSLProtocol all -SSLv2 -SSLv3
+	SSLCipherSuite ALL:!MD5:!aNULL:!ADH:!eNULL:!LOW:!EXP:RC4+RSA:+HIGH:+MEDIUM
+	SSLCertificateFile ${HTTPD_APP}/ssl/servercert.pem
+	SSLCertificateKeyFile ${HTTPD_APP}/ssl/serverkey.pem
+	SSLCertificateChainFile ${HTTPD_APP}/ssl/cacert.pem
+	
+	<Location />
+		SSLRenegBufferSize 524288
+	</Location>
+
+	<Files ~ "\.(cgi|shtml|phtml|php3|php|php5?)$">
+		SSLOptions +StdEnvVars
+	</Files>
+
+	SetEnvIf User-Agent ".*MSIE.*" \
+			 nokeepalive ssl-unclean-shutdown \
+			 downgrade-1.0 force-response-1.0
+</VirtualHost>
+</IfModule>

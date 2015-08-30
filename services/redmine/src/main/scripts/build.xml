@@ -1,0 +1,33 @@
+<project>
+	<property name="bundler.bin" value="bundle" />
+	<target name="install">
+		<chmod perm="+x" verbose="true">
+			<fileset dir="${project.product.directory}">
+				<include name="**/*.sh" />
+			</fileset>
+		</chmod>
+		<exec executable="${bundler.bin}" dir="${project.app.directory}" failonerror="true">
+			<arg value="config" />
+			<arg value="--local" />
+			<arg value="without" />
+			<arg value="${redmine.bundler.exclude}" />
+		</exec>
+		<exec executable="${bundler.bin}" dir="${project.app.directory}" failonerror="true">
+			<arg value="config" />
+			<arg value="--local" />
+			<arg value="path" />
+			<arg value="vendor/bundle" />
+		</exec>
+		<exec executable="${bundler.bin}" dir="${project.app.directory}" failonerror="true">
+			<arg value="package" />
+			<arg value="--all" />
+			<arg value="--no-install" />
+		</exec>
+		<exec executable="${bundler.bin}" dir="${project.app.directory}" failonerror="true">
+			<arg value="config" />
+			<arg value="--delete" />
+			<arg value="no_install" />
+		</exec>
+		<delete dir="${project.app.directory}/vendor/bundle" />
+	</target>
+</project>

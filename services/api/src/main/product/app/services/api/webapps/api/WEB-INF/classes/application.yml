@@ -1,0 +1,43 @@
+server:
+  port: @{package.port.http}
+  contextPath: /api
+management:
+  contextPath: /management
+security:
+  user:
+    name: @{root.user}
+    password: %{ROOT_PASSWORD}
+    role: USER,ADMIN
+authorization:
+  userAttribute: name
+  userAuthorityPrefix: USER_
+  userAuthorityUppercase: false
+  groupAttribute: details?.get('attributes')?.^[#this['groups']!=null]?.get('groups')
+  groupAuthorityPrefix: GROUP_
+  groupAuthorityUppercase: false
+  authorityMapping:
+    ROLE_ADMIN: GROUP_@{product.group.admins}
+spring:
+  oauth2:
+    sso:
+      home:
+        secure: true
+        path: /
+    client:
+      accessTokenUri: @{cas.url}oauth2.0/accessToken
+      userAuthorizationUri: @{cas.url}oauth2.0/authorize
+      clientId: @{product.id}-api
+      clientSecret: %{API_OAUTH_PASSWORD}
+      clientAuthenticationScheme: query
+      authenticationScheme: query
+    resource:
+      userInfoUri: @{cas.url}oauth2.0/profile
+      preferTokenInfo: false
+ldap:
+  contextSource:
+    url: ldap://@{ldap.host}:@{ldap.port}
+    base: @{ldap.base.dn}
+    userDn: @{ldap.root.dn}
+    password: %{LDAP_ROOT_PASSWORD}
+logging:
+  path: @{package.log}

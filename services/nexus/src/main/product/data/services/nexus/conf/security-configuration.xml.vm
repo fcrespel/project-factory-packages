@@ -1,0 +1,17 @@
+#set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
+<?xml version="1.0" encoding="UTF-8"?>
+<security-configuration>
+  <version>2.0.8</version>
+  <anonymousUsername>anonymous</anonymousUsername>
+  <anonymousPassword>{k4HFfGgqPn8H1AndYPnnvJi35wk8dGC7Z7iIa+yUwho=}</anonymousPassword>
+  <realms>
+    <realm>XmlAuthenticatingRealm</realm>
+    <realm>XmlAuthorizingRealm</realm>
+#if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
+    <realm>CasAuthenticatingRealm</realm>
+#else
+    <realm>NexusLdapAuthenticationRealm</realm>
+#end
+  </realms>
+  <hashIterations>1024</hashIterations>
+</security-configuration>

@@ -1,0 +1,4 @@
+= Redmine Token Management plugin
+
+This plugin lets you track issue tokens (billing units) per project.
+To configure it, go to Administration, Plugins, and click Configure next to this plugin's name.

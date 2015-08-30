@@ -1,0 +1,152 @@
+<!--
+  #[
+  Project Factory Services - Manager
+  ##
+  Copyright (C) 2013 - 2015 Project Factory team and contributors
+  ##
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  #]
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>fr.project-factory.packages.services</groupId>
+		<artifactId>services</artifactId>
+		<version>3.3.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>manager</artifactId>
+	<version>3.3.0-1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Project Factory Services - Manager</name>
+	<description>Platform Manager</description>
+
+	<properties>
+		<package.disabled>${manager.disabled}</package.disabled>
+		<package.src.bundle>${package.bundle.tomcat}</package.src.bundle>
+		<package.bind>${manager.bind}</package.bind>
+		<package.port.shutdown>${manager.port.shutdown}</package.port.shutdown>
+		<package.port.ajp>${manager.port.ajp}</package.port.ajp>
+		<package.port.http>${manager.port.http}</package.port.http>
+		<package.java.opts>${manager.java.opts}</package.java.opts>
+		<package.dependencies>
+			${package.prefix}-system-httpd,
+			${package.prefix}-system-tomcat,
+			${package.prefix}-service-portal,
+			${package.prefix}-service-api
+		</package.dependencies>
+		<manager.version>${package.version}-SNAPSHOT</manager.version>
+	</properties>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>rpm-maven-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>package-rpm</id>
+							<configuration>
+								<mappings combine.children="append">
+									<mapping>
+										<directory>${package.app}/logs</directory>
+										<sources>
+											<softlinkSource>
+												<location>${package.log}</location>
+											</softlinkSource>
+										</sources>
+									</mapping>
+									<mapping>
+										<directory>${system.init}</directory>
+										<sources>
+											<softlinkSource>
+												<location>${product.bin}/init.d/${project.artifactId}.sh</location>
+												<destination>${package.service}</destination>
+											</softlinkSource>
+										</sources>
+									</mapping>
+								</mappings>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.vafer</groupId>
+					<artifactId>jdeb</artifactId>
+					<executions>
+						<execution>
+							<id>package-deb</id>
+							<configuration>
+								<dataSet combine.children="append">
+									<data>
+										<type>link</type>
+										<linkName>${package.app}/logs</linkName>
+										<linkTarget>${package.log}</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+									<data>
+										<type>link</type>
+										<linkName>${system.init}/${package.service}</linkName>
+										<linkTarget>${product.bin}/init.d/${project.artifactId}.sh</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+								</dataSet>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>process-resources-extract</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<skip>${package.disabled}</skip>
+							<artifactItems>
+								<artifactItem>
+									<outputDirectory>${project.app.directory}/webapps/${project.artifactId}</outputDirectory>
+									<groupId>fr.project-factory.web</groupId>
+									<artifactId>manager</artifactId>
+									<version>${manager.version}</version>
+									<type>war</type>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

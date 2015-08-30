@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hudson.plugins.testlink.TestLinkBuilderDescriptor plugin="testlink@3.1.8">
+  <testLinkBuildType>hudson.plugins.testlink.TestLinkBuilder</testLinkBuildType>
+  <installations>
+    <hudson.plugins.testlink.TestLinkInstallation>
+      <name>TestLink</name>
+      <url>@{product.scheme}://@{product.domain}/testlink/lib/api/xmlrpc.php</url>
+      <devKey>%{BOT_PASSWORD_MD5}</devKey>
+      <testLinkJavaAPIProperties></testLinkJavaAPIProperties>
+    </hudson.plugins.testlink.TestLinkInstallation>
+  </installations>
+</hudson.plugins.testlink.TestLinkBuilderDescriptor>

@@ -1,0 +1,161 @@
+<!--
+  #[
+  Project Factory System - HTTPD
+  ##
+  Copyright (C) 2013 - 2015 Project Factory team and contributors
+  ##
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  #]
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>fr.project-factory.packages.system</groupId>
+		<artifactId>system</artifactId>
+		<version>3.3.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>httpd</artifactId>
+	<version>3.3.0-1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Project Factory System - HTTPD</name>
+	<description>Apache HTTPD Web Server</description>
+	
+	<properties>
+		<package.disabled>${httpd.disabled}</package.disabled>
+		<package.user>${httpd.user}</package.user>
+		<package.group>${httpd.group}</package.group>
+		<package.arch>${system.arch}</package.arch>
+		<package.dependencies>
+			${system.package.httpd},
+			${system.package.httpd-devel},
+			${system.package.apr-devel},
+			${system.package.apr-util-devel},
+			${system.package.mod_ldap},
+			${system.package.mod_ssl}
+		</package.dependencies>
+	</properties>
+	
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>rpm-maven-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>package-rpm</id>
+							<configuration>
+								<mappings combine.children="append">
+									<mapping>
+										<directory>${package.app}/logs</directory>
+										<sources>
+											<softlinkSource>
+												<location>${package.log}</location>
+											</softlinkSource>
+										</sources>
+									</mapping>
+									<mapping>
+										<directory>${package.data}/www</directory>
+										<sources>
+											<softlinkSource>
+												<location>${system.httpd.data.icons}</location>
+											</softlinkSource>
+										</sources>
+									</mapping>
+									<mapping>
+										<directory>${system.init}</directory>
+										<sources>
+											<softlinkSource>
+												<location>${product.bin}/init.d/httpd.sh</location>
+												<destination>${package.service}</destination>
+											</softlinkSource>
+										</sources>
+									</mapping>
+									<mapping>
+										<directory>${system.httpd.app.vhosts}</directory>
+										<sources>
+											<softlinkSource>
+												<location>${package.app}/conf/proxy.conf</location>
+												<destination>${product.id}.conf</destination>
+											</softlinkSource>
+										</sources>
+									</mapping>
+								</mappings>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.vafer</groupId>
+					<artifactId>jdeb</artifactId>
+					<executions>
+						<execution>
+							<id>package-deb</id>
+							<configuration>
+								<dataSet combine.children="append">
+									<data>
+										<type>link</type>
+										<linkName>${package.app}/logs</linkName>
+										<linkTarget>${package.log}</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+									<data>
+										<type>link</type>
+										<linkName>${package.data}/www/icons</linkName>
+										<linkTarget>${system.httpd.data.icons}</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+									<data>
+										<type>link</type>
+										<linkName>${system.init}/${package.service}</linkName>
+										<linkTarget>${product.bin}/init.d/httpd.sh</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+									<data>
+										<type>link</type>
+										<linkName>${system.httpd.app.vhosts}/${product.id}.conf</linkName>
+										<linkTarget>${package.app}/conf/proxy.conf</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+								</dataSet>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>

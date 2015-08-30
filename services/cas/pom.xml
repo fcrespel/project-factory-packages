@@ -1,0 +1,229 @@
+<!--
+  #[
+  Project Factory Services - CAS
+  ##
+  Copyright (C) 2013 - 2015 Project Factory team and contributors
+  ##
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  #]
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>fr.project-factory.packages.services</groupId>
+		<artifactId>services</artifactId>
+		<version>3.3.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>cas</artifactId>
+	<version>3.5.3-4-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Project Factory Services - CAS</name>
+	<description>Jasig Central Authentication Service</description>
+
+	<properties>
+		<package.disabled>${cas.disabled}</package.disabled>
+		<package.src.bundle>${package.bundle.tomcat}</package.src.bundle>
+		<package.bind>${cas.bind}</package.bind>
+		<package.port.shutdown>${cas.port.shutdown}</package.port.shutdown>
+		<package.port.ajp>${cas.port.ajp}</package.port.ajp>
+		<package.port.http>${cas.port.http}</package.port.http>
+		<package.java.opts>${cas.java.opts}</package.java.opts>
+		<package.dependencies>
+			${package.prefix}-system-httpd,
+			${package.prefix}-system-mysql,
+			${package.prefix}-system-tomcat,
+			${package.prefix}-service-portal,
+			${system.package.mod_auth_cas}
+		</package.dependencies>
+		<cas.version>3.5.3</cas.version>
+		<cas.db.name>${product.id}_cas</cas.db.name>
+		<cas.db.user>${product.id}_cas</cas.db.user>
+		<cas.rest.auth.connectTimeout>5000</cas.rest.auth.connectTimeout>
+		<cas.rest.auth.readTimeout>5000</cas.rest.auth.readTimeout>
+		<cas.rest.auth.ssl.trustStore>file://${package.app}/conf/trust.jks</cas.rest.auth.ssl.trustStore>
+	</properties>
+
+	<dependencies>
+		<!-- CAS Server -->
+		<dependency>
+			<groupId>org.jasig.cas</groupId>
+			<artifactId>cas-server-webapp</artifactId>
+			<version>${cas.version}</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>org.jasig.cas</groupId>
+			<artifactId>cas-server-support-oauth</artifactId>
+			<version>${cas.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jasig.cas</groupId>
+			<artifactId>cas-server-support-openid</artifactId>
+			<version>${cas.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>junit</artifactId>
+					<groupId>junit</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>xml-apis</artifactId>
+					<groupId>xml-apis</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.jasig.cas</groupId>
+			<artifactId>cas-server-support-ldap</artifactId>
+			<version>${cas.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jasig.cas</groupId>
+			<artifactId>cas-server-support-radius</artifactId>
+			<version>${cas.version}</version>
+		</dependency>
+
+		<!-- CAS Client -->
+		<dependency>
+			<groupId>org.jasig.cas.client</groupId>
+			<artifactId>cas-client-core</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.opensaml</groupId>
+			<artifactId>opensaml1</artifactId>
+			<version>1.1</version>
+		</dependency>
+		
+		<!-- Spring Framework -->
+		<dependency>
+			<groupId>org.springframework.ws</groupId>
+			<artifactId>spring-ws-security</artifactId>
+			<version>2.1.2.RELEASE</version>
+		</dependency>
+
+		<!-- Apache Commons -->
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+		<!-- Hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>4.1.0.Final</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>xml-apis</artifactId>
+					<groupId>xml-apis</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.2.0.Final</version>
+		</dependency>
+		
+		<!-- Servlet API and JSP taglibs -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.3</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>rpm-maven-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>package-rpm</id>
+							<configuration>
+								<mappings combine.children="append">
+									<mapping>
+										<directory>${package.app}/logs</directory>
+										<sources>
+											<softlinkSource>
+												<location>${package.log}</location>
+											</softlinkSource>
+										</sources>
+									</mapping>
+									<mapping>
+										<directory>${system.init}</directory>
+										<sources>
+											<softlinkSource>
+												<location>${product.bin}/init.d/${project.artifactId}.sh</location>
+												<destination>${package.service}</destination>
+											</softlinkSource>
+										</sources>
+									</mapping>
+								</mappings>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.vafer</groupId>
+					<artifactId>jdeb</artifactId>
+					<executions>
+						<execution>
+							<id>package-deb</id>
+							<configuration>
+								<dataSet combine.children="append">
+									<data>
+										<type>link</type>
+										<linkName>${package.app}/logs</linkName>
+										<linkTarget>${package.log}</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+									<data>
+										<type>link</type>
+										<linkName>${system.init}/${package.service}</linkName>
+										<linkTarget>${product.bin}/init.d/${project.artifactId}.sh</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+								</dataSet>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

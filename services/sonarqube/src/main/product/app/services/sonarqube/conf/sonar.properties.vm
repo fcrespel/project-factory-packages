@@ -1,0 +1,110 @@
+#set( $PRODUCT_DOMAIN = ${project.properties.getProperty('product.domain')} )
+#set( $PRODUCT_SCHEME = ${project.properties.getProperty('product.scheme')} )
+#set( $PACKAGE_APP = ${project.properties.getProperty('package.app')} )
+#set( $PACKAGE_DATA = ${project.properties.getProperty('package.data')} )
+#set( $PACKAGE_BIND = ${project.properties.getProperty('package.bind')} )
+#set( $PACKAGE_PORT_HTTP = ${project.properties.getProperty('package.port.http')} )
+#set( $PACKAGE_PORT_AJP = ${project.properties.getProperty('package.port.ajp')} )
+#set( $SONARQUBE_DB_USER = ${project.properties.getProperty('sonarqube.db.user')} )
+#set( $SONARQUBE_DB_NAME = ${project.properties.getProperty('sonarqube.db.name')} )
+#set( $BOT_USER = ${project.properties.getProperty('bot.user')} )
+#set( $PROXY_HOST = ${project.properties.getProperty('proxy.host')} )
+#set( $PROXY_PORT = ${project.properties.getProperty('proxy.port')} )
+#set( $MYSQL_HOST = ${project.properties.getProperty('mysql.host')} )
+#set( $MYSQL_PORT = ${project.properties.getProperty('mysql.port')} )
+#set( $LDAP_HOST = ${project.properties.getProperty('ldap.host')} )
+#set( $LDAP_PORT = ${project.properties.getProperty('ldap.port')} )
+#set( $LDAP_USERS_DN = ${project.properties.getProperty('ldap.users.dn')} )
+#set( $LDAP_USER_CLASS = ${project.properties.getProperty('ldap.user.class')} )
+#set( $LDAP_USER_RDN_ATTR = ${project.properties.getProperty('ldap.user.rdn.attr')} )
+#set( $LDAP_USER_DISPLAYNAME_ATTR = ${project.properties.getProperty('ldap.user.displayname.attr')} )
+#set( $LDAP_USER_MAIL_ATTR = ${project.properties.getProperty('ldap.user.mail.attr')} )
+#set( $LDAP_GROUPS_DN = ${project.properties.getProperty('ldap.groups.dn')} )
+#set( $LDAP_GROUP_CLASS = ${project.properties.getProperty('ldap.group.class')} )
+#set( $LDAP_GROUP_RDN_ATTR = ${project.properties.getProperty('ldap.group.rdn.attr')} )
+#set( $LDAP_GROUP_MEMBER_ATTR = ${project.properties.getProperty('ldap.group.member.attr')} )
+#set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
+#set( $CAS_URL = ${project.properties.getProperty('cas.url')} )
+# SonarQube configuration
+
+#--------------------------------------------------------------------------------------------------
+# DATABASE
+
+sonar.jdbc.username=${SONARQUBE_DB_USER}
+sonar.jdbc.password=%{SONARQUBE_DB_PASSWORD}
+sonar.jdbc.url=jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${SONARQUBE_DB_NAME}?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance
+
+#----- Connection pool settings
+sonar.jdbc.maxActive=20
+sonar.jdbc.maxIdle=5
+sonar.jdbc.minIdle=2
+sonar.jdbc.maxWait=5000
+sonar.jdbc.minEvictableIdleTimeMillis=600000
+sonar.jdbc.timeBetweenEvictionRunsMillis=30000
+
+
+#--------------------------------------------------------------------------------------------------
+# WEB SERVER
+
+sonar.web.javaOpts=-server -Xmx768m -XX:MaxPermSize=160m -XX:+HeapDumpOnOutOfMemoryError -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Djruby.management.enabled=false -Djavax.net.ssl.trustStore=${PACKAGE_APP}/conf/trust.jks
+sonar.web.host=${PACKAGE_BIND}
+sonar.web.context=/sonarqube
+sonar.web.port=${PACKAGE_PORT_HTTP}
+sonar.ajp.port=${PACKAGE_PORT_AJP}
+
+
+#--------------------------------------------------------------------------------------------------
+# SEARCH INDEX
+
+sonar.search.port=0
+
+
+#--------------------------------------------------------------------------------------------------
+# UPDATE CENTER
+
+http.proxyHost=${PROXY_HOST}
+http.proxyPort=${PROXY_PORT}
+
+
+#--------------------------------------------------------------------------------------------------
+# OTHERS
+
+sonar.notifications.delay=60
+sonar.path.data=${PACKAGE_DATA}/data
+sonar.path.temp=${PACKAGE_DATA}/temp
+
+
+#--------------------------------------------------------------------------------------------------
+# SECURITY REALM
+
+#if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
+sonar.security.realm=cas
+#else
+sonar.security.realm=LDAP
+#end
+sonar.security.savePassword=false
+sonar.security.localUsers=${BOT_USER}
+sonar.authenticator.createUsers=true
+sonar.authenticator.updateUserAttributes=true
+sonar.forceAuthentication=true
+
+# LDAP configuration
+ldap.url=ldap://${LDAP_HOST}:${LDAP_PORT}
+ldap.user.baseDn=${LDAP_USERS_DN}
+ldap.user.request=(&(objectClass=${LDAP_USER_CLASS})(${LDAP_USER_RDN_ATTR}={login}))
+ldap.user.realNameAttribute=${LDAP_USER_DISPLAYNAME_ATTR}
+ldap.user.emailAttribute=${LDAP_USER_MAIL_ATTR}
+ldap.group.baseDn=${LDAP_GROUPS_DN}
+ldap.group.request=(&(objectClass=${LDAP_GROUP_CLASS})(${LDAP_GROUP_MEMBER_ATTR}={dn}))
+ldap.group.idAttribute=${LDAP_GROUP_RDN_ATTR}
+
+# CAS configuration
+sonar.cas.protocol=saml11
+sonar.cas.sonarServerUrl=${PRODUCT_SCHEME}://${PRODUCT_DOMAIN}/sonarqube
+sonar.cas.casServerUrlPrefix=${CAS_URL}
+sonar.cas.casServerLoginUrl=${CAS_URL}login
+sonar.cas.casServerLogoutUrl=${CAS_URL}logout
+sonar.cas.saml11.toleranceMilliseconds=10000
+sonar.cas.saml11.attribute.name=displayName
+sonar.cas.saml11.attribute.email=mail
+sonar.cas.saml11.attribute.groups=groups,roles

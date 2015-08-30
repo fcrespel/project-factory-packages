@@ -1,0 +1,19 @@
+#set( $LDAP_MODULES = ${project.properties.getProperty('ldap.modules')} )
+#set( $SYSTEM_OPENLDAP_APP_MODULES_BUILTIN = ${project.properties.getProperty('system.openldap.app.modules.builtin')} )
+dn: cn=module{0}
+objectClass: olcModuleList
+cn: module{0}
+#set( $modules_enabled = $LDAP_MODULES.split('[, ]+') )
+#set( $modules_builtin = $SYSTEM_OPENLDAP_APP_MODULES_BUILTIN.split('[, ]+') )
+#foreach( $module in $modules_enabled )
+#if( !$modules_builtin.contains($module) )
+olcModuleLoad: {0}${module}.la
+#end
+#end
+structuralObjectClass: olcModuleList
+entryUUID: 5bfc23e0-a252-1031-90a0-7f7c004e5e48
+creatorsName: cn=config
+createTimestamp: 20120101000000Z
+entryCSN: 20120101000000.000000Z#000000#000#000000
+modifiersName: cn=config
+modifyTimestamp: 20120101000000Z

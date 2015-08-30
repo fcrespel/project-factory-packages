@@ -1,0 +1,116 @@
+<project>
+	<property name="php.bin" value="php" />
+	<property name="pear.bin" value="pear" />
+	<property name="pear.dir" value="${project.app.directory}" />
+	<property name="composer.bin" value="${project.app.directory}/composer.phar" />
+	<property name="composer.dir" value="${project.app.directory}/composer" />
+	<propertyregex property="composer.packages.flat" input="${composer.packages}" regexp="\s+" replace=" " global="true" defaultValue="${composer.packages}" />
+
+	<target name="install" depends="init-pear,install-pear-packages,clean-pear,init-composer,install-composer-packages,clean-composer" />
+
+	<target name="init-pear">
+		<tempfile property="pear.tmp" destDir="${java.io.tmpdir}" prefix="pear" />
+		<property name="pear.cfg" value="${pear.tmp}/.pearrc" />
+		<mkdir dir="${pear.tmp}" />
+		<exec executable="${pear.bin}" failonerror="true">
+			<arg value="config-create" />
+			<arg value="${pear.dir}" />
+			<arg value="${pear.cfg}" />
+		</exec>
+		<exec executable="${pear.bin}" failonerror="true">
+			<arg value="-c" />
+			<arg value="${pear.cfg}" />
+			<arg value="channel-update" />
+			<arg value="pear.php.net" />
+		</exec>
+		<exec executable="${pear.bin}" failonerror="true">
+			<arg value="-c" />
+			<arg value="${pear.cfg}" />
+			<arg value="config-set" />
+			<arg value="auto_discover" />
+			<arg value="1" />
+		</exec>
+		<exec executable="${pear.bin}" failonerror="true">
+			<arg value="-c" />
+			<arg value="${pear.cfg}" />
+			<arg value="config-set" />
+			<arg value="download_dir" />
+			<arg value="${pear.tmp}/download" />
+		</exec>
+		<exec executable="${pear.bin}" failonerror="true">
+			<arg value="-c" />
+			<arg value="${pear.cfg}" />
+			<arg value="config-set" />
+			<arg value="temp_dir" />
+			<arg value="${pear.tmp}/temp" />
+		</exec>
+		<exec executable="${pear.bin}" failonerror="true">
+			<arg value="-c" />
+			<arg value="${pear.cfg}" />
+			<arg value="config-set" />
+			<arg value="cache_dir" />
+			<arg value="${pear.tmp}/cache" />
+		</exec>
+	</target>
+
+	<target name="install-pear-packages">
+		<for list="${pear.packages}" delimiter="&#9;&#10; " trim="true" param="pear.package">
+			<sequential>
+				<echo message="==> Installing PEAR package @{pear.package}" />
+				<exec executable="${pear.bin}" failonerror="true">
+					<arg value="-c" />
+					<arg value="${pear.cfg}" />
+					<arg value="install" />
+					<arg value="@{pear.package}" />
+				</exec>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="clean-pear">
+		<exec executable="${pear.bin}" failonerror="false">
+			<arg value="-c" />
+			<arg value="${pear.cfg}" />
+			<arg value="clear-cache" />
+		</exec>
+		<delete dir="${pear.tmp}" />
+	</target>
+
+	<target name="init-composer">
+		<mkdir dir="${composer.dir}" />
+	</target>
+
+	<target name="install-composer-packages">
+		<exec executable="${php.bin}" failonerror="true">
+			<env key="COMPOSER_HOME" value="${composer.dir}" />
+			<env key="COMPOSER_NO_INTERACTION" value="1" />
+			<arg value="${composer.bin}" />
+			<arg value="global" />
+			<arg value="require" />
+			<arg line="${composer.packages.flat}" />
+		</exec>
+		<exec executable="tar" failonerror="true">
+			<arg value="-C" />
+			<arg value="${composer.dir}/vendor" />
+			<arg value="-cf" />
+			<arg value="${composer.dir}/vendor/bin.tar" />
+			<arg value="bin" />
+		</exec>
+		<delete dir="${composer.dir}/vendor/bin" />
+	</target>
+	
+	<target name="clean-composer">
+		<!-- Clear cache -->
+		<exec executable="${php.bin}" failonerror="true">
+			<env key="COMPOSER_HOME" value="${composer.dir}" />
+			<env key="COMPOSER_NO_INTERACTION" value="1" />
+			<arg value="${composer.bin}" />
+			<arg value="clear-cache" />
+		</exec>
+		<!-- Fix for troublesome characters in directories -->
+		<delete dir="${composer.dir}/vendor/symfony/finder/Symfony/Component/Finder/Tests" />
+		<delete dir="${composer.dir}/vendor/symfony/finder/Tests" />
+		<!-- Fix for invalid symlink -->
+		<delete dir="${composer.dir}/vendor/theseer/directoryscanner/tests" />
+	</target>
+</project>

@@ -1,0 +1,34 @@
+production:
+  deny_delete: false
+  auto_create: false
+  force_repository: false
+  pre_create: 
+  post_create: @{product.app}/services/svn/mkrepo-post-create.sh
+  pre_delete: 
+  post_delete: 
+  max_repos: 0
+  only_creator: false
+  allow_add_local: true
+  allow_pickup: false
+  svn:
+    path: @{product.data}/services/svn/repos
+    svnadmin: /usr/bin/svnadmin
+    url: svn
+  git:
+    path: @{product.data}/services/gitlab/repositories
+    git: /usr/bin/git
+    options: --bare
+    url: @{product.scheme}://@{product.domain}/gitlab
+    update_server_info: true
+    git_ext: true
+    append: trunk
+  mercurial:
+    path: /var/lib/mercurial
+    hg: /usr/bin/hg
+  bazaar:
+    path: /var/lib/bazaar
+    bzr: /usr/bin/bzr
+    init: init-repository
+    log_encoding: UTF-8
+
+development:

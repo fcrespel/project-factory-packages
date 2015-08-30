@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ldapConfiguration>
+  <version>2.8.0</version>
+  <connectionInfo>
+    <searchBase>@{ldap.base.dn}</searchBase>
+    <authScheme>none</authScheme>
+    <protocol>ldap</protocol>
+    <host>@{ldap.host}</host>
+    <port>@{ldap.port}</port>
+  </connectionInfo>
+  <userAndGroupConfig>
+    <emailAddressAttribute>@{ldap.user.mail.attr}</emailAddressAttribute>
+    <ldapGroupsAsRoles>true</ldapGroupsAsRoles>
+    <groupBaseDn>@{ldap.groups.rdn}</groupBaseDn>
+    <groupIdAttribute>@{ldap.group.rdn.attr}</groupIdAttribute>
+    <groupMemberAttribute>@{ldap.group.member.attr}</groupMemberAttribute>
+    <groupMemberFormat>${dn}</groupMemberFormat>
+    <groupObjectClass>@{ldap.group.class}</groupObjectClass>
+    <userIdAttribute>@{ldap.user.rdn.attr}</userIdAttribute>
+    <userObjectClass>@{ldap.user.class}</userObjectClass>
+    <userBaseDn>@{ldap.users.rdn}</userBaseDn>
+    <userRealNameAttribute>@{ldap.user.displayname.attr}</userRealNameAttribute>
+    <userSubtree>true</userSubtree>
+  </userAndGroupConfig>
+</ldapConfiguration>

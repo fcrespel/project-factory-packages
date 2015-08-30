@@ -1,0 +1,158 @@
+<!--
+  #[
+  Project Factory Admin - Nagios
+  ##
+  Copyright (C) 2013 - 2015 Project Factory team and contributors
+  ##
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  #]
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>fr.project-factory.packages.admin</groupId>
+		<artifactId>admin</artifactId>
+		<version>3.3.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>nagios</artifactId>
+	<version>3.5.1-4-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Project Factory Admin - Nagios</name>
+	<description>Nagios system monitoring</description>
+	
+	<properties>
+		<package.disabled>${nagios.disabled}</package.disabled>
+		<package.arch>${system.arch}</package.arch>
+		<package.src.url>http://downloads.sourceforge.net/project/nagios/nagios-3.x/nagios-${package.version}</package.src.url>
+		<package.src.file>nagios-${package.version}.tar.gz</package.src.file>
+		<package.dependencies>
+			${package.prefix}-system-httpd,
+			${package.prefix}-system-python,
+			${package.prefix}-system-php,
+			${package.prefix}-service-portal,
+			${system.package.sudo},
+			${system.package.nagios-plugins-all}
+		</package.dependencies>
+		<package.rpm.dependencies>
+			${package.dependencies},
+			${system.package.nagios} >= ${package.version}
+		</package.rpm.dependencies>
+		<package.deb.dependencies>
+			${package.dependencies},
+			${system.package.nagios} (>= ${package.version})
+		</package.deb.dependencies>
+	</properties>
+	
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>rpm-maven-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>package-rpm</id>
+							<configuration>
+								<mappings combine.children="append">
+									<mapping>
+										<directory>${system.init}</directory>
+										<sources>
+											<softlinkSource>
+												<location>${product.bin}/init.d/nagios.sh</location>
+												<destination>${package.service}</destination>
+											</softlinkSource>
+										</sources>
+									</mapping>
+								</mappings>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.vafer</groupId>
+					<artifactId>jdeb</artifactId>
+					<executions>
+						<execution>
+							<id>package-deb</id>
+							<configuration>
+								<dataSet combine.children="append">
+									<data>
+										<type>link</type>
+										<linkName>${system.init}/${package.service}</linkName>
+										<linkTarget>${product.bin}/init.d/nagios.sh</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+								</dataSet>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>process-resources-extract</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<skip>${package.disabled}</skip>
+							<target>
+								<untar compression="gzip"
+									src="${project.downloaded.directory}/${package.src.file}"
+									dest="${project.app.directory}/html">
+									<patternset>
+										<include name="*/html/**" />
+										<exclude name="*/html/.gitignore" />
+										<exclude name="*/html/*.in" />
+										<exclude name="*/html/images/**" />
+										<exclude name="*/html/stylesheets/**" />
+									</patternset>
+									<cutdirsmapper dirs="2" />
+								</untar>
+								<untar compression="gzip"
+									src="${project.downloaded.directory}/${package.src.file}"
+									dest="${project.app.directory}/html">
+									<patternset>
+										<include name="*/contrib/exfoliation/**" />
+										<exclude name="*/contrib/exfoliation/readme.txt" />
+									</patternset>
+									<cutdirsmapper dirs="3" />
+								</untar>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

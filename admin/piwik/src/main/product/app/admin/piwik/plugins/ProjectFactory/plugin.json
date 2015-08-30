@@ -1,0 +1,13 @@
+{
+    "name": "ProjectFactory",
+    "version": "1.0.0",
+    "description": "Project Factory Integration",
+    "theme": false,
+    "authors": [
+        {
+            "name": "iT-Toolbox",
+			"email": "contact@it-toolbox.fr",
+            "homepage": "https://it-toolbox.fr"
+        }
+    ]
+}

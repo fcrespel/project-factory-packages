@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<org.jenkinsci.plugins.rundeck.RundeckNotifier_-RundeckDescriptor plugin="rundeck@3.4">
+  <rundeckInstance>
+    <url>@{product.scheme}://@{product.domain}/rundeck/</url>
+    <apiVersion>12</apiVersion>
+    <login>@{bot.user}</login>
+    <password>%{BOT_PASSWORD}</password>
+  </rundeckInstance>
+</org.jenkinsci.plugins.rundeck.RundeckNotifier_-RundeckDescriptor>

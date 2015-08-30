@@ -1,0 +1,197 @@
+<!--
+  #[
+  Project Factory System - Ruby
+  ##
+  Copyright (C) 2013 - 2015 Project Factory team and contributors
+  ##
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  #]
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>fr.project-factory.packages.system</groupId>
+		<artifactId>system</artifactId>
+		<version>3.3.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>ruby</artifactId>
+	<version>3.3.0-1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Project Factory System - Ruby</name>
+	<description>Ruby scripting language and Phusion Passenger Apache HTTPD module</description>
+	
+	<properties>
+		<package.disabled>${ruby.disabled}</package.disabled>
+		<package.dependencies>
+			${package.prefix}-system-httpd,
+			${system.package.gcc},
+			${system.package.gcc-c++},
+			${system.package.db4},
+			${system.package.make},
+			${system.package.bison},
+			${system.package.gdbm-devel},
+			${system.package.libcurl-devel},
+			${system.package.libffi-devel},
+			${system.package.libtool},
+			${system.package.libyaml-devel},
+			${system.package.openssl-devel},
+			${system.package.readline-devel},
+			${system.package.zlib-devel}
+		</package.dependencies>
+		<rvm.version>1.25.33</rvm.version>
+		<rvm.src.url>https://github.com/wayneeseguin/rvm/archive</rvm.src.url>
+		<rvm.src.file>${rvm.version}.tar.gz</rvm.src.file>
+		<ruby.version>2.1.5</ruby.version>
+		<ruby.src.url>http://cache.ruby-lang.org/pub/ruby</ruby.src.url>
+		<ruby.src.file>ruby-${ruby.version}.tar.bz2</ruby.src.file>
+		<rubygems.version>2.2.2</rubygems.version>
+		<rubygems.src.url>http://production.cf.rubygems.org/rubygems</rubygems.src.url>
+		<rubygems.src.file>rubygems-${rubygems.version}.tgz</rubygems.src.file>
+		<ruby.gems>rake rack daemon_controller passenger bundler</ruby.gems>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>rubygems-release</id>
+			<url>http://rubygems-proxy.torquebox.org/releases</url>
+		</repository>
+	</repositories>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>rubygems</groupId>
+				<artifactId>rake</artifactId>
+				<version>10.3.2</version>
+				<type>gem</type>
+			</dependency>
+			<dependency>
+				<groupId>rubygems</groupId>
+				<artifactId>rack</artifactId>
+				<version>1.5.2</version>
+				<type>gem</type>
+			</dependency>
+			<dependency>
+				<groupId>rubygems</groupId>
+				<artifactId>daemon_controller</artifactId>
+				<version>1.2.0</version>
+				<type>gem</type>
+			</dependency>
+			<dependency>
+				<groupId>rubygems</groupId>
+				<artifactId>passenger</artifactId>
+				<version>4.0.59</version>
+				<type>gem</type>
+			</dependency>
+			<dependency>
+				<groupId>rubygems</groupId>
+				<artifactId>bundler</artifactId>
+				<version>1.8.2</version>
+				<type>gem</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>rubygems</groupId>
+			<artifactId>rake</artifactId>
+			<type>gem</type>
+		</dependency>
+		<dependency>
+			<groupId>rubygems</groupId>
+			<artifactId>passenger</artifactId>
+			<type>gem</type>
+		</dependency>
+		<dependency>
+			<groupId>rubygems</groupId>
+			<artifactId>bundler</artifactId>
+			<type>gem</type>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>generate-resources-download</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>download-single</goal>
+						</goals>
+						<configuration>
+							<skip>${package.disabled}</skip>
+							<url>${rvm.src.url}</url>
+							<fromFile>${rvm.src.file}</fromFile>
+							<toDir>${project.downloaded.directory}</toDir>
+						</configuration>
+					</execution>
+					<execution>
+						<id>generate-resources-download-ruby</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>download-single</goal>
+						</goals>
+						<configuration>
+							<skip>${package.disabled}</skip>
+							<url>${ruby.src.url}</url>
+							<fromFile>${ruby.src.file}</fromFile>
+							<toDir>${project.app.directory}/rvm/archives</toDir>
+						</configuration>
+					</execution>
+					<execution>
+						<id>generate-resources-download-rubygems</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>download-single</goal>
+						</goals>
+						<configuration>
+							<skip>${package.disabled}</skip>
+							<url>${rubygems.src.url}</url>
+							<fromFile>${rubygems.src.file}</fromFile>
+							<toDir>${project.app.directory}/rvm/archives</toDir>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>process-resources-copy</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<skip>${package.disabled}</skip>
+							<outputDirectory>${project.app.directory}/gems</outputDirectory>
+							<includeTypes>gem</includeTypes>
+							<stripVersion>true</stripVersion>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

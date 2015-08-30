@@ -1,0 +1,37 @@
+# English strings go here for Rails i18n
+en:
+  tokens_name: Tokens
+  permission_view_tokens: View Tokens
+  project_module_tokens: Tokens
+  
+  label_contract_information: Contract information
+  label_contract_start_date: Contract start date
+  label_qualifying_period: Qualifying period duration
+  label_month: month
+  
+  label_tokens_information: Tokens information
+  label_tokens_bought: Tokens bought
+  label_tokens_consumed: Tokens consumed
+  label_tokens_remaining: Tokens remaining
+  label_change_tokens_bought: Change tokens bought
+  
+  label_invoice_information: Invoice information
+  label_invoice_currency: €
+  label_cost: Token cost
+  label_change_cost: Modify token cost
+    
+  label_issue_id: Issue ID
+  label_issue_description: Description
+  label_last_update_date: Update date
+  label_issue_tracker: Tracker
+  label_issue_priority: Priority
+
+  label_var_lab_title: Custom fields configuration
+  label_var_lab_desc: Define custom field names to use for token management.
+  label_var_lab_tokens_consumed: Tokens consumed
+  label_var_lab_tokens_cost: Token cost
+  label_var_lab_contract_start_date: Contract start date
+  label_var_lab_qualifying_period: Qualifying period duration
+  label_var_lab_tokens_bought: Tokens bought
+  
+  label_show_issues: Show issues list

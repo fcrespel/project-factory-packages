@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<casConfiguration>
+  <casServerUrl>@{cas.url}</casServerUrl>
+  <casRestTicketUrl>@{cas.url}api/rest/tickets/</casRestTicketUrl>
+  <casService>@{product.scheme}://@{product.domain}/nexus/</casService>
+  <validationProtocol>SAML</validationProtocol>
+  <connectTimeout>5000</connectTimeout>
+  <readTimeout>10000</readTimeout>
+</casConfiguration>

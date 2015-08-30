@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<proxy>
+  <name>@{proxy.host}</name>
+  <port>@{proxy.port}</port>
+  <noProxyHost>@{product.domain}</noProxyHost>
+</proxy>

@@ -1,0 +1,211 @@
+#set( $D = '$' )
+#set( $PACKAGE_VERSION = ${project.properties.getProperty('package.version')} )
+#set( $PACKAGE_PORT_JNLP = ${project.properties.getProperty('package.port.jnlp')} )
+#set( $PRODUCT_GROUP_ADMINS = ${project.properties.getProperty('product.group.admins')} )
+#set( $PRODUCT_GROUP_USERS = ${project.properties.getProperty('product.group.users')} )
+#set( $ROOT_USER = ${project.properties.getProperty('root.user')} )
+#set( $BOT_USER = ${project.properties.getProperty('bot.user')} )
+#set( $LDAP_HOST = ${project.properties.getProperty('ldap.host')} )
+#set( $LDAP_PORT = ${project.properties.getProperty('ldap.port')} )
+#set( $LDAP_BASE_DN = ${project.properties.getProperty('ldap.base.dn')} )
+#set( $LDAP_USERS_RDN = ${project.properties.getProperty('ldap.users.rdn')} )
+#set( $LDAP_USER_RDN_ATTR = ${project.properties.getProperty('ldap.user.rdn.attr')} )
+#set( $LDAP_GROUPS_RDN = ${project.properties.getProperty('ldap.groups.rdn')} )
+#set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
+#set( $CAS_URL = ${project.properties.getProperty('cas.url')} )
+#set( $SYSTEM_JAVA6_APP = ${project.properties.getProperty('system.java6.app')} )
+#set( $SYSTEM_JAVA7_APP = ${project.properties.getProperty('system.java7.app')} )
+<?xml version='1.0' encoding='UTF-8'?>
+<hudson>
+  <disabledAdministrativeMonitors/>
+  <version>${PACKAGE_VERSION}</version>
+  <numExecutors>2</numExecutors>
+  <mode>NORMAL</mode>
+  <useSecurity>true</useSecurity>
+  <authorizationStrategy class="hudson.security.ProjectMatrixAuthorizationStrategy">
+    <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Create:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Create:${ROOT_USER}</permission>
+    <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Delete:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Delete:${ROOT_USER}</permission>
+    <permission>com.cloudbees.plugins.credentials.CredentialsProvider.ManageDomains:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>com.cloudbees.plugins.credentials.CredentialsProvider.ManageDomains:${ROOT_USER}</permission>
+    <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Update:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Update:${ROOT_USER}</permission>
+    <permission>com.cloudbees.plugins.credentials.CredentialsProvider.View:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>com.cloudbees.plugins.credentials.CredentialsProvider.View:${ROOT_USER}</permission>
+    <permission>hudson.model.Computer.Build:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Computer.Build:${ROOT_USER}</permission>
+    <permission>hudson.model.Computer.Configure:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Computer.Configure:${ROOT_USER}</permission>
+    <permission>hudson.model.Computer.Connect:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Computer.Connect:${ROOT_USER}</permission>
+    <permission>hudson.model.Computer.Create:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Computer.Create:${ROOT_USER}</permission>
+    <permission>hudson.model.Computer.Delete:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Computer.Delete:${ROOT_USER}</permission>
+    <permission>hudson.model.Computer.Disconnect:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Computer.Disconnect:${ROOT_USER}</permission>
+    <permission>hudson.model.Hudson.Administer:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Hudson.Administer:${ROOT_USER}</permission>
+    <permission>hudson.model.Hudson.ConfigureUpdateCenter:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Hudson.ConfigureUpdateCenter:${ROOT_USER}</permission>
+    <permission>hudson.model.Hudson.Read:authenticated</permission>
+    <permission>hudson.model.Hudson.Read:${BOT_USER}</permission>
+    <permission>hudson.model.Hudson.Read:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Hudson.Read:${PRODUCT_GROUP_USERS}</permission>
+    <permission>hudson.model.Hudson.Read:${ROOT_USER}</permission>
+    <permission>hudson.model.Hudson.RunScripts:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Hudson.RunScripts:${ROOT_USER}</permission>
+    <permission>hudson.model.Hudson.UploadPlugins:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Hudson.UploadPlugins:${ROOT_USER}</permission>
+    <permission>hudson.model.Item.Build:${BOT_USER}</permission>
+    <permission>hudson.model.Item.Build:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Item.Build:${ROOT_USER}</permission>
+    <permission>hudson.model.Item.Cancel:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Item.Cancel:${ROOT_USER}</permission>
+    <permission>hudson.model.Item.Configure:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Item.Configure:${ROOT_USER}</permission>
+    <permission>hudson.model.Item.Create:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Item.Create:${ROOT_USER}</permission>
+    <permission>hudson.model.Item.Delete:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Item.Delete:${ROOT_USER}</permission>
+    <permission>hudson.model.Item.Discover:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Item.Discover:${ROOT_USER}</permission>
+    <permission>hudson.model.Item.Move:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Item.Move:${ROOT_USER}</permission>
+    <permission>hudson.model.Item.Read:${BOT_USER}</permission>
+    <permission>hudson.model.Item.Read:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Item.Read:${ROOT_USER}</permission>
+    <permission>hudson.model.Item.Release:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Item.Release:${ROOT_USER}</permission>
+    <permission>hudson.model.Item.ViewStatus:anonymous</permission>
+    <permission>hudson.model.Item.ViewStatus:authenticated</permission>
+    <permission>hudson.model.Item.ViewStatus:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Item.ViewStatus:${PRODUCT_GROUP_USERS}</permission>
+    <permission>hudson.model.Item.ViewStatus:${ROOT_USER}</permission>
+    <permission>hudson.model.Item.Workspace:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Item.Workspace:${ROOT_USER}</permission>
+    <permission>hudson.model.Run.Delete:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Run.Delete:${ROOT_USER}</permission>
+    <permission>hudson.model.Run.Update:${BOT_USER}</permission>
+    <permission>hudson.model.Run.Update:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Run.Update:${ROOT_USER}</permission>
+    <permission>hudson.model.View.Configure:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.View.Configure:${ROOT_USER}</permission>
+    <permission>hudson.model.View.Create:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.View.Create:${ROOT_USER}</permission>
+    <permission>hudson.model.View.Delete:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.View.Delete:${ROOT_USER}</permission>
+    <permission>hudson.model.View.Read:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.View.Read:${ROOT_USER}</permission>
+    <permission>hudson.scm.SCM.Tag:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.scm.SCM.Tag:${ROOT_USER}</permission>
+  </authorizationStrategy>
+#if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
+  <securityRealm class="org.jenkinsci.plugins.cas.CasSecurityRealm" plugin="cas-plugin@1.1.2">
+    <casServerUrl>${CAS_URL}</casServerUrl>
+    <casProtocol class="org.jenkinsci.plugins.cas.protocols.Saml11Protocol">
+      <authoritiesAttribute>groups,roles</authoritiesAttribute>
+      <fullNameAttribute>displayName</fullNameAttribute>
+      <emailAttribute>mail</emailAttribute>
+      <tolerance>5000</tolerance>
+    </casProtocol>
+    <forceRenewal>false</forceRenewal>
+    <enableSingleSignOut>true</enableSingleSignOut>
+  </securityRealm>
+#else
+  <securityRealm class="hudson.security.LDAPSecurityRealm">
+    <server>${LDAP_HOST}:${LDAP_PORT}</server>
+    <rootDN>${LDAP_BASE_DN}</rootDN>
+    <inhibitInferRootDN>false</inhibitInferRootDN>
+    <userSearchBase>${LDAP_USERS_RDN}</userSearchBase>
+    <userSearch>${LDAP_USER_RDN_ATTR}={0}</userSearch>
+    <groupSearchBase>${LDAP_GROUPS_RDN}</groupSearchBase>
+  </securityRealm>
+#end
+  <disableRememberMe>false</disableRememberMe>
+  <projectNamingStrategy class="jenkins.model.ProjectNamingStrategy${D}DefaultProjectNamingStrategy"/>
+  <workspaceDir>${D}{ITEM_ROOTDIR}/workspace</workspaceDir>
+  <buildsDir>${D}{ITEM_ROOTDIR}/builds</buildsDir>
+  <markupFormatter class="hudson.markup.RawHtmlMarkupFormatter">
+    <disableSyntaxHighlighting>false</disableSyntaxHighlighting>
+  </markupFormatter>
+  <jdks>
+    <jdk>
+      <name>java-1.6.0</name>
+      <home>${SYSTEM_JAVA6_APP}</home>
+      <properties/>
+    </jdk>
+    <jdk>
+      <name>java-1.7.0</name>
+      <home>${SYSTEM_JAVA7_APP}</home>
+      <properties/>
+    </jdk>
+  </jdks>
+  <viewsTabBar class="hudson.views.DefaultViewsTabBar"/>
+  <myViewsTabBar class="hudson.views.DefaultMyViewsTabBar"/>
+  <clouds/>
+  <slaves/>
+  <quietPeriod>5</quietPeriod>
+  <scmCheckoutRetryCount>0</scmCheckoutRetryCount>
+  <views>
+    <listView>
+      <owner class="hudson" reference="../../.."/>
+      <name>Tous</name>
+      <description>&lt;h1&gt;Tous les jobs&lt;/h1&gt;</description>
+      <filterExecutors>false</filterExecutors>
+      <filterQueue>false</filterQueue>
+      <properties class="hudson.model.View${D}PropertyList"/>
+      <jobNames>
+        <comparator class="hudson.util.CaseInsensitiveComparator"/>
+      </jobNames>
+      <jobFilters/>
+      <columns>
+        <hudson.views.StatusColumn/>
+        <hudson.views.WeatherColumn/>
+        <hudson.views.JobColumn/>
+        <hudson.views.LastSuccessColumn/>
+        <hudson.views.LastFailureColumn/>
+        <hudson.views.LastDurationColumn/>
+        <hudson.plugins.favorite.column.FavoriteColumn plugin="favorite@1.16"/>
+        <org.jenkins.ci.plugins.column.console.LastBuildColumn plugin="console-column-plugin@1.5"/>
+        <hudson.views.BuildButtonColumn/>
+      </columns>
+      <includeRegex>.*</includeRegex>
+      <recurse>false</recurse>
+    </listView>
+    <listView>
+      <owner class="hudson" reference="../../.."/>
+      <name>Favoris</name>
+      <description>&lt;h1&gt;Favoris&lt;/h1&gt;</description>
+      <filterExecutors>false</filterExecutors>
+      <filterQueue>false</filterQueue>
+      <properties class="hudson.model.View${D}PropertyList"/>
+      <jobNames>
+        <comparator class="hudson.util.CaseInsensitiveComparator" reference="../../../listView/jobNames/comparator"/>
+      </jobNames>
+      <jobFilters>
+        <hudson.plugins.favorite.filter.FavoriteFilter plugin="favorite@1.16"/>
+      </jobFilters>
+      <columns>
+        <hudson.views.StatusColumn/>
+        <hudson.views.WeatherColumn/>
+        <hudson.views.JobColumn/>
+        <hudson.views.LastSuccessColumn/>
+        <hudson.views.LastFailureColumn/>
+        <hudson.views.LastDurationColumn/>
+        <hudson.plugins.favorite.column.FavoriteColumn plugin="favorite@1.16"/>
+        <org.jenkins.ci.plugins.column.console.LastBuildColumn plugin="console-column-plugin@1.5"/>
+        <hudson.views.BuildButtonColumn/>
+      </columns>
+      <includeRegex>.*</includeRegex>
+      <recurse>false</recurse>
+    </listView>
+  </views>
+  <primaryView>Tous</primaryView>
+  <slaveAgentPort>${PACKAGE_PORT_JNLP}</slaveAgentPort>
+  <label></label>
+  <nodeProperties/>
+  <globalNodeProperties/>
+  <noUsageStatistics>true</noUsageStatistics>
+</hudson>

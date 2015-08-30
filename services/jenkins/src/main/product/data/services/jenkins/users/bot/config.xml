@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<user>
+  <fullName>@{bot.user}</fullName>
+  <description></description>
+  <properties>
+    <jenkins.security.ApiTokenProperty>
+      <apiToken>%{BOT_PASSWORD}</apiToken>
+    </jenkins.security.ApiTokenProperty>
+    <hudson.tasks.Mailer_-UserProperty>
+      <emailAddress>@{bot.user}@@{product.domain}</emailAddress>
+    </hudson.tasks.Mailer_-UserProperty>
+  </properties>
+</user>

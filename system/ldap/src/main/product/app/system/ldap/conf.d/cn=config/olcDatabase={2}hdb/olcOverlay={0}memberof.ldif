@@ -1,0 +1,16 @@
+dn: olcOverlay={0}memberof
+objectClass: olcMemberOf
+objectClass: olcOverlayConfig
+olcOverlay: {0}memberof
+olcMemberOfDangling: ignore
+olcMemberOfRefInt: TRUE
+olcMemberOfGroupOC: @{ldap.group.class}
+olcMemberOfMemberAD: @{ldap.group.member.attr}
+olcMemberOfMemberOfAD: @{ldap.user.memberof.attr}
+structuralObjectClass: olcMemberOf
+entryUUID: 5c13464c-a252-1031-90a3-7f7c004e5e48
+creatorsName: cn=config
+createTimestamp: 20120101000000Z
+entryCSN: 20120101000000.000000Z#000000#000#000000
+modifiersName: cn=config
+modifyTimestamp: 20120101000000Z

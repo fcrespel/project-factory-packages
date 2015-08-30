@@ -1,0 +1,21 @@
+# Redmine database configuration
+
+production:
+  adapter: mysql2
+  database: '@{redmine.db.name}'
+  host: '@{mysql.host}'
+  port: @{mysql.port}
+  socket: '%{MYSQL_SOCKET}'
+  username: '@{redmine.db.user}'
+  password: '%{REDMINE_DB_PASSWORD}'
+  encoding: utf8
+
+development:
+  adapter: mysql2
+  database: '@{redmine.db.name}'
+  host: '@{mysql.host}'
+  port: @{mysql.port}
+  socket: '%{MYSQL_SOCKET}'
+  username: '@{redmine.db.user}'
+  password: '%{REDMINE_DB_PASSWORD}'
+  encoding: utf8

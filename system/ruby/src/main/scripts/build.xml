@@ -1,0 +1,37 @@
+<project>
+	<property name="rvm.file" value="${project.downloaded.directory}/${rvm.src.file}" />
+	<property name="rvm.src" value="${project.downloaded.directory}/rvm" />
+	<property name="rvm.dir" value="${project.app.directory}/rvm" />
+	<target name="install">
+		<chmod perm="+x" verbose="true">
+			<fileset dir="${project.product.directory}">
+				<include name="**/*.sh" />
+			</fileset>
+		</chmod>
+		<mkdir dir="${rvm.src}" />
+		<exec executable="tar" failonerror="true">
+			<arg value="--strip-components=1" />
+			<arg value="-C" />
+			<arg value="${rvm.src}" />
+			<arg value="-xzf" />
+			<arg value="${rvm.file}" />
+		</exec>
+		
+		<exec dir="${rvm.src}" executable="${rvm.src}/install" failonerror="true">
+			<arg value="--ignore-dotfiles" />
+			<arg value="--path" />
+			<arg value="${rvm.dir}" />
+		</exec>
+		
+		<echo file="${rvm.dir}/gemsets/global.gems" />
+		<echo file="${rvm.dir}/gemsets/default.gems" />
+		
+		<touch file="${rvm.dir}/environments/.flag" />
+		<touch file="${rvm.dir}/gems/.flag" />
+		<touch file="${rvm.dir}/log/.flag" />
+		<touch file="${rvm.dir}/rubies/.flag" />
+		<touch file="${rvm.dir}/src/.flag" />
+		<touch file="${rvm.dir}/tmp/.flag" />
+		<touch file="${rvm.dir}/wrappers/.flag" />
+	</target>
+</project>

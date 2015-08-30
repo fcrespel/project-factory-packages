@@ -1,0 +1,75 @@
+<% html_title l(:tokens_name) -%>
+<h2><%= l(:tokens_name) %></h2>
+<div class="splitcontentleft">
+	<div class="box news">
+		<h3><%=l(:label_contract_information)%></h3>
+		<ul>
+			<li><strong><%=l(:label_contract_start_date)%> :</strong> <%= @contractStartDate %></li>
+			<li><strong><%=l(:label_qualifying_period)%> :</strong> <%= @qualifyingPeriod %> <%= l(:label_month) %></li>
+		</ul>
+	</div>
+	<div class="box issues">
+		<h3><%=l(:label_tokens_information)%></h3>
+		<ul>
+			<li><strong><%=l(:label_tokens_bought)%> :</strong> <%= @tokensBought.to_f %></li>
+			<li><strong><%=l(:label_tokens_consumed)%> :</strong> <%= @tokensConsumed.to_f %></li>
+			<% @tmpTokensRemaining = @tokensBought.to_f - @tokensConsumed.to_f %>
+			<% if(@tmpTokensRemaining > 3.5) %>
+				<li><strong><%=l(:label_tokens_remaining)%> :</strong> <%= @tmpTokensRemaining %></li>
+			<% elsif(@tmpTokensRemaining >= 0 && @tmpTokensRemaining <= 3.5)  %>
+				<li><span style="color:orange"><strong><%=l(:label_tokens_remaining)%> : <%= @tmpTokensRemaining %></strong></span></li>
+			<% else %>
+				<li><span style="color:red"><strong><%=l(:label_tokens_remaining)%> : <%= @tmpTokensRemaining %></strong></span></li>
+			<% end %>
+		</ul>
+		<p><%= link_to l(:label_change_tokens_bought), :controller => "projects", :action => "settings", :id => @project.identifier %></p>
+	</div>
+	<div class="box billing">
+		<h3><%=l(:label_invoice_information)%></h3>
+		<ul>
+			<li><strong><%=l(:label_cost)%> :</strong> <%= @tokensCost %> <%= l(:label_invoice_currency) %></li>
+			<li><strong><%=l(:label_tokens_bought)%> :</strong> <%= @tokensBought.to_f * @tokensCost.to_f %> <%= l(:label_invoice_currency) %></li>
+			<li><strong><%=l(:label_tokens_consumed)%> :</strong> <%= @tokensConsumed.to_f * @tokensCost.to_f %> <%= l(:label_invoice_currency) %></li>
+			<% @tmpTokensRemaining = @tokensBought.to_f - @tokensConsumed.to_f %>
+			<% if(@tmpTokensRemaining > 3.5) %>
+				<li><strong><%=l(:label_tokens_remaining)%> :</strong> <%= @tmpTokensRemaining * @tokensCost.to_f %> <%= l(:label_invoice_currency) %></li>
+			<% elsif(@tmpTokensRemaining >= 0 && @tmpTokensRemaining <= 3.5)  %>
+				<li><span style="color:orange"><strong><%=l(:label_tokens_remaining)%> : <%= @tmpTokensRemaining * @tokensCost.to_f %> <%= l(:label_invoice_currency) %></strong></span></li>
+			<% else %>
+				<li><span style="color:red"><strong><%=l(:label_tokens_remaining)%> : <%= @tmpTokensRemaining * @tokensCost.to_f %> <%= l(:label_invoice_currency) %></strong></span></li>
+			<% end %>
+		</ul>
+		<p><%= link_to l(:label_change_cost), :controller => "projects", :action => "settings", :id => @project.identifier %></p>
+	</div>
+</div>
+
+<% if(Setting.plugin_redmine_token_management['show_issues'] == 'true') %>
+<div class="splitcontentright">
+	<div class="autoscroll">
+		<table class="list issues">
+			<thead>
+				<tr>
+					<th><%=l(:label_issue_id)%></th>
+					<th><%=l(:label_issue_description)%></th>
+					<th><%=l(:label_tokens_consumed)%></th>
+					<th><%=l(:label_issue_tracker)%></th>
+					<th><%=l(:label_issue_priority)%></th>
+					<th><%=l(:label_last_update_date)%></th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @currentIssue.each do |issue| %>
+					<tr id="issue-<%= issue["id"] %>" class="<%= cycle('odd', 'even') %> issue">
+						<td class="id"><%= link_to issue["id"], :controller => 'issues', :action => 'show', :id => issue["id"] %></td>
+						<td class="subject"><%= link_to issue["subject"], :controller => 'issues', :action => 'show', :id => issue["id"] %></td>
+						<td class="tokens_consumed"><%= "#{issue["tokens"]}" %></td>
+						<td class="tracker"><%= "#{issue["tracker"]}" %></td>
+						<td class="priority"><%= "#{issue["priority"]}" %></td>
+						<td class="updated_on"><%= "#{issue["updateDate"]}" %></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+</div>
+<% end %>

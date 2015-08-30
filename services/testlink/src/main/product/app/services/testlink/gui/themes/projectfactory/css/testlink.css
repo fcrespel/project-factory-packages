@@ -1,0 +1,7 @@
+/**
+ * Project Factory TestLink Theme
+ * By Fabien CRESPEL <fabien@crespel.net>
+ */
+
+@import url(../../default/css/testlink.css);
+@import url(/portal/themes/current/css/testlink.css);

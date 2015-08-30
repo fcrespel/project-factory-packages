@@ -1,0 +1,213 @@
+<!--
+  #[
+  Project Factory Services - GitLab
+  ##
+  Copyright (C) 2013 - 2015 Project Factory team and contributors
+  ##
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  #]
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>fr.project-factory.packages.services</groupId>
+		<artifactId>services</artifactId>
+		<version>3.3.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>gitlab</artifactId>
+	<version>7.14.1-1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Project Factory Services - GitLab</name>
+	<description>Git repository management</description>
+
+	<properties>
+		<package.disabled>${gitlab.disabled}</package.disabled>
+		<package.root>${package.data}</package.root>
+		<package.src.url>https://github.com/gitlabhq/gitlabhq/archive</package.src.url>
+		<package.src.file>v${package.version}.zip</package.src.file>
+		<package.dependencies>
+			${package.prefix}-system-httpd,
+			${package.prefix}-system-mysql,
+			${package.prefix}-system-redis,
+			${package.prefix}-service-portal,
+			${system.package.cmake},
+			${system.package.nodejs},
+			${system.package.libxml2-devel},
+			${system.package.libxslt-devel},
+			${system.package.libicu-devel}
+		</package.dependencies>
+		<package.rpm.dependencies>
+			${package.dependencies},
+			${package.prefix}-system-ruby >= 3.2.0,
+			${system.package.git} >= 1.7.10
+		</package.rpm.dependencies>
+		<package.deb.dependencies>
+			${package.dependencies},
+			${package.prefix}-system-ruby (>= 3.2.0),
+			${system.package.git} (>= 1.7.10)
+		</package.deb.dependencies>
+		<gitlab.db.name>${product.id}_gitlab</gitlab.db.name>
+		<gitlab.db.user>${product.id}_gitlab</gitlab.db.user>
+		<gitlab.bundler.exclude>development:test:postgres:aws:unicorn</gitlab.bundler.exclude>
+		<gitlab.shell.version>2.6.4</gitlab.shell.version>
+		<gitlab.shell.url>https://github.com/gitlabhq/gitlab-shell/archive</gitlab.shell.url>
+		<gitlab.shell.file>v${gitlab.shell.version}.zip</gitlab.shell.file>
+	</properties>
+	
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>rpm-maven-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>package-rpm</id>
+							<configuration>
+								<mappings combine.children="append">
+									<mapping>
+										<directory>${package.app}/log</directory>
+										<sources>
+											<softlinkSource>
+												<location>${package.log}</location>
+											</softlinkSource>
+										</sources>
+									</mapping>
+									<mapping>
+										<directory>${package.app}/tmp</directory>
+										<sources>
+											<softlinkSource>
+												<location>${package.data}/tmp</location>
+											</softlinkSource>
+										</sources>
+									</mapping>
+									<mapping>
+										<directory>${system.init}</directory>
+										<sources>
+											<softlinkSource>
+												<location>${product.bin}/init.d/gitlab.sh</location>
+												<destination>${package.service}</destination>
+											</softlinkSource>
+										</sources>
+									</mapping>
+								</mappings>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.vafer</groupId>
+					<artifactId>jdeb</artifactId>
+					<executions>
+						<execution>
+							<id>package-deb</id>
+							<configuration>
+								<dataSet combine.children="append">
+									<data>
+										<type>link</type>
+										<linkName>${package.app}/log</linkName>
+										<linkTarget>${package.log}</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+									<data>
+										<type>link</type>
+										<linkName>${package.app}/tmp</linkName>
+										<linkTarget>${package.data}/tmp</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+									<data>
+										<type>link</type>
+										<linkName>${system.init}/${package.service}</linkName>
+										<linkTarget>${product.bin}/init.d/gitlab.sh</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+								</dataSet>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>generate-resources-download-shell</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>download-single</goal>
+						</goals>
+						<configuration>
+							<skip>${package.disabled}</skip>
+							<url>${gitlab.shell.url}</url>
+							<fromFile>${gitlab.shell.file}</fromFile>
+							<toDir>${project.downloaded.directory}</toDir>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>process-resources-extract</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<skip>${package.disabled}</skip>
+							<target>
+								<unzip
+									src="${project.downloaded.directory}/${package.src.file}"
+									dest="${project.app.directory}">
+									<patternset>
+										<exclude name="*/log/**" />
+										<exclude name="*/tmp/**" />
+									</patternset>
+									<cutdirsmapper dirs="1" />
+								</unzip>
+								<unzip
+									src="${project.downloaded.directory}/${gitlab.shell.file}"
+									dest="${project.app.directory}/shell">
+									<cutdirsmapper dirs="1" />
+								</unzip>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

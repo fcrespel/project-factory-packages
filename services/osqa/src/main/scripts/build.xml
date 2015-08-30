@@ -1,0 +1,18 @@
+<project>
+	<property name="python.easy_install.bin" value="easy_install" />
+	<property name="python.eggs.dir" value="${project.product.directory}/app/system/python/eggs" />
+	<property name="python.modules" value="${osqa.python.modules}" />
+	<target name="install">
+		<chmod perm="+x" verbose="true">
+			<fileset dir="${project.product.directory}" erroronmissingdir="false">
+				<include name="**/*.sh" />
+			</fileset>
+		</chmod>
+		<mkdir dir="${python.eggs.dir}" />
+		<exec executable="${python.easy_install.bin}" failonerror="true">
+			<arg value="-zmaxd" />
+			<arg value="${python.eggs.dir}" />
+			<arg line="${python.modules}" />
+		</exec>
+	</target>
+</project>

@@ -1,0 +1,280 @@
+<!--
+  #[
+  Project Factory Services - SonarQube
+  ##
+  Copyright (C) 2013 - 2015 Project Factory team and contributors
+  ##
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  #]
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>fr.project-factory.packages.services</groupId>
+		<artifactId>services</artifactId>
+		<version>3.3.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>sonarqube</artifactId>
+	<version>4.5.4-1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Project Factory Services - SonarQube</name>
+	<description>Platform for continuous inspection of code quality</description>
+
+	<properties>
+		<package.disabled>${sonarqube.disabled}</package.disabled>
+		<package.src.url>http://downloads.sonarsource.com/sonarqube</package.src.url>
+		<package.src.file>sonarqube-${package.version}.zip</package.src.file>
+		<package.bind>${sonarqube.bind}</package.bind>
+		<package.port.shutdown>${sonarqube.port.shutdown}</package.port.shutdown>
+		<package.port.ajp>${sonarqube.port.ajp}</package.port.ajp>
+		<package.port.http>${sonarqube.port.http}</package.port.http>
+		<package.dependencies>
+			${package.prefix}-system-httpd,
+			${package.prefix}-system-mysql,
+			${package.prefix}-service-portal,
+			${system.package.java7}
+		</package.dependencies>
+		<sonarqube.db.name>${product.id}_sonarqube</sonarqube.db.name>
+		<sonarqube.db.user>${product.id}_sonarqube</sonarqube.db.user>
+	</properties>
+	
+	<dependencies>
+		<!-- Plugins -->
+		<dependency>
+			<groupId>org.sonarsource.sonar-plugins.javascript</groupId>
+			<artifactId>sonar-javascript-plugin</artifactId>
+			<version>2.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.sonar-plugins.l10n</groupId>
+			<artifactId>sonar-l10n-fr-plugin</artifactId>
+			<version>1.13</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.sonar-plugins</groupId>
+			<artifactId>sonar-ldap-plugin</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.sonar-plugins.php</groupId>
+			<artifactId>sonar-php-plugin</artifactId>
+			<version>2.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.sonar-plugins</groupId>
+			<artifactId>sonar-redmine-plugin</artifactId>
+			<version>0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.sonarsource.sonar-web-plugin</groupId>
+			<artifactId>sonar-web-plugin</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.sonarsource.sonar-xml-plugin</groupId>
+			<artifactId>sonar-xml-plugin</artifactId>
+			<version>1.3</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>rpm-maven-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>package-rpm</id>
+							<configuration>
+								<mappings combine.children="append">
+									<mapping>
+										<directory>${package.app}/logs</directory>
+										<sources>
+											<softlinkSource>
+												<location>${package.log}</location>
+											</softlinkSource>
+										</sources>
+									</mapping>
+									<mapping>
+										<directory>${package.app}/data</directory>
+										<sources>
+											<softlinkSource>
+												<location>${package.data}/data</location>
+											</softlinkSource>
+										</sources>
+									</mapping>
+									<mapping>
+										<directory>${package.app}/extensions</directory>
+										<sources>
+											<softlinkSource>
+												<location>${package.data}/extensions</location>
+											</softlinkSource>
+										</sources>
+									</mapping>
+									<mapping>
+										<directory>${package.app}/temp</directory>
+										<sources>
+											<softlinkSource>
+												<location>${package.data}/temp</location>
+											</softlinkSource>
+										</sources>
+									</mapping>
+									<mapping>
+										<directory>${system.init}</directory>
+										<sources>
+											<softlinkSource>
+												<location>${product.bin}/init.d/${project.artifactId}.sh</location>
+												<destination>${package.service}</destination>
+											</softlinkSource>
+										</sources>
+									</mapping>
+								</mappings>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.vafer</groupId>
+					<artifactId>jdeb</artifactId>
+					<executions>
+						<execution>
+							<id>package-deb</id>
+							<configuration>
+								<dataSet combine.children="append">
+									<data>
+										<type>link</type>
+										<linkName>${package.app}/logs</linkName>
+										<linkTarget>${package.log}</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+									<data>
+										<type>link</type>
+										<linkName>${package.app}/data</linkName>
+										<linkTarget>${package.data}/data</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+									<data>
+										<type>link</type>
+										<linkName>${package.app}/extensions</linkName>
+										<linkTarget>${package.data}/extensions</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+									<data>
+										<type>link</type>
+										<linkName>${package.app}/temp</linkName>
+										<linkTarget>${package.data}/temp</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+									<data>
+										<type>link</type>
+										<linkName>${system.init}/${package.service}</linkName>
+										<linkTarget>${product.bin}/init.d/${project.artifactId}.sh</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+								</dataSet>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>process-resources-extract</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<skip>${package.disabled}</skip>
+							<target>
+								<unzip src="${project.downloaded.directory}/${package.src.file}"
+									dest="${project.app.directory}">
+									<patternset>
+										<exclude name="*/data/**" />
+										<exclude name="*/extensions/**" />
+										<exclude name="*/logs/**" />
+										<exclude name="*/temp/**" />
+									</patternset>
+									<cutdirsmapper dirs="1" />
+								</unzip>
+								<unzip src="${project.downloaded.directory}/${package.src.file}"
+									dest="${project.data.directory}">
+									<patternset>
+										<include name="*/data/**" />
+										<include name="*/extensions/**" />
+										<include name="*/temp/**" />
+									</patternset>
+									<cutdirsmapper dirs="1" />
+								</unzip>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>process-resources-copy</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<skip>${package.disabled}</skip>
+							<outputDirectory>${project.data.directory}/extensions/plugins</outputDirectory>
+							<includeTypes>jar</includeTypes>
+							<excludeTransitive>true</excludeTransitive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

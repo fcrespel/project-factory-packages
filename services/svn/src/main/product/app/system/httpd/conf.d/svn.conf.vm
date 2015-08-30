@@ -1,0 +1,37 @@
+#set( $PRODUCT_NAME = ${project.properties.getProperty('product.name')} )
+#set( $PRODUCT_APP = ${project.properties.getProperty('product.app')} )
+#set( $SVN_DATA = ${project.properties.getProperty('package.data')} )
+#set( $SVN_LOG = ${project.properties.getProperty('package.log')} )
+#set( $LDAP_HOST = ${project.properties.getProperty('ldap.host')} )
+#set( $LDAP_PORT = ${project.properties.getProperty('ldap.port')} )
+#set( $LDAP_USERS_DN = ${project.properties.getProperty('ldap.users.dn')} )
+#set( $LDAP_USER_RDN_ATTR = ${project.properties.getProperty('ldap.user.rdn.attr')} )
+#set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
+#set( $DAV_SVN_MODULE = ${project.properties.getProperty('system.httpd.app.modules.dav_svn')} )
+#set( $AUTHZ_SVN_MODULE = ${project.properties.getProperty('system.httpd.app.modules.authz_svn')} )
+# Subversion (SVN) configuration
+
+LoadModule dav_svn_module ${DAV_SVN_MODULE}
+LoadModule authz_svn_module ${AUTHZ_SVN_MODULE}
+
+LogFormat "%h %l %u %t %{SVN-REPOS-NAME}e \"%{SVN-ACTION}e\"" svnaction
+CustomLog ${SVN_LOG}/svn_log svnaction env=SVN-ACTION
+
+<Location /svn/>
+	DAV svn
+	SVNParentPath ${SVN_DATA}/repos/
+	SVNListParentPath On
+	SVNIndexXSLT "/portal/themes/current/css/svn.xsl"
+
+	AuthName "${PRODUCT_NAME} Subversion (SVN)"
+	AuthType Basic
+#if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
+	AuthBasicProvider wsgi
+	WSGIAuthUserScript ${PRODUCT_APP}/system/httpd/scripts/cas_auth.wsgi
+#else
+	AuthBasicProvider ldap
+	AuthLDAPUrl "ldap://${LDAP_HOST}:${LDAP_PORT}/${LDAP_USERS_DN}?${LDAP_USER_RDN_ATTR}"
+#end
+	AuthzSVNAccessFile ${SVN_DATA}/authz
+	Require valid-user
+</Location>

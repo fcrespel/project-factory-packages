@@ -1,0 +1,17 @@
+<project>
+	<target name="install">
+		<chmod perm="+x" verbose="true">
+			<fileset dir="${project.product.directory}">
+				<include name="**/*.sh" />
+			</fileset>
+		</chmod>
+		<delete includeemptydirs="true">
+			<fileset dir="${project.product.directory}/app/system/httpd" />
+			<fileset dir="${project.app.directory}">
+				<include name="temp/**" />
+				<include name="webapps/**" />
+				<include name="work/**" />
+			</fileset>
+		</delete>
+	</target>
+</project>

@@ -1,0 +1,145 @@
+<!--
+  #[
+  Project Factory Services - OSQA
+  ##
+  Copyright (C) 2013 - 2015 Project Factory team and contributors
+  ##
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  #]
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>fr.project-factory.packages.services</groupId>
+		<artifactId>services</artifactId>
+		<version>3.3.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>osqa</artifactId>
+	<version>0.9.0-8.20130930git-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Project Factory Services - OSQA</name>
+	<description>Open Source Questions and Answers</description>
+	
+	<properties>
+		<package.disabled>${osqa.disabled}</package.disabled>
+		<package.src.url>https://github.com/fcrespel/osqa.git</package.src.url>
+		<package.src.branch>master</package.src.branch>
+		<package.dependencies>
+			${package.prefix}-system-httpd,
+			${package.prefix}-system-mysql,
+			${package.prefix}-system-python,
+			${package.prefix}-service-portal
+		</package.dependencies>
+		<osqa.db.name>${product.id}_osqa</osqa.db.name>
+		<osqa.db.user>${product.id}_osqa</osqa.db.user>
+		<osqa.python.modules>elementtree markdown==2.4.1 html5lib south django==1.3.5</osqa.python.modules>
+		<osqa.lang>fr</osqa.lang>
+	</properties>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>rpm-maven-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>package-rpm</id>
+							<configuration>
+								<mappings combine.children="append">
+									<mapping>
+										<directory>${package.app}/forum/upfiles</directory>
+										<sources>
+											<softlinkSource>
+												<location>${package.data}/upfiles</location>
+											</softlinkSource>
+										</sources>
+									</mapping>
+									<mapping>
+										<directory>${package.app}/log</directory>
+										<sources>
+											<softlinkSource>
+												<location>${package.log}</location>
+											</softlinkSource>
+										</sources>
+									</mapping>
+								</mappings>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.vafer</groupId>
+					<artifactId>jdeb</artifactId>
+					<executions>
+						<execution>
+							<id>package-deb</id>
+							<configuration>
+								<dataSet combine.children="append">
+									<data>
+										<type>link</type>
+										<linkName>${package.app}/forum/upfiles</linkName>
+										<linkTarget>${package.data}/upfiles</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+									<data>
+										<type>link</type>
+										<linkName>${package.app}/log</linkName>
+										<linkTarget>${package.log}</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+								</dataSet>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<artifactId>maven-scm-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>process-resources-scm-checkout</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>checkout</goal>
+						</goals>
+						<configuration>
+							<checkoutDirectory>${project.app.directory}</checkoutDirectory>
+							<connectionUrl>scm:git:${package.src.url}</connectionUrl>
+							<scmVersionType>branch</scmVersionType>
+							<scmVersion>${package.src.branch}</scmVersion>
+							<excludes>.git/**,log/**,forum/upfiles/**</excludes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

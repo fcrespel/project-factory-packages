@@ -1,0 +1,70 @@
+#set( $PRODUCT_DOMAIN = ${project.properties.getProperty('product.domain')} )
+#set( $PRODUCT_SCHEME = ${project.properties.getProperty('product.scheme')} )
+#set( $OSQA_DB_NAME = ${project.properties.getProperty('osqa.db.name')} )
+#set( $OSQA_DB_USER = ${project.properties.getProperty('osqa.db.user')} )
+#set( $OSQA_LANG = ${project.properties.getProperty('osqa.lang')} )
+#set( $MYSQL_HOST = ${project.properties.getProperty('mysql.host')} )
+#set( $MYSQL_PORT = ${project.properties.getProperty('mysql.port')} )
+#set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
+# encoding:utf-8
+import os.path
+
+SITE_SRC_ROOT = os.path.dirname(__file__)
+LOG_FILENAME = 'django.osqa.log'
+
+#for logging
+import logging
+logging.basicConfig(
+    filename=os.path.join(SITE_SRC_ROOT, 'log', LOG_FILENAME),
+    level=logging.ERROR,
+    format='%(pathname)s TIME: %(asctime)s MSG: %(filename)s:%(funcName)s:%(lineno)d %(message)s',
+)
+
+#ADMINS and MANAGERS
+ADMINS = ()
+MANAGERS = ADMINS
+
+DEBUG = False
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': True
+}
+TEMPLATE_DEBUG = DEBUG
+INTERNAL_IPS = ('127.0.0.1',)
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': '${OSQA_DB_NAME}',
+        'USER': '${OSQA_DB_USER}',
+        'PASSWORD': '%{OSQA_DB_PASSWORD}',
+        'HOST': '${MYSQL_HOST}',
+        'PORT': '${MYSQL_PORT}',
+    }
+}
+
+CACHE_BACKEND = 'file://%s' % os.path.join(os.path.dirname(__file__),'cache').replace('\\','/')
+#CACHE_BACKEND = 'dummy://'
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+# This should be equal to your domain name, plus the web application context.
+# This shouldn't be followed by a trailing slash.
+# I.e., http://www.yoursite.com or http://www.hostedsite.com/yourhostapp
+APP_URL = '${PRODUCT_SCHEME}://${PRODUCT_DOMAIN}/osqa'
+
+#LOCALIZATIONS
+TIME_ZONE = 'Europe/Paris'
+
+#OTHER SETTINGS
+
+USE_I18N = True
+LANGUAGE_CODE = '${OSQA_LANG}'
+
+DJANGO_VERSION = 1.3
+OSQA_DEFAULT_SKIN = 'default'
+
+#if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
+DISABLED_MODULES = ['books', 'recaptcha', 'project_badges', 'openidauth', 'oauthauth', 'facebookauth', 'localauth', 'ldapauth']
+#else
+DISABLED_MODULES = ['books', 'recaptcha', 'project_badges', 'openidauth', 'oauthauth', 'facebookauth', 'localauth', 'casauth']
+#end

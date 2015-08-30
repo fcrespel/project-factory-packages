@@ -1,0 +1,69 @@
+#set( $PRODUCT_DOMAIN = ${project.properties.getProperty('product.domain')} )
+#set( $PRODUCT_GROUP_ADMINS = ${project.properties.getProperty('product.group.admins')} )
+#set( $PRODUCT_GROUP_USERS = ${project.properties.getProperty('product.group.users')} )
+#set( $ROOT_USER = ${project.properties.getProperty('root.user')} )
+#set( $BOT_USER = ${project.properties.getProperty('bot.user')} )
+#set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
+#if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
+#set( $AUTH_SOURCE = "CAS" )
+#else
+#set( $AUTH_SOURCE = "LDAP" )
+#end
+<?xml version="1.0" encoding="UTF-8"?>
+<security>
+  <version>2.0.5</version>
+  <users>
+    <user>
+      <id>anonymous</id>
+      <firstName>Nexus</firstName>
+      <lastName>Anonymous User</lastName>
+      <password>0a92fab3230134cca6eadd9898325b9b2ae67998</password>
+      <status>disabled</status>
+      <email>anonymous@${PRODUCT_DOMAIN}</email>
+    </user>
+  </users>
+  <roles>
+    <role>
+      <id>${PRODUCT_GROUP_ADMINS}</id>
+      <name>${PRODUCT_GROUP_ADMINS}</name>
+      <description>External mapping for ${PRODUCT_GROUP_ADMINS} (${AUTH_SOURCE})</description>
+      <roles>
+        <role>repository-any-full</role>
+        <role>nx-admin</role>
+      </roles>
+    </role>
+    <role>
+      <id>${PRODUCT_GROUP_USERS}</id>
+      <name>${PRODUCT_GROUP_USERS}</name>
+      <description>External mapping for ${PRODUCT_GROUP_USERS} (${AUTH_SOURCE})</description>
+      <roles>
+        <role>nx-developer</role>
+        <role>repository-any-read</role>
+      </roles>
+    </role>
+  </roles>
+  <userRoleMappings>
+    <userRoleMapping>
+      <userId>anonymous</userId>
+      <source>default</source>
+      <roles>
+        <role>anonymous</role>
+      </roles>
+    </userRoleMapping>
+    <userRoleMapping>
+      <userId>${ROOT_USER}</userId>
+      <source>${AUTH_SOURCE}</source>
+      <roles>
+        <role>nx-admin</role>
+      </roles>
+    </userRoleMapping>
+    <userRoleMapping>
+      <userId>${BOT_USER}</userId>
+      <source>${AUTH_SOURCE}</source>
+      <roles>
+        <role>nx-deployment</role>
+        <role>repository-any-full</role>
+      </roles>
+    </userRoleMapping>
+  </userRoleMappings>
+</security>
