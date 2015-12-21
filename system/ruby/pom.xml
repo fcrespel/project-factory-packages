@@ -54,14 +54,14 @@
 			${system.package.readline-devel},
 			${system.package.zlib-devel}
 		</package.dependencies>
-		<rvm.version>1.25.33</rvm.version>
+		<rvm.version>1.26.11</rvm.version>
 		<rvm.src.url>https://github.com/wayneeseguin/rvm/archive</rvm.src.url>
 		<rvm.src.file>${rvm.version}.tar.gz</rvm.src.file>
-		<ruby.version>2.1.5</ruby.version>
-		<ruby.src.url>http://cache.ruby-lang.org/pub/ruby</ruby.src.url>
+		<ruby.version>2.1.8</ruby.version>
+		<ruby.src.url>https://cache.ruby-lang.org/pub/ruby</ruby.src.url>
 		<ruby.src.file>ruby-${ruby.version}.tar.bz2</ruby.src.file>
-		<rubygems.version>2.2.2</rubygems.version>
-		<rubygems.src.url>http://production.cf.rubygems.org/rubygems</rubygems.src.url>
+		<rubygems.version>2.5.1</rubygems.version>
+		<rubygems.src.url>https://rubygems.org/rubygems</rubygems.src.url>
 		<rubygems.src.file>rubygems-${rubygems.version}.tgz</rubygems.src.file>
 		<ruby.gems>rake rack daemon_controller passenger bundler</ruby.gems>
 	</properties>
