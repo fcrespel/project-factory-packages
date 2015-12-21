@@ -52,6 +52,7 @@
 			${system.package.libyaml-devel},
 			${system.package.openssl-devel},
 			${system.package.readline-devel},
+			${system.package.sqlite-devel},
 			${system.package.zlib-devel}
 		</package.dependencies>
 		<rvm.version>1.26.11</rvm.version>
