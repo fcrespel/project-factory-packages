@@ -96,3 +96,5 @@ fi
 rm -f "@{product.bin}/cron.5mins/redmine-jenkins-sync.sh.lock"
 rm -f "@{product.bin}/cron.5mins/redmine-ldap-sync.sh.lock"
 rm -f "@{product.bin}/cron.daily/redmine-reminders.sh.lock"
+rm -f "@{product.bin}/cron.daily/redmine-attachments-prune.sh.lock"
+rm -f "@{product.bin}/cron.hourly/redmine-repo-sync.sh.lock"
