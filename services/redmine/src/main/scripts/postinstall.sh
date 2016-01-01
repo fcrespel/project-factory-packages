@@ -21,6 +21,7 @@ if [ ! -x "$BUNDLER" ]; then
 fi
 
 # Execute bundler to install required gems
+rvm default do bundle config build.nokogiri --use-system-libraries > /dev/null 2>&1
 if ! ( cd "@{package.app}" && rvm default do bundle install --jobs $NPROC --deployment --local ) > "$POSTINSTALL_OUTPUT" 2>&1; then
 	cat "$POSTINSTALL_OUTPUT"
 	rm -f "$POSTINSTALL_OUTPUT"
