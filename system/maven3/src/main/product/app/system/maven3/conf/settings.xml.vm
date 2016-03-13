@@ -1,7 +1,7 @@
 #set( $D = '$' )
 #set( $PRODUCT_DOMAIN = ${project.properties.getProperty('product.domain')} )
 #set( $PRODUCT_SCHEME = ${project.properties.getProperty('product.scheme')} )
-#set( $PRODUCT_DATA = ${project.properties.getProperty('product.data')} )
+#set( $PACKAGE_DATA = ${project.properties.getProperty('package.data')} )
 #set( $PROXY_HOST = ${project.properties.getProperty('proxy.host')} )
 #set( $PROXY_PORT = ${project.properties.getProperty('proxy.port')} )
 <?xml version="1.0" encoding="UTF-8"?>
@@ -57,7 +57,7 @@ under the License.
    |
    | Default: ~/.m2/repository
   -->
-  <localRepository>${PRODUCT_DATA}/system/maven/repository</localRepository>
+  <localRepository>${PACKAGE_DATA}/repository</localRepository>
 
   <!-- interactiveMode
    | This will determine whether maven prompts you when it needs input. If set to false,

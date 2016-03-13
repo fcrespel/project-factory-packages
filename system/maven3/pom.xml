@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>maven3</artifactId>
-	<version>3.2.5-1-SNAPSHOT</version>
+	<version>3.3.9-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory System - Maven 3</name>
@@ -39,6 +39,7 @@
 	<properties>
 		<package.disabled>${maven3.disabled}</package.disabled>
 		<package.src.file>apache-maven-${package.version}-bin.tar.gz</package.src.file>
+		<package.data>${product.data}/${package.type}/maven</package.data>
 		<package.dependencies>
 			${system.package.java7},
 			${system.package.java7-devel}
