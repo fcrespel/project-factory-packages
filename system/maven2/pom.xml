@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>maven2</artifactId>
-	<version>2.2.1-6-SNAPSHOT</version>
+	<version>2.2.1-7-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory System - Maven 2</name>
@@ -39,6 +39,7 @@
 	<properties>
 		<package.disabled>${maven2.disabled}</package.disabled>
 		<package.src.file>apache-maven-${package.version}-bin.tar.gz</package.src.file>
+		<package.data>${product.data}/${package.type}/maven</package.data>
 		<package.dependencies>
 			${system.package.java7},
 			${system.package.java7-devel}
