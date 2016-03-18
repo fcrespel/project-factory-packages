@@ -8,6 +8,7 @@
 #set( $HTTPD_PORT_HTTP = ${project.properties.getProperty('httpd.port.http')} )
 #set( $HTTPD_PORT_HTTPS = ${project.properties.getProperty('httpd.port.https')} )
 #set( $HTTPD_HSTS_ENABLED = ${project.properties.getProperty('httpd.hsts.enabled')} )
+#set( $HTTPD_XFRAMEOPTIONS_ENABLED = ${project.properties.getProperty('httpd.xframeoptions.enabled')} )
 #set( $HTTPD_MODULES = ${project.properties.getProperty('httpd.modules')} )
 #set( $SYSTEM_HTTPD_APP_MODULES = ${project.properties.getProperty('system.httpd.app.modules')} )
 #set( $SYSTEM_HTTPD_APP_MODULES_BUILTIN = ${project.properties.getProperty('system.httpd.app.modules.builtin')} )
@@ -171,6 +172,9 @@ Listen ${HTTPD_PORT_HTTP}
 #end
 <VirtualHost *:${HTTPD_PORT_HTTP}>
 	ServerName http://${PRODUCT_DOMAIN}:80
+#if( ${HTTPD_XFRAMEOPTIONS_ENABLED} == "1" || ${HTTPD_XFRAMEOPTIONS_ENABLED} == "true" )
+	Header always set X-Frame-Options SAMEORIGIN
+#end
 	<IfVersion < 2.4>
 		Include conf/maintenance?conf
 	</IfVersion>
@@ -189,7 +193,10 @@ Listen ${HTTPD_PORT_HTTPS}
 	ServerName https://${PRODUCT_DOMAIN}:443
 	SetEnvIf X-Forwarded-Proto ^https$ HTTPS=on
 #if( ${HTTPD_HSTS_ENABLED} == "1" || ${HTTPD_HSTS_ENABLED} == "true" )
-	Header set Strict-Transport-Security max-age=31536000
+	Header always set Strict-Transport-Security max-age=31536000
+#end
+#if( ${HTTPD_XFRAMEOPTIONS_ENABLED} == "1" || ${HTTPD_XFRAMEOPTIONS_ENABLED} == "true" )
+	Header always set X-Frame-Options SAMEORIGIN
 #end
 	<IfVersion < 2.4>
 		Include conf/maintenance?conf
