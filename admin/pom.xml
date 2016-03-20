@@ -46,6 +46,7 @@
 		<module>phpmyadmin</module>
 		<module>phpldapadmin</module>
 		<module>piwik</module>
+		<module>kibana</module>
 	</modules>
 
 </project>

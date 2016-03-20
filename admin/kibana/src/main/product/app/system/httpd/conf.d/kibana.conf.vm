@@ -1,0 +1,31 @@
+#set( $PRODUCT_NAME = ${project.properties.getProperty('product.name')} )
+#set( $PRODUCT_APP = ${project.properties.getProperty('product.app')} )
+#set( $PRODUCT_GROUP_ADMINS = ${project.properties.getProperty('product.group.admins')} )
+#set( $KIBANA_PORT_HTTP = ${project.properties.getProperty('kibana.port.http')} )
+#set( $LDAP_HOST = ${project.properties.getProperty('ldap.host')} )
+#set( $LDAP_PORT = ${project.properties.getProperty('ldap.port')} )
+#set( $LDAP_USERS_DN = ${project.properties.getProperty('ldap.users.dn')} )
+#set( $LDAP_USER_RDN_ATTR = ${project.properties.getProperty('ldap.user.rdn.attr')} )
+#set( $LDAP_GROUPS_DN = ${project.properties.getProperty('ldap.groups.dn')} )
+#set( $LDAP_GROUP_RDN_ATTR = ${project.properties.getProperty('ldap.group.rdn.attr')} )
+#set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
+# Kibana configuration
+
+<Location /admin/kibana>
+	ProxyPass http://127.0.0.1:${KIBANA_PORT_HTTP} timeout=60 ttl=300
+	ProxyPassReverse http://127.0.0.1:${KIBANA_PORT_HTTP}
+
+	AuthName "${PRODUCT_NAME} Administration"
+	AuthType Basic
+#if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
+	AuthBasicProvider wsgi
+	WSGIAuthUserScript ${PRODUCT_APP}/system/httpd/scripts/cas_auth.wsgi
+	WSGIAuthGroupScript ${PRODUCT_APP}/system/httpd/scripts/cas_auth.wsgi
+	Require wsgi-group ${PRODUCT_GROUP_ADMINS}
+	
+#else
+	AuthBasicProvider ldap
+	AuthLDAPUrl "ldap://${LDAP_HOST}:${LDAP_PORT}/${LDAP_USERS_DN}?${LDAP_USER_RDN_ATTR}"
+	Require ldap-group ${LDAP_GROUP_RDN_ATTR}=${PRODUCT_GROUP_ADMINS},${LDAP_GROUPS_DN}
+#end
+</Location>
