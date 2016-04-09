@@ -27,3 +27,5 @@ fi
 # Set the new theme
 storevar PRODUCT_THEME "$NEW_THEME"
 rm -f "$THEME_DIR/default" && ln -s "$NEW_THEME" "$THEME_DIR/default"
+chown -h $PRODUCT_USER:$PRODUCT_GROUP "$THEME_DIR/default"
+echo "Theme changed to '$NEW_THEME'"
