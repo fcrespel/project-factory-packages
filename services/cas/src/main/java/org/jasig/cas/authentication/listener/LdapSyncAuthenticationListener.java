@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
@@ -71,7 +72,7 @@ public class LdapSyncAuthenticationListener implements AuthenticationListener {
 			return false;
 		
 		// Build the user DN
-		String userDN = dnTemplate.replaceAll("%u", LdapEncoder.nameEncode(principal.getId()));
+		String userDN = dnTemplate.replaceAll("%u", LdapEncoder.nameEncode(principal.getId().toLowerCase(Locale.ROOT)));
 		
 		try {
 			// Find and update the existing user
@@ -93,7 +94,7 @@ public class LdapSyncAuthenticationListener implements AuthenticationListener {
 				try {
 					// Find and update the existing group
 					DirContextOperations context = ldapTemplate.lookupContext(groupDN);
-					context.addAttributeValue(groupMemberAttr, groupMemberIsDN ? userDN : principal.getId());
+					context.addAttributeValue(groupMemberAttr, groupMemberIsDN ? userDN : principal.getId().toLowerCase(Locale.ROOT));
 					ldapTemplate.modifyAttributes(context);
 					log.info("User DN '" + userDN + "' was successfully added to group DN '" + groupDN + "'");
 				} catch (NameNotFoundException e) {
@@ -169,7 +170,7 @@ public class LdapSyncAuthenticationListener implements AuthenticationListener {
 			
 			// Replace %u placeholder with username
 			if (sValue.contains("%u")) {
-				sValue = sValue.replaceAll("%u", upCredentials.getUsername());
+				sValue = sValue.replaceAll("%u", upCredentials.getUsername().toLowerCase(Locale.ROOT));
 			}
 			
 			// Replace %p placeholder with hashed and salted password
