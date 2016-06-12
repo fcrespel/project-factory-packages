@@ -87,6 +87,8 @@
     <permission>hudson.model.Item.Workspace:${ROOT_USER}</permission>
     <permission>hudson.model.Run.Delete:${PRODUCT_GROUP_ADMINS}</permission>
     <permission>hudson.model.Run.Delete:${ROOT_USER}</permission>
+    <permission>hudson.model.Run.Replay:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Run.Replay:${ROOT_USER}</permission>
     <permission>hudson.model.Run.Update:${BOT_USER}</permission>
     <permission>hudson.model.Run.Update:${PRODUCT_GROUP_ADMINS}</permission>
     <permission>hudson.model.Run.Update:${ROOT_USER}</permission>
@@ -102,7 +104,7 @@
     <permission>hudson.scm.SCM.Tag:${ROOT_USER}</permission>
   </authorizationStrategy>
 #if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
-  <securityRealm class="org.jenkinsci.plugins.cas.CasSecurityRealm" plugin="cas-plugin@1.1.2">
+  <securityRealm class="org.jenkinsci.plugins.cas.CasSecurityRealm" plugin="cas-plugin@1.2.0">
     <casServerUrl>${CAS_URL}</casServerUrl>
     <casProtocol class="org.jenkinsci.plugins.cas.protocols.Saml11Protocol">
       <authoritiesAttribute>groups,roles</authoritiesAttribute>
@@ -127,7 +129,7 @@
   <projectNamingStrategy class="jenkins.model.ProjectNamingStrategy${D}DefaultProjectNamingStrategy"/>
   <workspaceDir>${D}{ITEM_ROOTDIR}/workspace</workspaceDir>
   <buildsDir>${D}{ITEM_ROOTDIR}/builds</buildsDir>
-  <markupFormatter class="hudson.markup.RawHtmlMarkupFormatter">
+  <markupFormatter class="hudson.markup.RawHtmlMarkupFormatter" plugin="antisamy-markup-formatter@1.1">
     <disableSyntaxHighlighting>false</disableSyntaxHighlighting>
   </markupFormatter>
   <jdks>
