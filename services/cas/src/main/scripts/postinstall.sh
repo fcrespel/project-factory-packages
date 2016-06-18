@@ -1,7 +1,37 @@
+APXS_LIBEXECDIR="@{product.app}/system/httpd/modules"
+MOD_AUTH_CAS_DIR="$APXS_LIBEXECDIR/mod_auth_cas"
+
 # Interpolate template
 ensurepassword CAS_DB_PASSWORD
 interpolatetemplate_inplace "@{package.app}/conf/tomcat-users.xml"
 interpolatetemplate_inplace "@{package.app}/webapps/cas/WEB-INF/cas.properties"
+
+# Fix script permissions
+chmod +x "$MOD_AUTH_CAS_DIR/compile"
+chmod +x "$MOD_AUTH_CAS_DIR/config.guess"
+chmod +x "$MOD_AUTH_CAS_DIR/config.sub"
+chmod +x "$MOD_AUTH_CAS_DIR/configure"
+chmod +x "$MOD_AUTH_CAS_DIR/depcomp"
+chmod +x "$MOD_AUTH_CAS_DIR/install-sh"
+chmod +x "$MOD_AUTH_CAS_DIR/missing"
+
+# Make and install mod_auth_cas
+POSTINSTALL_OUTPUT=`mktemp --tmpdir=$PRODUCT_TMP`
+( cd "$MOD_AUTH_CAS_DIR" && make distclean ) > /dev/null 2>&1
+if ! ( cd "$MOD_AUTH_CAS_DIR" && ./configure && make ) > "$POSTINSTALL_OUTPUT" 2>&1; then
+	cat "$POSTINSTALL_OUTPUT"
+	rm -f "$POSTINSTALL_OUTPUT"
+	printerror "ERROR: failed to compile mod_auth_cas"
+	exit 1
+fi
+if ! ( cd "$MOD_AUTH_CAS_DIR/src" && apxs -i -S LIBEXECDIR="$APXS_LIBEXECDIR" mod_auth_cas.la ) > "$POSTINSTALL_OUTPUT" 2>&1; then
+	cat "$POSTINSTALL_OUTPUT"
+	rm -f "$POSTINSTALL_OUTPUT"
+	printerror "ERROR: failed to install mod_auth_cas"
+	exit 1
+fi
+( cd "$MOD_AUTH_CAS_DIR" && make distclean ) > /dev/null 2>&1
+rm -f "$POSTINSTALL_OUTPUT"
 
 # Create mod_auth_cas cookie directory
 mkdir -p "@{product.data}/system/httpd/mod_auth_cas"

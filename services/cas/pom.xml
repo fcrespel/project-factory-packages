@@ -39,6 +39,8 @@
 	<properties>
 		<package.disabled>${cas.disabled}</package.disabled>
 		<package.src.bundle>${package.bundle.tomcat}</package.src.bundle>
+		<package.src.url>https://github.com/Jasig/mod_auth_cas/archive</package.src.url>
+		<package.src.file>v${mod_auth_cas.version}.tar.gz</package.src.file>
 		<package.bind>${cas.bind}</package.bind>
 		<package.port.shutdown>${cas.port.shutdown}</package.port.shutdown>
 		<package.port.ajp>${cas.port.ajp}</package.port.ajp>
@@ -49,7 +51,12 @@
 			${package.prefix}-system-mysql,
 			${package.prefix}-system-tomcat,
 			${package.prefix}-service-portal,
-			${system.package.mod_auth_cas}
+			${system.package.gcc},
+			${system.package.libtool},
+			${system.package.libcurl-devel},
+			${system.package.make},
+			${system.package.openssl-devel},
+			${system.package.pcre-devel}
 		</package.dependencies>
 		<cas.version>3.5.3</cas.version>
 		<cas.db.name>${product.id}_cas</cas.db.name>
@@ -57,6 +64,7 @@
 		<cas.rest.auth.connectTimeout>5000</cas.rest.auth.connectTimeout>
 		<cas.rest.auth.readTimeout>5000</cas.rest.auth.readTimeout>
 		<cas.rest.auth.ssl.trustStore>file://${package.app}/conf/trust.jks</cas.rest.auth.ssl.trustStore>
+		<mod_auth_cas.version>1.1</mod_auth_cas.version>
 	</properties>
 
 	<dependencies>
@@ -222,6 +230,32 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>process-resources-extract</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<skip>${package.disabled}</skip>
+							<target>
+								<untar compression="gzip"
+									src="${project.downloaded.directory}/${package.src.file}"
+									dest="${project.product.directory}/app/system/httpd/modules/mod_auth_cas">
+									<cutdirsmapper dirs="1" />
+								</untar>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
