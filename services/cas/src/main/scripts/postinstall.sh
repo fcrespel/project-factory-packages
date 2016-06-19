@@ -24,7 +24,7 @@ if ! ( cd "$MOD_AUTH_CAS_DIR" && ./configure && make ) > "$POSTINSTALL_OUTPUT" 2
 	printerror "ERROR: failed to compile mod_auth_cas"
 	exit 1
 fi
-if ! ( cd "$MOD_AUTH_CAS_DIR/src" && apxs -i -S LIBEXECDIR="$APXS_LIBEXECDIR" mod_auth_cas.la ) > "$POSTINSTALL_OUTPUT" 2>&1; then
+if ! ( cd "$MOD_AUTH_CAS_DIR" && apxs -i -S LIBEXECDIR="$APXS_LIBEXECDIR" src/mod_auth_cas.la ) > "$POSTINSTALL_OUTPUT" 2>&1; then
 	cat "$POSTINSTALL_OUTPUT"
 	rm -f "$POSTINSTALL_OUTPUT"
 	printerror "ERROR: failed to install mod_auth_cas"
