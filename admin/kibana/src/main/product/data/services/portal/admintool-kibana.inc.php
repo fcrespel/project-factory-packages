@@ -5,7 +5,7 @@ return array(
 	'id'			=> 'kibana',
 	'url'			=> '/admin/kibana/',
 	'title'			=> 'Kibana',
-	'description'	=> 'Visualisation de données Elasticsearch',
+	'description'	=> 'Visualisation de donn&eacute;es Elasticsearch',
 	'details'		=> <<<EOL
         <ul>
           <li>Visualisation des <strong>données issues d'Elasticsearch</strong> sous forme de tableau de bord</li>
