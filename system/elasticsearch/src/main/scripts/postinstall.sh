@@ -4,7 +4,7 @@ chmod +x "@{package.app}/bin/elasticsearch.in.sh"
 chmod +x "@{package.app}/bin/plugin"
 
 # Fix directory permissions
-chown -R @{package.user}:@{package.group} "@{package.app}" "@{package.data}" "@{package.log}"
+chown -R @{package.user}:@{package.group} "@{package.app}" "@{package.backup}" "@{package.data}" "@{package.log}"
 
 # Enable service at startup
 if ! enableservice @{package.service}; then
