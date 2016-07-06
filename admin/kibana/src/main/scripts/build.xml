@@ -1,0 +1,19 @@
+<project>
+	<target name="install">
+		<chmod perm="+x" verbose="true">
+			<fileset dir="${project.product.directory}" erroronmissingdir="false">
+				<include name="**/*.sh" />
+			</fileset>
+		</chmod>
+		<concat destfile="${project.app.directory}/src/ui/views/ui_app.jade" append="true"><![CDATA[
+block head
+  link(rel='stylesheet', type='text/css', href='/portal/themes/current/css/kibana.css')
+  script(type='text/javascript', src='/portal/toolbar.php?tab=kibana&format=js')
+]]></concat>
+		<concat destfile="${project.app.directory}/src/ui/public/chrome/chrome.html" append="true"><![CDATA[
+<script type="text/javascript">
+add_platform_toolbar(); // Project Factory
+</script>
+]]></concat>
+	</target>
+</project>
