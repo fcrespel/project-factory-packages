@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>kibana</artifactId>
-	<version>4.5.1-1-SNAPSHOT</version>
+	<version>4.5.2-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Admin - Kibana</name>
