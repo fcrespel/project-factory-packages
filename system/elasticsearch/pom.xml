@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>elasticsearch</artifactId>
-	<version>2.3.3-1-SNAPSHOT</version>
+	<version>2.3.4-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory System - Elasticsearch</name>
