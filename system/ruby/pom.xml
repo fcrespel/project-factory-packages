@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>ruby</artifactId>
-	<version>3.3.0-1-SNAPSHOT</version>
+	<version>2.2.5-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory System - Ruby</name>
@@ -55,16 +55,16 @@
 			${system.package.sqlite-devel},
 			${system.package.zlib-devel}
 		</package.dependencies>
-		<rvm.version>1.26.11</rvm.version>
+		<rvm.version>1.27.0</rvm.version>
 		<rvm.src.url>https://github.com/wayneeseguin/rvm/archive</rvm.src.url>
 		<rvm.src.file>${rvm.version}.tar.gz</rvm.src.file>
-		<ruby.version>2.1.8</ruby.version>
+		<ruby.version>2.2.5</ruby.version>
 		<ruby.src.url>https://cache.ruby-lang.org/pub/ruby</ruby.src.url>
 		<ruby.src.file>ruby-${ruby.version}.tar.bz2</ruby.src.file>
-		<rubygems.version>2.5.1</rubygems.version>
+		<rubygems.version>2.6.6</rubygems.version>
 		<rubygems.src.url>https://rubygems.org/rubygems</rubygems.src.url>
 		<rubygems.src.file>rubygems-${rubygems.version}.tgz</rubygems.src.file>
-		<ruby.gems>rake rack daemon_controller passenger bundler</ruby.gems>
+		<ruby.gems>rake rack passenger bundler</ruby.gems>
 	</properties>
 
 	<repositories>
@@ -79,31 +79,25 @@
 			<dependency>
 				<groupId>rubygems</groupId>
 				<artifactId>rake</artifactId>
-				<version>10.3.2</version>
+				<version>11.2.2</version>
 				<type>gem</type>
 			</dependency>
 			<dependency>
 				<groupId>rubygems</groupId>
 				<artifactId>rack</artifactId>
-				<version>1.5.2</version>
-				<type>gem</type>
-			</dependency>
-			<dependency>
-				<groupId>rubygems</groupId>
-				<artifactId>daemon_controller</artifactId>
-				<version>1.2.0</version>
+				<version>1.6.4</version>
 				<type>gem</type>
 			</dependency>
 			<dependency>
 				<groupId>rubygems</groupId>
 				<artifactId>passenger</artifactId>
-				<version>4.0.59</version>
+				<version>5.0.29</version>
 				<type>gem</type>
 			</dependency>
 			<dependency>
 				<groupId>rubygems</groupId>
 				<artifactId>bundler</artifactId>
-				<version>1.8.2</version>
+				<version>1.12.5</version>
 				<type>gem</type>
 			</dependency>
 		</dependencies>
