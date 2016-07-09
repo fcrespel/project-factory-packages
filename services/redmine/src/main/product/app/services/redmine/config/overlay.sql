@@ -18,14 +18,23 @@ SET `login` = '@{root.user}',
 `hashed_password` = SHA1(CONCAT(`salt`, '%{ROOT_PASSWORD_SHA1}')),
 `firstname` = 'System',
 `lastname` = 'Admin',
-`mail` = '@{root.user}@@{product.domain}',
 `language` = '@{redmine.lang}',
-`auth_source_id` = 1
+`auth_source_id` = 1,
+`must_change_passwd` = 0
 WHERE `id` = 1;
 
+-- Root email
+UPDATE `email_addresses`
+SET `address` = '@{root.user}@@{product.domain}'
+WHERE `user_id`= 1;
+
 -- Bot user
-INSERT INTO `users` (`id`, `login`, `hashed_password`, `firstname`, `lastname`, `mail`, `admin`, `status`, `last_login_on`, `language`, `auth_source_id`, `created_on`, `updated_on`, `type`, `identity_url`, `mail_notification`, `salt`) VALUES
-(4, '@{bot.user}', '', 'System', 'Bot', '@{bot.user}@@{product.domain}', 0, 1, NULL, '@{redmine.lang}', 1, SYSDATE(), SYSDATE(), 'User', NULL, 'only_my_events', NULL);
+INSERT INTO `users` (`id`, `login`, `hashed_password`, `firstname`, `lastname`, `admin`, `status`, `last_login_on`, `language`, `auth_source_id`, `created_on`, `updated_on`, `type`, `identity_url`, `mail_notification`, `salt`) VALUES
+(4, '@{bot.user}', '', 'System', 'Bot', 0, 1, NULL, '@{redmine.lang}', 1, SYSDATE(), SYSDATE(), 'User', NULL, 'only_my_events', NULL);
+
+-- Bot email
+INSERT INTO `email_addresses` (`id`, `user_id`, `address`, `is_default`, `notify`, `created_on`, `updated_on`) VALUES
+(2, 4, '@{bot.user}@@{product.domain}', 1, 0, SYSDATE(), SYSDATE());
 
 -- Bot API key
 INSERT INTO `tokens` (`id`, `user_id`, `action`, `value`, `created_on`) VALUES
@@ -34,7 +43,7 @@ INSERT INTO `tokens` (`id`, `user_id`, `action`, `value`, `created_on`) VALUES
 -- Settings
 INSERT INTO `settings` (`id`, `name`, `value`, `updated_on`) VALUES
 (1, 'text_formatting', 'textile', SYSDATE()),
-(2, 'protocol', 'http', SYSDATE()),
+(2, 'protocol', '@{product.scheme}', SYSDATE()),
 (3, 'repositories_encodings', '', SYSDATE()),
 (4, 'host_name', '@{product.domain}/redmine', SYSDATE()),
 (5, 'app_title', 'Redmine', SYSDATE()),
@@ -101,7 +110,7 @@ INSERT INTO `settings` (`id`, `name`, `value`, `updated_on`) VALUES
 
 -- Hooks
 INSERT INTO `hooks` (`id`, `hook`, `html_code`) VALUES
-(1, 'view_layouts_base_html_head', '<script type="text/javascript" src="/portal/toolbar.php?tab=redmine&amp;format=js"></script>\r\n<script type="text/javascript" src="/portal/themes/current/js/redmine.js"></script>');
+(1, 'view_layouts_base_html_head', '<script type="text/javascript" src="/portal/toolbar.php?tab=redmine&amp;format=js"></script>');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

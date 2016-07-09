@@ -11,7 +11,6 @@ interpolatetemplate_inplace "@{package.app}/config/overlay.sql"
 # Initialize logs
 touch "@{package.log}/$RAILS_ENV.log" && chown @{package.user}:@{package.group} "@{package.log}/$RAILS_ENV.log"
 touch "@{package.log}/ldap_sync.log" && chown @{product.user}:@{product.group} "@{package.log}/ldap_sync.log"
-touch "@{package.log}/jenkins_sync.log" && chown @{product.user}:@{product.group} "@{package.log}/jenkins_sync.log"
 
 # Check if bundler is available
 BUNDLER=`rvm default do which bundle`
@@ -30,7 +29,7 @@ if ! ( cd "@{package.app}" && rvm default do bundle install --jobs $NPROC --depl
 fi
 
 # Generate session store
-( cd "@{package.app}" && rvm default do bundle exec rake generate_secret_token )
+( cd "@{package.app}" && rm -f "config/initializers/secret_token.rb" && rvm default do bundle exec rake generate_secret_token )
 
 # Start MySQL if necessary
 if ! startservice @{mysql.service}; then

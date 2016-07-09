@@ -6,7 +6,7 @@ Redmine::Plugin.register :redmine_token_management do
   author 'Jeremy Mistero'
   author_url 'mailto:jeremy.mistero@cgi.com'
   description 'This plugin lets you track issue tokens (billing units) per project'
-  version '1.2.1'
+  version '1.2.2'
   requires_redmine :version_or_higher => '2.0.0'
 
   project_module :tokens do
