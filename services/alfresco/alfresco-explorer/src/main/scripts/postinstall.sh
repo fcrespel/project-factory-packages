@@ -15,28 +15,20 @@ chmod +x "@{package.app}/swftools/src/missing"
 chmod +x "@{package.app}/swftools/src/mkinstalldirs"
 
 # Make and install SWFTools
-POSTINSTALL_OUTPUT=`mktemp --tmpdir=$PRODUCT_TMP`
 ( cd "@{package.app}/swftools/src" && make distclean ) > /dev/null 2>&1
-if ! ( cd "@{package.app}/swftools/src" && ./configure --prefix=@{package.app}/swftools ) > "$POSTINSTALL_OUTPUT" 2>&1; then
-	cat "$POSTINSTALL_OUTPUT"
-	rm -f "$POSTINSTALL_OUTPUT"
+if ! ( cd "@{package.app}/swftools/src" && ./configure --prefix=@{package.app}/swftools ); then
 	printerror "ERROR: failed to configure SWFTools"
 	exit 1
 fi
-if ! ( cd "@{package.app}/swftools/src" && make ) > "$POSTINSTALL_OUTPUT" 2>&1; then
-	cat "$POSTINSTALL_OUTPUT"
-	rm -f "$POSTINSTALL_OUTPUT"
+if ! ( cd "@{package.app}/swftools/src" && make ); then
 	printerror "ERROR: failed to compile SWFTools"
 	exit 1
 fi
-if ! ( cd "@{package.app}/swftools/src" && make install ) > "$POSTINSTALL_OUTPUT" 2>&1; then
-	cat "$POSTINSTALL_OUTPUT"
-	rm -f "$POSTINSTALL_OUTPUT"
+if ! ( cd "@{package.app}/swftools/src" && make install ); then
 	printerror "ERROR: failed to install SWFTools"
 	exit 1
 fi
 ( cd "@{package.app}/swftools/src" && make distclean ) > /dev/null 2>&1
-rm -f "$POSTINSTALL_OUTPUT"
 
 # Create trust store if necessary
 create_truststore "@{package.app}/conf/trust.jks" @{package.user} @{package.group}

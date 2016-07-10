@@ -1,4 +1,3 @@
-POSTINSTALL_OUTPUT=`mktemp --tmpdir=$PRODUCT_TMP`
 MODULES_ENABLED="@{drupal.modules.enabled}"
 MODULES_DISABLED="@{drupal.modules.disabled}"
 
@@ -12,13 +11,11 @@ interpolatetemplate_inplace "@{package.app}/scripts/overlay.sql"
 
 # Start MySQL if necessary
 if ! startservice @{mysql.service}; then
-	rm -f "$POSTINSTALL_OUTPUT"
 	exit 1
 fi
 
 # Create database and user if necessary
 if ! mysql_createdb "@{drupal.db.name}" || ! mysql_createuser "@{drupal.db.user}" "$DRUPAL_DB_PASSWORD" "@{drupal.db.name}"; then
-	rm -f "$POSTINSTALL_OUTPUT"
 	exit 1
 fi
 
@@ -28,10 +25,7 @@ if [ ! -e "@{package.app}/sites/default/settings.php" ]; then
 	if ! drush site-install standard \
 		--site-name="@{product.name}" --site-mail="drupal@@{product.domain}" --locale="@{drupal.lang}" \
 		--account-name="@{root.user}" --account-mail="@{root.user}@@{product.domain}" --account-pass="$ROOT_PASSWORD" \
-		--db-url="mysql://@{drupal.db.user}:$DRUPAL_DB_PASSWORD@@{mysql.host}:@{mysql.port}/@{drupal.db.name}" \
-		> "$POSTINSTALL_OUTPUT" 2>&1; then
-		cat "$POSTINSTALL_OUTPUT"
-		rm -f "$POSTINSTALL_OUTPUT"
+		--db-url="mysql://@{drupal.db.user}:$DRUPAL_DB_PASSWORD@@{mysql.host}:@{mysql.port}/@{drupal.db.name}"; then
 		printerror "ERROR: failed to install Drupal using Drush"
 		exit 1
 	fi
@@ -82,25 +76,19 @@ if [ ! -e "@{package.app}/sites/default/settings.php" ]; then
 	done
 	
 	# Update database if necessary
-	if ! drush updatedb > "$POSTINSTALL_OUTPUT" 2>&1; then
-		cat "$POSTINSTALL_OUTPUT"
-		rm -f "$POSTINSTALL_OUTPUT"
+	if ! drush updatedb; then
 		printerror "ERROR: failed to update Drupal database"
 		exit 1
 	fi
 	
 	# Apply SQL overlay
-	if ! cat "@{package.app}/scripts/overlay.sql" | mysql_exec "@{drupal.db.name}" > "$POSTINSTALL_OUTPUT" 2>&1; then
-		cat "$POSTINSTALL_OUTPUT"
-		rm -f "$POSTINSTALL_OUTPUT"
+	if ! cat "@{package.app}/scripts/overlay.sql" | mysql_exec "@{drupal.db.name}"; then
 		printerror "ERROR: failed to apply overlay to Drupal database"
 		exit 1
 	fi
 else
 	# Update database if necessary
-	if ! drush updatedb > "$POSTINSTALL_OUTPUT" 2>&1; then
-		cat "$POSTINSTALL_OUTPUT"
-		rm -f "$POSTINSTALL_OUTPUT"
+	if ! drush updatedb; then
 		printerror "ERROR: failed to update Drupal database"
 		exit 1
 	fi
@@ -114,7 +102,6 @@ drush_quiet cache-clear all
 chown -R @{package.user}:@{package.group} "@{package.app}"
 chown -R @{httpd.user}:@{httpd.group} "@{package.app}/sites" "@{package.data}"
 chmod -R ug=rwX "@{package.app}/sites" "@{package.data}"
-rm -f "$POSTINSTALL_OUTPUT"
 
 # Reload HTTPD and Nagios if already running
 reloadservice @{httpd.service}

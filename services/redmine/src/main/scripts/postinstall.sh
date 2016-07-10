@@ -1,5 +1,4 @@
 export RAILS_ENV="production"
-POSTINSTALL_OUTPUT=`mktemp --tmpdir=$PRODUCT_TMP`
 NPROC=`nproc`
 
 # Interpolate templates
@@ -21,9 +20,7 @@ fi
 
 # Execute bundler to install required gems
 rvm default do bundle config build.nokogiri --use-system-libraries > /dev/null 2>&1
-if ! ( cd "@{package.app}" && rvm default do bundle install --jobs $NPROC --deployment --local ) > "$POSTINSTALL_OUTPUT" 2>&1; then
-	cat "$POSTINSTALL_OUTPUT"
-	rm -f "$POSTINSTALL_OUTPUT"
+if ! ( cd "@{package.app}" && rvm default do bundle install --jobs $NPROC --deployment --local ); then
 	printerror "ERROR: failed to install required Gems for Redmine"
 	exit 1
 fi
@@ -39,14 +36,11 @@ fi
 # Create database and user if necessary
 DO_DBINIT=`if mysql_dbexists "@{redmine.db.name}"; then echo 0; else echo 1; fi`
 if ! mysql_createdb "@{redmine.db.name}" || ! mysql_createuser "@{redmine.db.user}" "$REDMINE_DB_PASSWORD" "@{redmine.db.name}"; then
-	rm -f "$POSTINSTALL_OUTPUT"
 	exit 1
 fi
 
 # Migrate database structure
-if ! ( cd "@{package.app}" && rvm default do bundle exec rake db:migrate && rvm default do bundle exec rake redmine:plugins:migrate ) > "$POSTINSTALL_OUTPUT" 2>&1; then
-	cat "$POSTINSTALL_OUTPUT"
-	rm -f "$POSTINSTALL_OUTPUT"
+if ! ( cd "@{package.app}" && rvm default do bundle exec rake db:migrate && rvm default do bundle exec rake redmine:plugins:migrate ); then
 	printerror "ERROR: failed to migrate Redmine database"
 	exit 1
 fi
@@ -54,17 +48,13 @@ fi
 # Initialize database content
 if [ "$DO_DBINIT" -eq 1 ]; then
 	# Load default data
-	if ! ( cd "@{package.app}" && REDMINE_LANG=@{redmine.lang} rvm default do bundle exec rake redmine:load_default_data ) > "$POSTINSTALL_OUTPUT" 2>&1; then
-		cat "$POSTINSTALL_OUTPUT"
-		rm -f "$POSTINSTALL_OUTPUT"
+	if ! ( cd "@{package.app}" && REDMINE_LANG=@{redmine.lang} rvm default do bundle exec rake redmine:load_default_data ); then
 		printerror "ERROR: failed to load default data into Redmine"
 		exit 1
 	fi
 	
 	# Apply SQL overlay
-	if ! cat "@{package.app}/config/overlay.sql" | mysql_exec "@{redmine.db.name}" > "$POSTINSTALL_OUTPUT" 2>&1; then
-		cat "$POSTINSTALL_OUTPUT"
-		rm -f "$POSTINSTALL_OUTPUT"
+	if ! cat "@{package.app}/config/overlay.sql" | mysql_exec "@{redmine.db.name}"; then
 		printerror "ERROR: failed to apply overlay to Redmine database"
 		exit 1
 	fi
@@ -75,7 +65,6 @@ fi
 
 # Cleanup
 ( cd "@{package.app}" && rvm default do bundle exec rake tmp:cache:clear && rvm default do bundle exec rake tmp:sessions:clear ) > /dev/null 2>&1
-rm -f "$POSTINSTALL_OUTPUT"
 chown -R @{package.user}:@{package.group} "@{package.app}" "@{package.data}"
 
 # Reload HTTPD and Nagios if already running

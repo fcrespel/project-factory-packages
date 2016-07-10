@@ -22,18 +22,12 @@ if [ "$DO_DBINIT" -eq 1 ]; then
 fi
 
 # Update database (twice for certain versions)
-POSTINSTALL_OUTPUT=`mktemp --tmpdir=$PRODUCT_TMP`
-if ! /usr/bin/php "@{package.app}/console" core:update --yes > "$POSTINSTALL_OUTPUT" 2>&1; then
-	cat "$POSTINSTALL_OUTPUT"
-	rm -f "$POSTINSTALL_OUTPUT"
+if ! /usr/bin/php "@{package.app}/console" core:update --yes; then
 	exit 1
 fi
-if ! /usr/bin/php "@{package.app}/console" core:update --yes > "$POSTINSTALL_OUTPUT" 2>&1; then
-	cat "$POSTINSTALL_OUTPUT"
-	rm -f "$POSTINSTALL_OUTPUT"
+if ! /usr/bin/php "@{package.app}/console" core:update --yes; then
 	exit 1
 fi
-rm -f "$POSTINSTALL_OUTPUT"
 
 # Clear cache
 /usr/bin/php "@{package.app}/console" core:clear-caches > /dev/null 2>&1

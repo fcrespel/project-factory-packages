@@ -16,22 +16,16 @@ chmod +x "$MOD_AUTH_CAS_DIR/install-sh"
 chmod +x "$MOD_AUTH_CAS_DIR/missing"
 
 # Make and install mod_auth_cas
-POSTINSTALL_OUTPUT=`mktemp --tmpdir=$PRODUCT_TMP`
 ( cd "$MOD_AUTH_CAS_DIR" && make distclean ) > /dev/null 2>&1
-if ! ( cd "$MOD_AUTH_CAS_DIR" && ./configure && make ) > "$POSTINSTALL_OUTPUT" 2>&1; then
-	cat "$POSTINSTALL_OUTPUT"
-	rm -f "$POSTINSTALL_OUTPUT"
+if ! ( cd "$MOD_AUTH_CAS_DIR" && ./configure && make ); then
 	printerror "ERROR: failed to compile mod_auth_cas"
 	exit 1
 fi
-if ! ( cd "$MOD_AUTH_CAS_DIR" && apxs -i -S LIBEXECDIR="$APXS_LIBEXECDIR" src/mod_auth_cas.la ) > "$POSTINSTALL_OUTPUT" 2>&1; then
-	cat "$POSTINSTALL_OUTPUT"
-	rm -f "$POSTINSTALL_OUTPUT"
+if ! ( cd "$MOD_AUTH_CAS_DIR" && apxs -i -S LIBEXECDIR="$APXS_LIBEXECDIR" src/mod_auth_cas.la ); then
 	printerror "ERROR: failed to install mod_auth_cas"
 	exit 1
 fi
 ( cd "$MOD_AUTH_CAS_DIR" && make distclean ) > /dev/null 2>&1
-rm -f "$POSTINSTALL_OUTPUT"
 
 # Create mod_auth_cas cookie directory
 mkdir -p "@{product.data}/system/httpd/mod_auth_cas"

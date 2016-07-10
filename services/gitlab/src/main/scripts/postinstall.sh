@@ -1,5 +1,4 @@
 export RAILS_ENV="production"
-POSTINSTALL_OUTPUT=`mktemp --tmpdir=$PRODUCT_TMP`
 NPROC=`nproc`
 
 # Interpolate templates
@@ -25,9 +24,7 @@ fi
 
 # Execute bundler to install required gems
 rvm default do bundle config build.nokogiri --use-system-libraries > /dev/null 2>&1
-if ! ( cd "@{package.app}" && rvm default do bundle install --jobs $NPROC --deployment --local ) > "$POSTINSTALL_OUTPUT" 2>&1; then
-	cat "$POSTINSTALL_OUTPUT"
-	rm -f "$POSTINSTALL_OUTPUT"
+if ! ( cd "@{package.app}" && rvm default do bundle install --jobs $NPROC --deployment --local ); then
 	printerror "ERROR: failed to install required Gems for GitLab"
 	exit 1
 fi
@@ -40,47 +37,37 @@ fi
 # Create database and user if necessary
 DO_DBINIT=`if mysql_dbexists "@{gitlab.db.name}"; then echo 0; else echo 1; fi`
 if ! mysql_createdb "@{gitlab.db.name}" || ! mysql_createuser "@{gitlab.db.user}" "$GITLAB_DB_PASSWORD" "@{gitlab.db.name}"; then
-	rm -f "$POSTINSTALL_OUTPUT"
 	exit 1
 fi
 
 # Initialize database content
 if [ "$DO_DBINIT" -eq 1 ]; then
 	# Create schema and load default data
-	if ! ( cd "@{package.app}" && rvm default do bundle exec rake gitlab:setup force=yes GITLAB_ROOT_PASSWORD=$ROOT_PASSWORD ) > "$POSTINSTALL_OUTPUT" 2>&1; then
-		cat "$POSTINSTALL_OUTPUT"
-		rm -f "$POSTINSTALL_OUTPUT"
+	if ! ( cd "@{package.app}" && rvm default do bundle exec rake gitlab:setup force=yes GITLAB_ROOT_PASSWORD=$ROOT_PASSWORD ); then
 		printerror "ERROR: failed to initialize GitLab database"
 		exit 1
 	fi
 else
 	# Migrate schema and data
-	if ! ( cd "@{package.app}" && rvm default do bundle exec rake db:migrate ) > "$POSTINSTALL_OUTPUT" 2>&1; then
-		cat "$POSTINSTALL_OUTPUT"
-		rm -f "$POSTINSTALL_OUTPUT"
+	if ! ( cd "@{package.app}" && rvm default do bundle exec rake db:migrate ); then
 		printerror "ERROR: failed to migrate GitLab database"
 		exit 1
 	fi
 fi
 
 # Apply SQL overlay
-if ! cat "@{package.app}/config/overlay.sql" | mysql_exec "@{gitlab.db.name}" > "$POSTINSTALL_OUTPUT" 2>&1; then
-	cat "$POSTINSTALL_OUTPUT"
-	rm -f "$POSTINSTALL_OUTPUT"
+if ! cat "@{package.app}/config/overlay.sql" | mysql_exec "@{gitlab.db.name}"; then
 	printerror "ERROR: failed to apply overlay to GitLab database"
 	exit 1
 fi
 
 # Clean up assets and cache
-if ! ( cd "@{package.app}" && rvm default do bundle exec rake assets:clean assets:precompile cache:clear RAILS_RELATIVE_URL_ROOT=/gitlab ) > "$POSTINSTALL_OUTPUT" 2>&1; then
-	cat "$POSTINSTALL_OUTPUT"
-	rm -f "$POSTINSTALL_OUTPUT"
+if ! ( cd "@{package.app}" && rvm default do bundle exec rake assets:clean assets:precompile cache:clear RAILS_RELATIVE_URL_ROOT=/gitlab ); then
 	printerror "ERROR: failed to clean up assets and cache for GitLab"
 	exit 1
 fi
 
-# Clean up temp file and permissions
-rm -f "$POSTINSTALL_OUTPUT"
+# Fix permissions
 chown -R @{package.user}:@{package.group} "@{package.app}" "@{package.data}" "@{package.log}"
 chmod -R ug+rwX,o-rwx @{package.data}/repositories/
 chmod -R ug-s @{package.data}/repositories/
