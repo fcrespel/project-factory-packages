@@ -91,7 +91,7 @@
 			<dependency>
 				<groupId>rubygems</groupId>
 				<artifactId>passenger</artifactId>
-				<version>5.0.29</version>
+				<version>5.0.30</version>
 				<type>gem</type>
 			</dependency>
 			<dependency>
