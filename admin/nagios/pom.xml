@@ -47,16 +47,9 @@
 			${package.prefix}-system-php,
 			${package.prefix}-service-portal,
 			${system.package.sudo},
+			${system.package.nagios} >= ${package.version},
 			${system.package.nagios-plugins-all}
 		</package.dependencies>
-		<package.rpm.dependencies>
-			${package.dependencies},
-			${system.package.nagios} >= ${package.version}
-		</package.rpm.dependencies>
-		<package.deb.dependencies>
-			${package.dependencies},
-			${system.package.nagios} (>= ${package.version})
-		</package.deb.dependencies>
 	</properties>
 	
 	<build>
