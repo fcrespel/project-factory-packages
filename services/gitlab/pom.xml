@@ -45,23 +45,15 @@
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-mysql,
 			${package.prefix}-system-redis,
+			${package.prefix}-system-ruby >= 2.2.0,
 			${package.prefix}-service-portal,
 			${system.package.cmake},
+			${system.package.git} >= 1.7.10,
 			${system.package.nodejs},
 			${system.package.libxml2-devel},
 			${system.package.libxslt-devel},
 			${system.package.libicu-devel}
 		</package.dependencies>
-		<package.rpm.dependencies>
-			${package.dependencies},
-			${package.prefix}-system-ruby >= 3.2.0,
-			${system.package.git} >= 1.7.10
-		</package.rpm.dependencies>
-		<package.deb.dependencies>
-			${package.dependencies},
-			${package.prefix}-system-ruby (>= 3.2.0),
-			${system.package.git} (>= 1.7.10)
-		</package.deb.dependencies>
 		<gitlab.db.name>${product.id}_gitlab</gitlab.db.name>
 		<gitlab.db.user>${product.id}_gitlab</gitlab.db.user>
 		<gitlab.bundler.exclude>development:test:postgres:aws:unicorn</gitlab.bundler.exclude>
