@@ -42,11 +42,12 @@
 	</properties>
 
 	<modules>
+		<module>cas-management</module>
+		<module>kibana</module>
 		<module>nagios</module>
 		<module>phpmyadmin</module>
 		<module>phpldapadmin</module>
 		<module>piwik</module>
-		<module>kibana</module>
 	</modules>
 
 </project>
