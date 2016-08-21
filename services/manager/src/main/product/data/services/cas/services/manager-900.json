@@ -1,0 +1,23 @@
+{
+  "@class": "org.jasig.cas.support.oauth.services.OAuthRegisteredService",
+  "serviceId": "^https?://\\Q@{product.domain}\\E/manager/.*",
+  "name": "Platform Manager",
+  "id": 900,
+  "description": "@{product.name} Platform Manager",
+  "evaluationOrder": 900,
+  "attributeReleasePolicy": {
+    "@class": "org.jasig.cas.services.ReturnAllAttributeReleasePolicy"
+  },
+  "accessStrategy": {
+    "@class": "org.jasig.cas.services.DefaultRegisteredServiceAccessStrategy",
+    "enabled": true,
+    "ssoEnabled": true,
+    "requiredAttributes": {
+      "@class": "java.util.HashMap",
+      "groups": [ "java.util.HashSet", [ "@{product.group.users}" ] ]
+    }
+  },
+  "clientSecret": "%{MANAGER_OAUTH_PASSWORD}",
+  "clientId": "@{product.id}-manager",
+  "bypassApprovalPrompt": true
+}

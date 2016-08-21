@@ -2,6 +2,7 @@
 ensurepassword MANAGER_OAUTH_PASSWORD
 interpolatetemplate_inplace "@{package.app}/conf/tomcat-users.xml"
 interpolatetemplate_inplace "@{package.app}/webapps/manager/WEB-INF/classes/application.yml"
+interpolatetemplate_inplace "@{product.data}/services/cas/services/manager-900.json"
 
 # Create trust store if necessary
 create_truststore "@{package.app}/conf/trust.jks" @{package.user} @{package.group}
