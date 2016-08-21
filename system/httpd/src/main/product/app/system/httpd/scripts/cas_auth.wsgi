@@ -1,5 +1,5 @@
 # WSGI CAS Authentication module, for use with WSGIAuthUserScript directive
-# More info: http://code.google.com/p/modwsgi/wiki/AccessControlMechanisms
+# More info: http://modwsgi.readthedocs.io/en/develop/user-guides/access-control-mechanisms.html
 #
 # Author: Fabien CRESPEL <fabien@crespel.net>
 #
@@ -13,7 +13,8 @@ import logging
 
 # CAS server configuration
 CAS_SERVER_URL = '@{cas.url}'
-CAS_SERVER_TICKETS_URL = urljoin(CAS_SERVER_URL, 'api/rest/tickets/')
+CAS_SERVER_TICKETS_URL = urljoin(CAS_SERVER_URL, 'v1/tickets/')
+CAS_SERVER_VALIDATE_URL = urljoin(CAS_SERVER_URL, 'p3/serviceValidate')
 CAS_ATTRIBUTE_GROUPS = 'groups'
 
 # Cache storage and configuration
@@ -115,7 +116,7 @@ def _validate_st(ticket, service):
     except ImportError:
         from elementtree import ElementTree
     params = {'ticket': ticket, 'service': service}
-    url = urljoin(CAS_SERVER_URL, 'proxyValidate') + '?' + urlencode(params)
+    url = CAS_SERVER_VALIDATE_URL + '?' + urlencode(params)
     response = urlopen(url)
     try:
         user = None
