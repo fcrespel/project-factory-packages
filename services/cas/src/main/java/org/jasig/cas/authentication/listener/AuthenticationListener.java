@@ -1,26 +1,28 @@
 package org.jasig.cas.authentication.listener;
 
-import org.jasig.cas.authentication.principal.Credentials;
-import org.jasig.cas.authentication.principal.Principal;
+import java.security.GeneralSecurityException;
+
+import org.jasig.cas.authentication.Credential;
+import org.jasig.cas.authentication.HandlerResult;
+import org.jasig.cas.authentication.PreventedException;
 
 /**
  * Authentication listener.
  * 
  * Listeners are called whenever authentication succeeded, are free to perform
  * any relevant action and may decide to mark the authentication as failed.
- * In such a case, subsequent listeners will not be called.
  * 
  * @author Fabien Crespel <fabien@crespel.net>
  */
 public interface AuthenticationListener {
 
 	/**
-     * Method to execute after authentication occurs.
-     * 
-     * @param credentials the supplied credentials
-     * @param principal the authenticated principal
-     * @return true if the handler should return true, false otherwise.
-     */
-	boolean postAuthenticate(final Credentials credentials, final Principal principal);
+	 * Method to execute after authentication occurs.
+	 * 
+	 * @param credential the supplied credential
+	 * @param result latest authentication handler result
+	 * @return new authentication handler result
+	 */
+	HandlerResult postAuthenticate(Credential credential, HandlerResult result) throws GeneralSecurityException, PreventedException;
 
 }

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:c="http://www.springframework.org/schema/c"
+	   xmlns:ldaptive="http://www.ldaptive.org/schema/spring-ext"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.ldaptive.org/schema/spring-ext http://www.ldaptive.org/schema/spring-ext.xsd">
+
+	<!-- https://apereo.github.io/cas/4.2.x/integration/Attribute-Resolution.html -->
+	<bean id="attributeRepository"
+		  class="org.jasig.services.persondir.support.CascadingPersonAttributeDao">
+		<property name="merger">
+			<bean class="org.jasig.services.persondir.support.merger.JoiningAttributeMerger" p:joinAttributeName="entryDn" />
+		</property>
+		<property name="personAttributeDaos">
+			<list>
+				<ref bean="ldapUserAttributeRepository" />
+				<ref bean="ldapGroupAttributeRepository" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="ldapUserAttributeRepository"
+		  class="org.jasig.services.persondir.support.ldap.LdaptivePersonAttributeDao"
+		  p:connectionFactory-ref="pooledLdapConnectionFactory"
+		  p:baseDN="${ldap.usersDn}"
+		  p:searchControls-ref="searchControls"
+		  p:searchFilter="(&amp;(objectClass=${ldap.user.class})(${ldap.user.rdn.attr}={0}))">
+		<property name="queryAttributeMapping">
+			<map>
+				<entry key="username" value="${ldap.user.rdn.attr}" />
+			</map>
+		</property>
+		<property name="resultAttributeMapping">
+			<map>
+				<entry key="${ldap.dn.attr}" value="entryDn" />
+				<entry key="${ldap.user.rdn.attr}" value="uid" />
+				<entry key="${ldap.user.commonname.attr}" value="cn"/>
+				<entry key="${ldap.user.firstname.attr}" value="givenName"/>
+				<entry key="${ldap.user.lastname.attr}" value="sn"/>
+				<entry key="${ldap.user.displayname.attr}" value="displayName"/>
+				<entry key="${ldap.user.mail.attr}" value="mail" />
+				<entry key="${ldap.user.telephone.attr}" value="telephoneNumber" />
+				<entry key="${ldap.user.organization.attr}" value="o" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="ldapGroupAttributeRepository"
+		  class="org.jasig.services.persondir.support.ldap.LdaptivePersonAttributeDao"
+		  p:connectionFactory-ref="pooledLdapConnectionFactory"
+		  p:baseDN="${ldap.groupsDn}"
+		  p:searchControls-ref="searchControls"
+		  p:searchFilter="(&amp;(objectClass=${ldap.group.class})(${ldap.group.member.attr}={0}))"
+		  p:unmappedUsernameAttribute="cn">
+		<property name="queryAttributeMapping">
+			<map>
+				<entry key="entryDn" value="${ldap.group.member.attr}" />
+			</map>
+		</property>
+		<property name="resultAttributeMapping">
+			<map>
+				<entry key="${ldap.group.rdn.attr}" value="groups" />
+				<entry key="${ldap.group.member.attr}" value="entryDn" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="searchControls"
+		  class="javax.naming.directory.SearchControls"
+		  p:searchScope="2"
+		  p:countLimit="100"
+		  p:timeLimit="10000"
+	/>
+
+</beans>

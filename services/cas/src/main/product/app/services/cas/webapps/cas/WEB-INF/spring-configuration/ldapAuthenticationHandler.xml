@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:c="http://www.springframework.org/schema/c"
+	   xmlns:ldaptive="http://www.ldaptive.org/schema/spring-ext"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.ldaptive.org/schema/spring-ext http://www.ldaptive.org/schema/spring-ext.xsd">
+
+	<!-- https://apereo.github.io/cas/4.2.x/installation/LDAP-Authentication.html -->
+	<bean id="ldapAuthenticationHandler"
+		  class="org.jasig.cas.authentication.LdapAuthenticationHandler"
+		  p:principalIdAttribute="${ldap.user.rdn.attr}"
+		  c:authenticator-ref="ldapAuthenticator"
+	/>
+
+	<ldaptive:anonymous-search-authenticator id="ldapAuthenticator"
+		  ldapUrl="${ldap.url}"
+		  connectTimeout="${ldap.connectTimeout}"
+		  validateOnCheckOut="${ldap.pool.validateOnCheckout}"
+		  failFastInitialize="true"
+		  blockWaitTime="${ldap.pool.blockWaitTime}"
+		  idleTime="${ldap.pool.idleTime}"
+		  maxPoolSize="${ldap.pool.maxSize}"
+		  minPoolSize="${ldap.pool.minSize}"
+		  validatePeriodically="${ldap.pool.validatePeriodically}"
+		  validatePeriod="${ldap.pool.validatePeriod}"
+		  prunePeriod="${ldap.pool.prunePeriod}"
+		  useSSL="${ldap.use.ssl:false}"
+		  useStartTLS="${ldap.useStartTLS}"
+		  usePasswordPolicy="${ldap.usePpolicy:true}"
+		  allowMultipleDns="${ldap.allowMultipleDns:false}"
+		  baseDn="${ldap.baseDn}"
+		  subtreeSearch="${ldap.subtree.search:true}"
+		  userFilter="${ldap.authn.searchFilter}"
+	/>
+
+</beans>

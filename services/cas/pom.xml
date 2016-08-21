@@ -30,11 +30,11 @@
 	</parent>
 
 	<artifactId>cas</artifactId>
-	<version>3.5.3-5-SNAPSHOT</version>
+	<version>4.2.4-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - CAS</name>
-	<description>Jasig Central Authentication Service</description>
+	<description>Apereo Central Authentication Service</description>
 
 	<properties>
 		<package.disabled>${cas.disabled}</package.disabled>
@@ -58,13 +58,14 @@
 			${system.package.openssl-devel},
 			${system.package.pcre-devel}
 		</package.dependencies>
-		<cas.version>3.5.3</cas.version>
+		<cas.version>4.2.4</cas.version>
 		<cas.db.name>${product.id}_cas</cas.db.name>
 		<cas.db.user>${product.id}_cas</cas.db.user>
 		<cas.rest.auth.connectTimeout>5000</cas.rest.auth.connectTimeout>
 		<cas.rest.auth.readTimeout>5000</cas.rest.auth.readTimeout>
 		<cas.rest.auth.ssl.trustStore>file://${package.app}/conf/trust.jks</cas.rest.auth.ssl.trustStore>
 		<mod_auth_cas.version>1.1</mod_auth_cas.version>
+		<pac4j.version>1.8.8</pac4j.version>
 	</properties>
 
 	<dependencies>
@@ -75,25 +76,12 @@
 			<version>${cas.version}</version>
 			<type>war</type>
 		</dependency>
+
+		<!-- Authentication -->
 		<dependency>
 			<groupId>org.jasig.cas</groupId>
-			<artifactId>cas-server-support-oauth</artifactId>
+			<artifactId>cas-server-support-basic</artifactId>
 			<version>${cas.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jasig.cas</groupId>
-			<artifactId>cas-server-support-openid</artifactId>
-			<version>${cas.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>junit</artifactId>
-					<groupId>junit</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>xml-apis</artifactId>
-					<groupId>xml-apis</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.jasig.cas</groupId>
@@ -105,56 +93,53 @@
 			<artifactId>cas-server-support-radius</artifactId>
 			<version>${cas.version}</version>
 		</dependency>
-
-		<!-- CAS Client -->
 		<dependency>
-			<groupId>org.jasig.cas.client</groupId>
-			<artifactId>cas-client-core</artifactId>
-			<version>3.2.1</version>
+			<groupId>org.jasig.cas</groupId>
+			<artifactId>cas-server-integration-pac4j</artifactId>
+			<version>${cas.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.opensaml</groupId>
-			<artifactId>opensaml1</artifactId>
-			<version>1.1</version>
+			<groupId>org.pac4j</groupId>
+			<artifactId>pac4j-cas</artifactId>
+			<version>${pac4j.version}</version>
 		</dependency>
 		
-		<!-- Spring Framework -->
+		<!-- Ticketing -->
 		<dependency>
-			<groupId>org.springframework.ws</groupId>
-			<artifactId>spring-ws-security</artifactId>
-			<version>2.1.2.RELEASE</version>
+			<groupId>org.jasig.cas</groupId>
+			<artifactId>cas-server-support-jpa-ticket-registry</artifactId>
+			<version>${cas.version}</version>
+		</dependency>
+		
+		<!-- Integration -->
+		<dependency>
+			<groupId>org.jasig.cas</groupId>
+			<artifactId>cas-server-support-oauth</artifactId>
+			<version>${cas.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jasig.cas</groupId>
+			<artifactId>cas-server-support-rest</artifactId>
+			<version>${cas.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jasig.cas</groupId>
+			<artifactId>cas-server-support-saml</artifactId>
+			<version>${cas.version}</version>
 		</dependency>
 
 		<!-- Apache Commons -->
 		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<version>1.4</version>
-		</dependency>
-
-		<!-- Hibernate -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>4.1.0.Final</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>xml-apis</artifactId>
-					<groupId>xml-apis</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>4.2.0.Final</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.1</version>
 		</dependency>
 		
 		<!-- Servlet API and JSP taglibs -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.3</version>
+			<groupId>javax</groupId>
+			<artifactId>javaee-web-api</artifactId>
+			<version>6.0</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

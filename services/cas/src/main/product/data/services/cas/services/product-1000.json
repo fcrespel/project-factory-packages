@@ -1,0 +1,20 @@
+{
+  "@class": "org.jasig.cas.services.RegexRegisteredService",
+  "serviceId": "^https?://\\Q@{product.domain}\\E/.*",
+  "name": "@{product.domain}",
+  "id": 1000,
+  "description": "@{product.name}",
+  "evaluationOrder": 1000,
+  "attributeReleasePolicy": {
+    "@class": "org.jasig.cas.services.ReturnAllAttributeReleasePolicy"
+  },
+  "accessStrategy": {
+    "@class": "org.jasig.cas.services.DefaultRegisteredServiceAccessStrategy",
+    "enabled": true,
+    "ssoEnabled": true,
+    "requiredAttributes": {
+      "@class": "java.util.HashMap",
+      "groups": [ "java.util.HashSet", [ "@{product.group.users}" ] ]
+    }
+  }
+}

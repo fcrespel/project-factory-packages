@@ -1,8 +1,11 @@
 package org.jasig.cas.authentication.listener;
 
+import java.security.GeneralSecurityException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -11,24 +14,34 @@ import java.util.Random;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
-import org.jasig.cas.authentication.principal.Credentials;
+import org.jasig.cas.authentication.Credential;
+import org.jasig.cas.authentication.HandlerResult;
+import org.jasig.cas.authentication.PreventedException;
+import org.jasig.cas.authentication.UsernamePasswordCredential;
 import org.jasig.cas.authentication.principal.Principal;
-import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
+import org.ldaptive.BindOperation;
+import org.ldaptive.BindRequest;
+import org.ldaptive.Connection;
+import org.ldaptive.ConnectionFactory;
+import org.ldaptive.LdapAttribute;
+import org.ldaptive.LdapEntry;
+import org.ldaptive.LdapException;
+import org.ldaptive.LdapUtils;
+import org.ldaptive.Response;
+import org.ldaptive.SearchOperation;
+import org.ldaptive.SearchRequest;
+import org.ldaptive.SearchResult;
+import org.ldaptive.SortBehavior;
+import org.ldaptive.ext.MergeOperation;
+import org.ldaptive.ext.MergeRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ldap.NameNotFoundException;
-import org.springframework.ldap.core.DirContextAdapter;
-import org.springframework.ldap.core.DirContextOperations;
-import org.springframework.ldap.core.LdapEncoder;
-import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.security.authentication.encoding.LdapShaPasswordEncoder;
-import org.springframework.security.authentication.encoding.PasswordEncoder;
 
 /**
  * LDAP Synchronization Authentication Listener.
  * 
  * This listener uses the authentication credentials and the authenticated principal
- * coming from a remote CAS server to synchronize attributes with an LDAP directory.
+ * to synchronize attributes with an LDAP directory.
  * 
  * @author Fabien Crespel <fabien@crespel.net>
  */
@@ -37,13 +50,10 @@ public class LdapSyncAuthenticationListener implements AuthenticationListener {
 	private static final Logger log = LoggerFactory.getLogger(LdapSyncAuthenticationListener.class);
 	private static final Random random;
 	
-	@NotNull
-	private LdapTemplate ldapTemplate;
-	
-	@NotNull
-	private String dnTemplate;
-	
-	private PasswordEncoder passwordEncoder = new LdapShaPasswordEncoder();
+	private @NotNull ConnectionFactory connectionFactory;
+	private @NotNull String bindDn;
+	private @NotNull String bindPassword;
+	private @NotNull String dnTemplate;
 
 	private Map<String, Object> defaultAttributes;
 	private Map<String, String> mapAttributes;
@@ -62,111 +72,164 @@ public class LdapSyncAuthenticationListener implements AuthenticationListener {
 		}
 		random = randomLocal;
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jasig.cas.authentication.listener.AuthenticationListener#postAuthenticate(org.jasig.cas.authentication.principal.Credentials, org.jasig.cas.authentication.principal.Principal)
-	 */
-	public boolean postAuthenticate(final Credentials credentials, final Principal principal) {
+	
+	@Override
+	public HandlerResult postAuthenticate(Credential credential, HandlerResult result) throws GeneralSecurityException, PreventedException {
+		Principal principal = result.getPrincipal();
 		if (principal == null)
-			return false;
+			return result;
 		
-		// Build the user DN
-		String userDN = dnTemplate.replaceAll("%u", LdapEncoder.nameEncode(principal.getId().toLowerCase(Locale.ROOT)));
-		
+		Connection conn;
 		try {
-			// Find and update the existing user
-			DirContextOperations context = ldapTemplate.lookupContext(userDN);
-			mapAttributes(credentials, principal, context);
-			ldapTemplate.modifyAttributes(context);
-			log.info("User DN '" + userDN + "' was successfully updated");
-		} catch (NameNotFoundException e) {
-			// Create a new user
-			DirContextOperations context = new DirContextAdapter(userDN);
-			mapAttributes(credentials, principal, context);
-			ldapTemplate.bind(context);
-			log.info("User DN '" + userDN + "' was successfully created");
-		}
-		
-		// Add the user to groups
-		if (groupDNs != null) {
-			for (String groupDN : groupDNs) {
-				try {
-					// Find and update the existing group
-					DirContextOperations context = ldapTemplate.lookupContext(groupDN);
-					context.addAttributeValue(groupMemberAttr, groupMemberIsDN ? userDN : principal.getId().toLowerCase(Locale.ROOT));
-					ldapTemplate.modifyAttributes(context);
-					log.info("User DN '" + userDN + "' was successfully added to group DN '" + groupDN + "'");
-				} catch (NameNotFoundException e) {
-					log.warn("Group DN '" + groupDN + "' does not exist in LDAP directory");
-				}
+			conn = connectionFactory.getConnection();
+			try {
+				// Bind to LDAP
+				BindOperation bind = new BindOperation(conn);
+				bind.execute(new BindRequest(bindDn, new org.ldaptive.Credential(bindPassword)));
+				
+				// Build the user DN
+				String userDN = dnTemplate.replaceAll("%u", LdapAttribute.escapeValue(principal.getId().toLowerCase(Locale.ROOT)));
+				
+				// Sync LDAP user and groups
+				syncUser(conn, userDN, principal, credential);
+				syncGroups(conn, userDN, principal);
+				
+			} finally {
+				conn.close();
 			}
+		} catch (LdapException e) {
+			log.error("LDAP sync failed", e);
+			throw new PreventedException("LDAP sync failed: " + e.getMessage(), e);
 		}
 		
-		return true;
+		return result;
 	}
 	
 	/**
-	 * Map default, principal and override attributes to an LDAP DirContext.
-	 * @param credentials authentication credentials
+	 * Synchronize LDAP user with authenticated principal.
+	 * @param conn LDAP connection
+	 * @param userDN user distinguished name
 	 * @param principal authenticated principal
-	 * @param context LDAP DirContext
+	 * @param credential authentication credentials
+	 * @throws LdapException
 	 */
-	protected void mapAttributes(Credentials credentials, Principal principal, DirContextOperations context) {
+	protected void syncUser(Connection conn, String userDN, Principal principal, Credential credential) throws LdapException {
+		log.debug("Syncing LDAP user for user DN '" + userDN + "'");
+		
+		// Search the user
+		SearchOperation search = new SearchOperation(conn);
+		Response<SearchResult> response = search.execute(SearchRequest.newObjectScopeSearchRequest(userDN));
+		LdapEntry entry = response.getResult().getEntry();
+		if (entry == null) {
+			log.info("User DN '" + userDN + "' not found, will be created");
+			entry = new LdapEntry(userDN);
+		}
+		
+		// Map attributes and merge the user
+		mapAttributes(credential, principal, entry);
+		MergeOperation merge = new MergeOperation(conn);
+		merge.execute(new MergeRequest(entry));
+		log.info("User DN '" + userDN + "' was successfully synchronized");
+	}
+	
+	/**
+	 * Synchronize LDAP groups with authenticated principal.
+	 * @param conn LDAP connection
+	 * @param userDN user distinguished name
+	 * @param principal authenticated principal
+	 * @throws LdapException
+	 */
+	protected void syncGroups(Connection conn, String userDN, Principal principal) throws LdapException {
+		if (groupDNs != null) {
+			log.debug("Syncing LDAP groups for user DN '" + userDN + "'");
+			for (String groupDN : groupDNs) {
+				// Search the group
+				SearchOperation search = new SearchOperation(conn);
+				Response<SearchResult> response = search.execute(SearchRequest.newObjectScopeSearchRequest(groupDN));
+				LdapEntry entry = response.getResult().getEntry();
+				if (entry == null) {
+					log.warn("Group DN '" + groupDN + "' does not exist in LDAP directory");
+				} else {
+					// Update attribute and merge the group
+					entry.getAttribute(groupMemberAttr).addStringValue(groupMemberIsDN ? userDN : principal.getId().toLowerCase(Locale.ROOT));
+					MergeOperation merge = new MergeOperation(conn);
+					merge.execute(new MergeRequest(entry));
+					log.info("User DN '" + userDN + "' was successfully added to group DN '" + groupDN + "'");
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Map default, principal and override attributes to an LDAP entry.
+	 * @param credential authentication credentials
+	 * @param principal authenticated principal
+	 * @param entry LDAP entry
+	 */
+	protected void mapAttributes(Credential credential, Principal principal, LdapEntry entry) {
 		// Set default attributes
 		if (defaultAttributes != null) {
-			for (Map.Entry<String, Object> entry : defaultAttributes.entrySet()) {
+			for (Map.Entry<String, Object> defaultAttribute : defaultAttributes.entrySet()) {
 				// Ensure the attribute is not already set
-				if (context.getAttributes().get(entry.getKey()) == null) {
-					// Get and interpolate value
-					Object value = interpolateAttributeValue(entry.getValue(), credentials);
-					
-					// Set attribute value(s)
-					if (value.getClass().isArray()) {
-						context.setAttributeValues(entry.getKey(), (Object[])value);
-					} else {
-						context.setAttributeValue(entry.getKey(), value);
-					}
+				if (entry.getAttribute(defaultAttribute.getKey()) == null) {
+					Object value = interpolateAttributeValue(defaultAttribute.getValue(), credential);
+					entry.addAttribute(createAttribute(defaultAttribute.getKey(), value));
 				}
 			}
 		}
 		
 		// Map principal attributes
 		if (mapAttributes != null) {
-			for (Map.Entry<String, Object> entry : principal.getAttributes().entrySet()) {
-				String attribute = mapAttributes.get(entry.getKey());
-				if (attribute != null) {
-					context.setAttributeValue(attribute, entry.getValue());
+			for (Map.Entry<String, Object> principalAttribute : principal.getAttributes().entrySet()) {
+				String mappedAttribute = mapAttributes.get(principalAttribute.getKey());
+				if (mappedAttribute != null) {
+					entry.addAttribute(createAttribute(mappedAttribute, principalAttribute.getValue()));
 				}
 			}
 		}
 		
 		// Override attributes
 		if (overrideAttributes != null) {
-			for (Map.Entry<String, Object> entry : overrideAttributes.entrySet()) {
-				// Get and interpolate value
-				Object value = interpolateAttributeValue(entry.getValue(), credentials);
-				
-				// Set attribute value(s)
-				if (value.getClass().isArray()) {
-					context.setAttributeValues(entry.getKey(), (Object[])value);
-				} else {
-					context.setAttributeValue(entry.getKey(), value);
-				}
+			for (Map.Entry<String, Object> overrideAttribute : overrideAttributes.entrySet()) {
+				Object value = interpolateAttributeValue(overrideAttribute.getValue(), credential);
+				entry.addAttribute(createAttribute(overrideAttribute.getKey(), value));
 			}
+		}
+	}
+	
+	/**
+	 * Create an attribute with a name and value(s).
+	 * @param name attribute name
+	 * @param value attribute value(s)
+	 * @return corresponding LDAP attribute
+	 */
+	@SuppressWarnings("unchecked")
+	protected LdapAttribute createAttribute(String name, Object value) {
+		if (value == null) {
+			return new LdapAttribute(name);
+		} else {
+			Collection<Object> values;
+			if (value.getClass().isArray()) {
+				values = Arrays.asList((Object[]) value);
+			} else if (value instanceof Collection) {
+				values = (Collection<Object>) value;
+			} else {
+				values = Arrays.asList(value);
+			}
+			return LdapAttribute.createLdapAttribute(SortBehavior.getDefaultSortBehavior(), name, values);
 		}
 	}
 	
 	/**
 	 * Interpolate placeholders in an attribute's value.
 	 * @param value value to interpolate
-	 * @param credentials authentication credentials
+	 * @param credential authentication credential
 	 * @return interpolated value, or the original value if no placeholder was found
 	 */
-	protected Object interpolateAttributeValue(Object value, Credentials credentials) {
-		if (value instanceof String && credentials instanceof UsernamePasswordCredentials) {
+	protected Object interpolateAttributeValue(Object value, Credential credential) {
+		if (value instanceof String && credential instanceof UsernamePasswordCredential) {
 			String sValue = (String) value;
-			UsernamePasswordCredentials upCredentials = (UsernamePasswordCredentials) credentials;
+			UsernamePasswordCredential upCredentials = (UsernamePasswordCredential) credential;
 			
 			// Replace %u placeholder with username
 			if (sValue.contains("%u")) {
@@ -177,7 +240,7 @@ public class LdapSyncAuthenticationListener implements AuthenticationListener {
 			if (sValue.contains("%p")) {
 				byte[] salt = new byte[4]; // 32 bits salt
 				random.nextBytes(salt);
-				String password = passwordEncoder.encodePassword(upCredentials.getPassword(), salt);
+				String password = encodePassword(upCredentials.getPassword(), salt);
 				sValue = sValue.replaceAll("%p", password);
 			}
 			
@@ -185,19 +248,74 @@ public class LdapSyncAuthenticationListener implements AuthenticationListener {
 		}
 		return value;
 	}
-
+	
 	/**
-	 * @return the ldapTemplate
+	 * Encode a password using the SSHA algorithm.
+	 * @param password password to encode
+	 * @param salt 32-bit salt
+	 * @return encoded password prefixed with {SSHA}
 	 */
-	public LdapTemplate getLdapTemplate() {
-		return ldapTemplate;
+	protected String encodePassword(String password, byte[] salt) {
+		MessageDigest sha;
+		try {
+			sha = MessageDigest.getInstance("SHA");
+		} catch (NoSuchAlgorithmException e) {
+			throw new IllegalStateException("No SHA implementation available", e);
+		}
+		
+		// Compute hash of password+salt
+		sha.update(LdapUtils.utf8Encode(password));
+		sha.update(salt);
+		byte[] hash = sha.digest();
+		
+		// Concat hash and salt
+		byte[] hashAndSalt = new byte[hash.length + salt.length];
+		System.arraycopy(hash, 0, hashAndSalt, 0, hash.length);
+		System.arraycopy(salt, 0, hashAndSalt, hash.length, salt.length);
+
+		return "{SSHA}" + LdapUtils.base64Encode(hashAndSalt);
 	}
 
 	/**
-	 * @param ldapTemplate the ldapTemplate to set
+	 * @return the connectionFactory
 	 */
-	public void setLdapTemplate(LdapTemplate ldapTemplate) {
-		this.ldapTemplate = ldapTemplate;
+	public ConnectionFactory getConnectionFactory() {
+		return connectionFactory;
+	}
+
+	/**
+	 * @param connectionFactory the connectionFactory to set
+	 */
+	public void setConnectionFactory(ConnectionFactory connectionFactory) {
+		this.connectionFactory = connectionFactory;
+	}
+
+	/**
+	 * @return the bindDn
+	 */
+	public String getBindDn() {
+		return bindDn;
+	}
+
+	/**
+	 * @param bindDn the bindDn to set
+	 */
+	public void setBindDn(String bindDn) {
+		this.bindDn = bindDn;
+	}
+
+	/**
+	 * @return the bindPassword
+	 */
+	public String getBindPassword() {
+		return bindPassword;
+	}
+
+	/**
+	 * @param bindPassword the bindPassword to set
+	 */
+	public void setBindPassword(String bindPassword) {
+		this.bindPassword = bindPassword;
 	}
 
 	/**
@@ -212,20 +330,6 @@ public class LdapSyncAuthenticationListener implements AuthenticationListener {
 	 */
 	public void setDnTemplate(String dnTemplate) {
 		this.dnTemplate = dnTemplate;
-	}
-
-	/**
-	 * @return the passwordEncoder
-	 */
-	public PasswordEncoder getPasswordEncoder() {
-		return passwordEncoder;
-	}
-
-	/**
-	 * @param passwordEncoder the passwordEncoder to set
-	 */
-	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-		this.passwordEncoder = passwordEncoder;
 	}
 
 	/**

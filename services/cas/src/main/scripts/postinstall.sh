@@ -1,12 +1,19 @@
 APXS_LIBEXECDIR="@{product.app}/system/httpd/modules"
 MOD_AUTH_CAS_DIR="$APXS_LIBEXECDIR/mod_auth_cas"
 
-# Interpolate template
+# Generate encryption keys
+[ -z "$CAS_TGC_ENCRYPTION_KEY" ] && storevar CAS_TGC_ENCRYPTION_KEY "$(cat /dev/urandom | head -c 32 | base64 -w 0)"
+[ -z "$CAS_TGC_SIGNING_KEY" ] && storevar CAS_TGC_SIGNING_KEY "$(cat /dev/urandom | head -c 64 | base64 -w 0)"
+[ -z "$CAS_WEBFLOW_ENCRYPTION_KEY" ] && storevar CAS_WEBFLOW_ENCRYPTION_KEY "$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 16)"
+[ -z "$CAS_WEBFLOW_SIGNING_KEY" ] && storevar CAS_WEBFLOW_SIGNING_KEY "$(cat /dev/urandom | head -c 64 | base64 -w 0)"
+
+# Interpolate templates
 ensurepassword CAS_DB_PASSWORD
 interpolatetemplate_inplace "@{package.app}/conf/tomcat-users.xml"
-interpolatetemplate_inplace "@{package.app}/webapps/cas/WEB-INF/cas.properties"
+interpolatetemplate_inplace "@{package.app}/webapps/@{project.artifactId}/WEB-INF/cas.properties"
 
-# Fix script permissions
+# Fix permissions
+chown -R @{package.user}:@{package.group} "@{package.data}" "@{package.log}"
 chmod +x "$MOD_AUTH_CAS_DIR/compile"
 chmod +x "$MOD_AUTH_CAS_DIR/config.guess"
 chmod +x "$MOD_AUTH_CAS_DIR/config.sub"
