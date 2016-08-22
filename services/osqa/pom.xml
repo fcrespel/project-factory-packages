@@ -49,7 +49,7 @@
 		<osqa.db.name>${product.id}_osqa</osqa.db.name>
 		<osqa.db.user>${product.id}_osqa</osqa.db.user>
 		<osqa.python.modules>markdown==2.4.1 html5lib==1.0b6 south django==1.3.5</osqa.python.modules>
-		<osqa.lang>fr</osqa.lang>
+		<osqa.lang>${product.locale}</osqa.lang>
 	</properties>
 
 	<build>
