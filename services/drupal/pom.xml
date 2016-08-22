@@ -48,7 +48,7 @@
 		</package.dependencies>
 		<drupal.db.name>${product.id}_drupal</drupal.db.name>
 		<drupal.db.user>${product.id}_drupal</drupal.db.user>
-		<drupal.lang>fr</drupal.lang>
+		<drupal.lang>${product.locale}</drupal.lang>
 		<drupal.lang.url>http://ftp.drupal.org/files/translations/7.x/drupal/</drupal.lang.url>
 		<drupal.lang.file>drupal-${package.version}.${drupal.lang}.po</drupal.lang.file>
 		<drupal.drush.url>https://github.com/drush-ops/drush/archive</drupal.drush.url>
