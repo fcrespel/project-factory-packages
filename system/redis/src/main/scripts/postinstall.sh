@@ -17,8 +17,8 @@ if ! ( cd "@{package.app}/src" && make PREFIX="@{package.app}" install ); then
 fi
 ( cd "@{package.app}/src" && make distclean ) > /dev/null 2>&1
 
-# Fix data and log directory permissions
-chown -R @{package.user}:@{package.group} "@{package.data}" "@{package.log}"
+# Fix directory permissions
+chown -R @{package.user}:@{package.group} "@{package.app}" "@{package.data}" "@{package.log}"
 
 # Enable service at startup
 if ! enableservice @{package.service}; then
