@@ -6,14 +6,22 @@ ensurepassword GITLAB_DB_PASSWORD
 interpolatetemplate_inplace "@{package.app}/config/database.yml"
 interpolatetemplate_inplace "@{package.app}/config/gitlab.yml"
 interpolatetemplate_inplace "@{package.app}/config/overlay.sql"
-cp "@{package.app}/config/initializers/rack_attack.rb.example" "@{package.app}/config/initializers/rack_attack.rb"
+if [ ! -e "@{package.app}/config/secrets.yml" ]; then
+	cp "@{package.app}/config/secrets.yml.example" "@{package.app}/config/secrets.yml"
+fi
 
 # Fix execute permissions
-chmod +x @{package.app}/bin/* @{package.app}/shell/bin/* @{package.app}/shell/hooks/*
+chmod +x @{package.app}/bin/* @{package.app}/lib/support/init.d/gitlab @{package.app}/shell/bin/* @{package.app}/shell/hooks/*
 
 # Configure user
 usermod -s /bin/bash @{package.user} > /dev/null 2>&1
 mkdir -p "@{package.root}/.ssh" && touch "@{package.root}/.ssh/authorized_keys"
+
+# Build workhorse
+if ! ( cd "@{package.app}/workhorse" && make ); then
+	printerror "ERROR: failed to build Gitlab Workhorse"
+	exit 1
+fi
 
 # Check if bundler is available
 BUNDLER=`rvm default do which bundle`
@@ -43,7 +51,7 @@ fi
 # Initialize database content
 if [ "$DO_DBINIT" -eq 1 ]; then
 	# Create schema and load default data
-	if ! ( cd "@{package.app}" && rvm default do bundle exec rake gitlab:setup force=yes GITLAB_ROOT_PASSWORD=$ROOT_PASSWORD ); then
+	if ! ( cd "@{package.app}" && rvm default do bundle exec rake gitlab:setup force=yes GITLAB_ROOT_PASSWORD="$ROOT_PASSWORD" GITLAB_ROOT_EMAIL="@{root.user}@@{product.domain}" ); then
 		printerror "ERROR: failed to initialize GitLab database"
 		exit 1
 	fi
@@ -69,15 +77,18 @@ fi
 
 # Fix permissions
 chown -R @{package.user}:@{package.group} "@{package.app}" "@{package.data}" "@{package.log}"
-chmod -R ug+rwX,o-rwx @{package.data}/repositories/
-chmod -R ug-s @{package.data}/repositories/
-find @{package.data}/repositories/ -type d -print0 | xargs -0 chmod g+s
-chmod u+rwx,g=rx,o-rwx @{package.data}/satellites
+chmod 0600 "@{package.app}/config/secrets.yml"
+chmod 0700 "@{package.data}/uploads"
+chmod -R ug+rwX,o-rwx "@{package.data}/repositories/"
+chmod -R ug-s "@{package.data}/repositories/"
+find "@{package.data}/repositories/" -type d -print0 | xargs -0 chmod g+s
+chmod u+rwx,g=rx,o-rwx "@{package.data}/satellites"
 
 # Configure Git
 su -s /bin/bash - @{package.user} -c "git config --global user.name GitLab"
 su -s /bin/bash - @{package.user} -c "git config --global user.email gitlab@@{product.domain}"
 su -s /bin/bash - @{package.user} -c "git config --global core.autocrlf input"
+su -s /bin/bash - @{package.user} -c "git config --global gc.auto 0"
 
 # Enable service at startup
 if ! enableservice @{package.service}; then

@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>gitlab</artifactId>
-	<version>7.14.1-1-SNAPSHOT</version>
+	<version>8.11.2-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - GitLab</name>
@@ -49,6 +49,7 @@
 			${package.prefix}-service-portal,
 			${system.package.cmake},
 			${system.package.git} >= 1.7.10,
+			${system.package.golang},
 			${system.package.nodejs},
 			${system.package.libxml2-devel},
 			${system.package.libxslt-devel},
@@ -56,10 +57,13 @@
 		</package.dependencies>
 		<gitlab.db.name>${product.id}_gitlab</gitlab.db.name>
 		<gitlab.db.user>${product.id}_gitlab</gitlab.db.user>
-		<gitlab.bundler.exclude>development:test:postgres:aws:unicorn</gitlab.bundler.exclude>
-		<gitlab.shell.version>2.6.4</gitlab.shell.version>
+		<gitlab.bundler.exclude>development:test:postgres:aws:kerberos</gitlab.bundler.exclude>
+		<gitlab.shell.version>3.4.0</gitlab.shell.version>
 		<gitlab.shell.url>https://github.com/gitlabhq/gitlab-shell/archive</gitlab.shell.url>
 		<gitlab.shell.file>v${gitlab.shell.version}.zip</gitlab.shell.file>
+		<gitlab.workhorse.version>0.7.11</gitlab.workhorse.version>
+		<gitlab.workhorse.url>https://gitlab.com/gitlab-org/gitlab-workhorse/repository</gitlab.workhorse.url>
+		<gitlab.workhorse.file>archive.zip?ref=v${gitlab.workhorse.version}</gitlab.workhorse.file>
 	</properties>
 	
 	<build>
@@ -78,6 +82,14 @@
 										<sources>
 											<softlinkSource>
 												<location>${package.log}</location>
+											</softlinkSource>
+										</sources>
+									</mapping>
+									<mapping>
+										<directory>${package.app}/public/uploads</directory>
+										<sources>
+											<softlinkSource>
+												<location>${package.data}/uploads</location>
 											</softlinkSource>
 										</sources>
 									</mapping>
@@ -166,6 +178,19 @@
 							<toDir>${project.downloaded.directory}</toDir>
 						</configuration>
 					</execution>
+					<execution>
+						<id>generate-resources-download-workhorse</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>download-single</goal>
+						</goals>
+						<configuration>
+							<skip>${package.disabled}</skip>
+							<url>${gitlab.workhorse.url}</url>
+							<fromFile>${gitlab.workhorse.file}</fromFile>
+							<toDir>${project.downloaded.directory}</toDir>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>
@@ -194,6 +219,15 @@
 									dest="${project.app.directory}/shell">
 									<cutdirsmapper dirs="1" />
 								</unzip>
+								<unzip
+									src="${project.downloaded.directory}/${gitlab.workhorse.file}"
+									dest="${project.app.directory}/workhorse">
+									<cutdirsmapper dirs="1" />
+								</unzip>
+								<copy file="${project.app.directory}/config/initializers/rack_attack.rb.example"
+									tofile="${project.app.directory}/config/initializers/rack_attack.rb" />
+								<replace file="${project.app.directory}/lib/support/init.d/gitlab"
+									token="/etc/default/gitlab" value="${package.app}/config/service.conf" />
 							</target>
 						</configuration>
 					</execution>

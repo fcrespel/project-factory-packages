@@ -10,8 +10,8 @@
 # Should-Stop: $syslog $named
 # Default-Start: 3 4 5
 # Default-Stop: 0 1 2 6
-# Short-Description: @{product.name} GitLab sidekiq daemon
-# Description: @{product.name} GitLab sidekiq daemon
+# Short-Description: @{product.name} GitLab repository management
+# Description: @{product.name} GitLab repository management
 ### END INIT INFO
 
 # Source LSB function library
@@ -21,13 +21,10 @@ else
 	exit 1
 fi
 
-# Local script variables
-SERVICENAME="@{package.service}"
-PROGNAME="sidekiq"
-EXEC="@{package.app}/bin/background_jobs"
-PIDFILE="@{package.app}/tmp/pids/sidekiq.pid"
-LOCKFILE="@{package.app}/tmp/pids/lockfile"
-GITLABUSER="@{package.user}"
+# Source service configuration
+if [ -f "@{package.app}/config/service.conf" ]; then
+	. "@{package.app}/config/service.conf"
+fi
 
 # For SELinux we need to use 'runuser' not 'su'
 if [ -x "/sbin/runuser" ]; then
@@ -36,22 +33,16 @@ else
 	SU="/bin/su -s /bin/bash"
 fi
 
+# Local script variables
+SERVICENAME="@{package.service}"
+EXEC="$app_root/lib/support/init.d/gitlab"
+INITLOG="$app_root/log/initd.log"
+
 start() {
 	echo -n $"Starting $SERVICENAME: "
-	if [ -f "$LOCKFILE" ]; then
-		if [ -f "$PIDFILE" ]; then
-			read kpid < "$PIDFILE"
-			if [ -d "/proc/${kpid}" ]; then
-				log_success_msg
-				RETVAL=0
-				return $RETVAL
-			fi
-		fi
-	fi
-	$SU - $GITLABUSER -c "$EXEC start"
+	$SU - $app_user -c "$EXEC start" >> "$INITLOG" 2>&1
 	RETVAL=$?
 	if [ $RETVAL -eq 0 ]; then
-		touch $LOCKFILE
 		log_success_msg
 	else
 		log_failure_msg
@@ -61,10 +52,21 @@ start() {
 
 stop() {
 	echo -n $"Stopping $SERVICENAME: "
-	killproc -p $PIDFILE $PROGNAME
+	$SU - $app_user -c "$EXEC stop" >> "$INITLOG" 2>&1
 	RETVAL=$?
 	if [ $RETVAL -eq 0 ]; then
-		rm -f $LOCKFILE $PIDFILE
+		log_success_msg
+	else
+		log_failure_msg
+	fi
+	return $RETVAL
+}
+
+reload() {
+	echo -n $"Reloading $SERVICENAME: "
+	$SU - $app_user -c "$EXEC reload" >> "$INITLOG" 2>&1
+	RETVAL=$?
+	if [ $RETVAL -eq 0 ]; then
 		log_success_msg
 	else
 		log_failure_msg
@@ -73,20 +75,8 @@ stop() {
 }
 
 status() {
-	kpid=`pidofproc -p $PIDFILE $PROGNAME`
+	$SU - $app_user -c "$EXEC status"
 	RETVAL=$?
-	if [ $RETVAL -eq 0 ]; then
-		log_success_msg $"$SERVICENAME (pid ${kpid}) is running..."
-	elif [ $RETVAL -eq 1 ]; then
-		log_failure_msg $"$SERVICENAME dead but pid file exists"
-	elif [ $RETVAL -eq 4 ]; then
-		log_failure_msg $"$SERVICENAME status unknown due to insufficient privileges."
-	elif [ -f $LOCKFILE ]; then
-		log_failure_msg $"$SERVICENAME dead but subsys locked"
-		RETVAL=2
-	else
-		log_success_msg $"$SERVICENAME is stopped"
-	fi
 	return $RETVAL
 }
 
@@ -113,7 +103,7 @@ case "$1" in
 		fi
 		;;
 	reload)
-		RETVAL=3
+		reload
 		;;
 	*)
 		echo $"Usage: $0 {start|stop|status|restart|force-reload|condrestart|try-restart|reload}"

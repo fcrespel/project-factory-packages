@@ -12,6 +12,11 @@
 #set( $LDAP_ROOT_DN = ${project.properties.getProperty('ldap.root.dn')} )
 #set( $LDAP_USER_CLASS = ${project.properties.getProperty('ldap.user.class')} )
 #set( $LDAP_USER_RDN_ATTR = ${project.properties.getProperty('ldap.user.rdn.attr')} )
+#set( $LDAP_USER_COMMONNAME_ATTR = ${project.properties.getProperty('ldap.user.commonname.attr')} )
+#set( $LDAP_USER_DISPLAYNAME_ATTR = ${project.properties.getProperty('ldap.user.displayname.attr')} )
+#set( $LDAP_USER_FIRSTNAME_ATTR = ${project.properties.getProperty('ldap.user.firstname.attr')} )
+#set( $LDAP_USER_LASTNAME_ATTR = ${project.properties.getProperty('ldap.user.lastname.attr')} )
+#set( $LDAP_USER_MAIL_ATTR = ${project.properties.getProperty('ldap.user.mail.attr')} )
 #set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
 #set( $CAS_URL = ${project.properties.getProperty('cas.url')} )
 # # # # # # # # # # # # # # # # # #
@@ -40,9 +45,22 @@ production: &base
     # Otherwise, ssh host will be set to the `host:` value above
     # ssh_host: ssh.host_example.com
 
-    # WARNING: See config/application.rb under "Relative url support" for the list of
-    # other files that need to be changed for relative url support
+    # Relative URL support
+    # WARNING: We recommend using an FQDN to host GitLab in a root path instead
+    # of using a relative URL.
+    # Documentation: http://doc.gitlab.com/ce/install/relative_url.html
+    # Uncomment and customize the following line to run in a non-root path
+    #
     relative_url_root: /gitlab
+
+    # Trusted Proxies
+    # Customize if you have GitLab behind a reverse proxy which is running on a different machine.
+    # Add the IP address for your reverse proxy to the list, otherwise users will appear signed in from that address.
+    trusted_proxies:
+      # Examples:
+      #- 192.168.1.0/24
+      #- 192.168.2.1
+      #- 2001:0db8::/32
 
     # Uncomment and customize if you can't use the default user to run GitLab (default: 'git')
     user: ${PACKAGE_USER}
@@ -78,7 +96,7 @@ production: &base
     # This happens when the commit is pushed or merged into the default branch of a project.
     # When not specified the default issue_closing_pattern as specified below will be used.
     # Tip: you can test your closing pattern at http://rubular.com.
-    # issue_closing_pattern: '((?:[Cc]los(?:e[sd]?|ing)|[Ff]ix(?:e[sd]|ing)?) +(?:(?:issues? +)?#\d+(?:(?:, *| +and +)?))+)'
+    # issue_closing_pattern: '((?:[Cc]los(?:e[sd]?|ing)|[Ff]ix(?:e[sd]|ing)?|[Rr]esolv(?:e[sd]?|ing))(:?) +(?:(?:issues? +)?%{issue_ref}(?:(?:, *| +and +)?)|([A-Z][A-Z0-9_]+-\d+))+)'
 
     $H$H Default project features settings
     default_projects_features:
@@ -86,6 +104,8 @@ production: &base
       merge_requests: true
       wiki: false
       snippets: false
+      builds: false
+      container_registry: false
 
     $H$H Webhook settings
     # Number of seconds to wait for HTTP response after sending webhook HTTP POST request (default: 10)
@@ -93,19 +113,106 @@ production: &base
 
     $H$H Repository downloads directory
     # When a user clicks e.g. 'Download zip' on a project, a temporary zip file is created in the following directory.
-    # The default is 'tmp/repositories' relative to the root of the Rails app.
-    repository_downloads_path: ${PACKAGE_DATA}/tmp/repositories
+    # The default is 'shared/cache/archive/' relative to the root of the Rails app.
+    repository_downloads_path: ${PACKAGE_DATA}/shared/cache/archive/
+
+  $H$H Reply by email
+  # Allow users to comment on issues and merge requests by replying to notification emails.
+  # For documentation on how to set this up, see http://doc.gitlab.com/ce/incoming_email/README.html
+  incoming_email:
+    enabled: false
+
+    # The email address including the `%{key}` placeholder that will be replaced to reference the item being replied to.
+    # The placeholder can be omitted but if present, it must appear in the "user" part of the address (before the `@`).
+    address: "gitlab-incoming+%{key}@gmail.com"
+
+    # Email account username
+    # With third party providers, this is usually the full email address.
+    # With self-hosted email servers, this is usually the user part of the email address.
+    user: "gitlab-incoming@gmail.com"
+    # Email account password
+    password: "[REDACTED]"
+
+    # IMAP server host
+    host: "imap.gmail.com"
+    # IMAP server port
+    port: 993
+    # Whether the IMAP server uses SSL
+    ssl: true
+    # Whether the IMAP server uses StartTLS
+    start_tls: false
+
+    # The mailbox where incoming mail will end up. Usually "inbox".
+    mailbox: "inbox"
+
+  $H$H Build Artifacts
+  artifacts:
+    enabled: true
+    # The location where build artifacts are stored (default: shared/artifacts).
+    path: ${PACKAGE_DATA}/shared/artifacts
+
+  $H$H Git LFS
+  lfs:
+    enabled: true
+    # The location where LFS objects are stored (default: shared/lfs-objects).
+    storage_path: ${PACKAGE_DATA}/shared/lfs-objects
 
   $H$H Gravatar
   $H$H For Libravatar see: http://doc.gitlab.com/ce/customization/libravatar.html
   gravatar:
-    enabled: true                 # Use user avatar image from Gravatar.com (default: true)
     # gravatar urls: possible placeholders: %{hash} %{size} %{email}
     # plain_url: "http://..."     # default: http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon
     # ssl_url:   "https://..."    # default: https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon
 
+  $H$H Auxiliary jobs
+  # Periodically executed jobs, to self-heal Gitlab, do external synchronizations, etc.
+  # Please read here for more information: https://github.com/ondrejbartas/sidekiq-cron#adding-cron-job
+  cron_jobs:
+    # Flag stuck CI builds as failed
+    stuck_ci_builds_worker:
+      cron: "0 0 * * *"
+    # Remove expired build artifacts
+    expire_build_artifacts_worker:
+      cron: "50 * * * *"
+    # Periodically run 'git fsck' on all repositories. If started more than
+    # once per hour you will have concurrent 'git fsck' jobs.
+    repository_check_worker:
+      cron: "20 * * * *"
+    # Send admin emails once a week
+    admin_email_worker:
+      cron: "0 0 * * 0"
+
+    # Remove outdated repository archives
+    repository_archive_cache_worker:
+      cron: "0 * * * *"
+
+  registry:
+    # enabled: true
+    # host: registry.example.com
+    # port: 5005
+    # api_url: http://localhost:5000/ # internal address to the registry, will be used by GitLab to directly communicate with API
+    # key: config/registry.key
+    # path: shared/registry
+    # issuer: gitlab-issuer
+
   #
-  # 2. Auth settings
+  # 2. GitLab CI settings
+  # ==========================
+
+  gitlab_ci:
+    # Default project notifications settings:
+    #
+    # Send emails only on broken builds (default: true)
+    # all_broken_builds: true
+    #
+    # Add pusher to recipients list (default: false)
+    # add_pusher: true
+
+    # The location where build traces are stored (default: builds/). Relative paths are relative to Rails.root
+    builds_path: ${PACKAGE_DATA}/builds/
+
+  #
+  # 3. Auth settings
   # ==========================
 
   $H$H LDAP settings
@@ -129,6 +236,11 @@ production: &base
         method: 'plain' # "tls" or "ssl" or "plain"
         bind_dn: '${LDAP_ROOT_DN}'
         password: '%{LDAP_ROOT_PASSWORD}'
+
+        # Set a timeout, in seconds, for LDAP queries. This helps avoid blocking
+        # a request if the LDAP server becomes unresponsive.
+        # A value of 0 means there is no timeout.
+        timeout: 10
 
         # This setting specifies if LDAP server is Active Directory LDAP server.
         # For non AD servers it skips the AD specific queries.
@@ -166,6 +278,26 @@ production: &base
         #
         user_filter: '(objectClass=${LDAP_USER_CLASS})'
 
+        # LDAP attributes that GitLab will use to create an account for the LDAP user.
+        # The specified attribute can either be the attribute name as a string (e.g. 'mail'),
+        # or an array of attribute names to try in order (e.g. ['mail', 'email']).
+        # Note that the user's LDAP login will always be the attribute specified as `uid` above.
+        attributes:
+          # The username will be used in paths for the user's own projects
+          # (like `gitlab.example.com/username/project`) and when mentioning
+          # them in issues, merge request and comments (like `@username`).
+          # If the attribute specified for `username` contains an email address,
+          # the GitLab username will be the part of the email address before the '@'.
+          username: '${LDAP_USER_RDN_ATTR}'
+          email:    '${LDAP_USER_MAIL_ATTR}'
+
+          # If no full name could be found at the attribute specified for `name`,
+          # the full name is determined using the attributes specified for
+          # `first_name` and `last_name`.
+          name:       ['${LDAP_USER_DISPLAYNAME_ATTR}', '${LDAP_USER_COMMONNAME_ATTR}']
+          first_name: '${LDAP_USER_FIRSTNAME_ATTR}'
+          last_name:  '${LDAP_USER_LASTNAME_ATTR}'
+
       # GitLab EE only: add more LDAP servers
       # Choose an ID made of a-z and 0-9 . This ID will be stored in the database
       # so that GitLab can remember which LDAP server a user belongs to.
@@ -182,17 +314,31 @@ production: &base
 
     # Uncomment this to automatically sign in with a specific omniauth provider's without
     # showing GitLab's sign-in page (default: show the GitLab sign-in page)
-    auto_sign_in_with_provider: cas
+    auto_sign_in_with_provider: cas3
 
     # CAUTION!
-    # This allows users to login without having a user account first (default: false).
+    # This allows users to login without having a user account first. Define the allowed providers
+    # using an array, e.g. ["saml", "twitter"], or as true/false to allow all providers or none.
     # User accounts will be created automatically when authentication was successful.
     allow_single_sign_on: true
+
     # Locks down those users until they have been cleared by the admin (default: true).
     block_auto_created_users: false
     # Look up new users in LDAP servers. If a match is found (same uid), automatically
     # link the omniauth identity with the LDAP account. (default: false)
     auto_link_ldap_user: false
+
+    # Allow users with existing accounts to login and auto link their account via SAML
+    # login, without having to do a manual login first and manually add SAML
+    # (default: false)
+    auto_link_saml_user: false
+
+    # Set different Omniauth providers as external so that all users creating accounts
+    # via these providers will not be able to have access to internal projects. You
+    # will need to use the full name of the provider, like `google_oauth2` for Google.
+    # Refer to the examples below for the full names of the supported providers.
+    # (default: [])
+    external_providers: []
 
     $H$H Auth providers
     # Uncomment the following lines and fill in the data of the auth provider you want to use
@@ -202,29 +348,47 @@ production: &base
     # arguments, followed by optional 'args' which can be either a hash or an array.
     # Documentation for this is available at http://doc.gitlab.com/ce/integration/omniauth.html
     providers:
-      # - { name: 'google_oauth2', 
-      #     label: 'Google',
-      #     app_id: 'YOUR_APP_ID', 
+      # See omniauth-cas3 for more configuration details
+      - { name: 'cas3',
+          label: 'cas3',
+          args: {
+                  url: '${CAS_URL}',
+                  disable_ssl_verification: true,
+                  login_url: '/login',
+                  service_validate_url: '/p3/serviceValidate',
+                  logout_url: '/logout',
+                  email_key: 'mail',
+                  name_key: 'displayName',
+                  first_name_key: 'givenName',
+                  last_name_key: 'sn' } }
+      # - { name: 'github',
+      #     app_id: 'YOUR_APP_ID',
       #     app_secret: 'YOUR_APP_SECRET',
-      #     args: { access_type: 'offline', approval_prompt: '' } }
-      # - { name: 'twitter', 
-      #     app_id: 'YOUR_APP_ID', 
-      #     app_secret: 'YOUR_APP_SECRET' }
-      # - { name: 'github', 
-      #     label: 'GitHub',
-      #     app_id: 'YOUR_APP_ID', 
-      #     app_secret: 'YOUR_APP_SECRET',
+      #     url: "https://github.com/",
+      #     verify_ssl: true,
       #     args: { scope: 'user:email' } }
-      # - { name: 'gitlab', 
-      #     label: 'GitLab.com',
-      #     app_id: 'YOUR_APP_ID', 
+      # - { name: 'bitbucket',
+      #     app_id: 'YOUR_APP_ID',
+      #     app_secret: 'YOUR_APP_SECRET' }
+      # - { name: 'gitlab',
+      #     app_id: 'YOUR_APP_ID',
       #     app_secret: 'YOUR_APP_SECRET',
       #     args: { scope: 'api' } }
-      # - { name: 'bitbucket', 
-      #     app_id: 'YOUR_APP_ID', 
+      # - { name: 'google_oauth2',
+      #     app_id: 'YOUR_APP_ID',
+      #     app_secret: 'YOUR_APP_SECRET',
+      #     args: { access_type: 'offline', approval_prompt: '' } }
+      # - { name: 'facebook',
+      #     app_id: 'YOUR_APP_ID',
       #     app_secret: 'YOUR_APP_SECRET' }
-      # - { name: 'saml', 
+      # - { name: 'twitter',
+      #     app_id: 'YOUR_APP_ID',
+      #     app_secret: 'YOUR_APP_SECRET' }
+      #
+      # - { name: 'saml',
       #     label: 'Our SAML Provider',
+      #     groups_attribute: 'Groups',
+      #     external_groups: ['Contractors', 'Freelancers'],
       #     args: {
       #             assertion_consumer_service_url: 'https://gitlab.example.com/users/auth/saml/callback',
       #             idp_cert_fingerprint: '43:51:43:a1:b5:fc:8b:b7:0a:3a:a9:b1:0f:66:73:a8',
@@ -232,31 +396,53 @@ production: &base
       #             issuer: 'https://gitlab.example.com',
       #             name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
       #           } }
-      - { name: 'cas', args: {
-          url: '${CAS_URL}',
-          disable_ssl_verification: true,
-          email_key: 'mail',
-          name_key: 'displayName',
-          first_name_key: 'givenName',
-          last_name_key: 'sn' } }
+      #
+      # - { name: 'crowd',
+      #     args: {
+      #       crowd_server_url: 'CROWD SERVER URL',
+      #       application_name: 'YOUR_APP_NAME',
+      #       application_password: 'YOUR_APP_PASSWORD' } }
+      #
+      # - { name: 'auth0',
+      #     args: {
+      #       client_id: 'YOUR_AUTH0_CLIENT_ID',
+      #       client_secret: 'YOUR_AUTH0_CLIENT_SECRET',
+      #       namespace: 'YOUR_AUTH0_DOMAIN' } }
 
+    # SSO maximum session duration in seconds. Defaults to CAS default of 8 hours.
+    # cas3:
+    #   session_duration: 28800
+
+  # Shared file storage settings
+  shared:
+    path: ${PACKAGE_DATA}/shared # Default: shared
 
 
   #
-  # 3. Advanced settings
+  # 4. Advanced settings
   # ==========================
 
   # GitLab Satellites
+  #
+  # Note for maintainers: keep the satellites.path setting until GitLab 9.0 at
+  # least. This setting is fed to 'rm -rf' in
+  # db/migrate/20151023144219_remove_satellites.rb
   satellites:
-    # Relative paths are relative to Rails.root (default: tmp/repo_satellites/)
     path: ${PACKAGE_DATA}/satellites/
-    timeout: 30
+
+  $H$H Repositories settings
+  repositories:
+    # Paths where repositories can be stored. Give the canonicalized absolute pathname.
+    # NOTE: REPOS PATHS MUST NOT CONTAIN ANY SYMLINK!!!
+    storages: # You must have at least a `default` storage path.
+      default: ${PACKAGE_DATA}/repositories/
 
   $H$H Backup settings
   backup:
     path: "${PACKAGE_BACKUP}"   # Relative paths are relative to Rails.root (default: tmp/backups/)
     archive_permissions: 0640 # Permissions for the resulting backup.tar file (default: 0600)
     keep_time: 2592000   # default: 0 (forever) (in seconds)
+    # pg_schema: public     # default: nil, it means that all schemas will be backed up
     # upload:
     #   # Fog storage connection settings, see http://fog.io/storage/ .
     #   connection:
@@ -269,13 +455,12 @@ production: &base
     #   # Use multipart uploads when file size reaches 100MB, see
     #   #  http://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html
     #   multipart_chunk_size: 104857600
+    #   # Turns on AWS Server-Side Encryption with Amazon S3-Managed Keys for backups, this is optional
+    #   # encryption: 'AES256'
 
   $H$H GitLab Shell settings
   gitlab_shell:
     path: ${PACKAGE_APP}/shell/
-
-    # REPOS_PATH MUST NOT BE A SYMLINK!!!
-    repos_path: ${PACKAGE_DATA}/repositories/
     hooks_path: ${PACKAGE_APP}/shell/hooks/
 
     # File that contains the secret key for verifying access for gitlab-shell.
@@ -302,7 +487,7 @@ production: &base
     timeout: 10
 
   #
-  # 4. Extra customization
+  # 5. Extra customization
   # ==========================
 
   extra:
@@ -337,6 +522,8 @@ test:
   <<: *base
   gravatar:
     enabled: true
+  lfs:
+    enabled: false
   gitlab:
     host: localhost
     port: 80
@@ -347,11 +534,13 @@ test:
     # user: YOUR_USERNAME
   satellites:
     path: tmp/tests/gitlab-satellites/
+  repositories:
+    storages:
+      default: tmp/tests/repositories/
   backup:
     path: tmp/tests/backups
   gitlab_shell:
     path: tmp/tests/gitlab-shell/
-    repos_path: tmp/tests/repositories/
     hooks_path: tmp/tests/gitlab-shell/hooks/
   issues_tracker:
     redmine:
@@ -372,7 +561,6 @@ test:
         user_filter: ''
         group_base: 'ou=groups,dc=example,dc=com'
         admin_group: ''
-        sync_ssh_keys: false
 
 staging:
   <<: *base
