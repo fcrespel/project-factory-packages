@@ -57,7 +57,8 @@ if ! enableservice @{package.service}; then
 fi
 
 # Reload HTTPD and Nagios if already running
-reloadservice @{httpd.service}
+stopservice @{httpd.service}
+startservice @{httpd.service}
 reloadservice @{nagios.service}
 
 # Enable user access to the service
