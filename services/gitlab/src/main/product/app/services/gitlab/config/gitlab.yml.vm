@@ -19,6 +19,10 @@
 #set( $LDAP_USER_MAIL_ATTR = ${project.properties.getProperty('ldap.user.mail.attr')} )
 #set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
 #set( $CAS_URL = ${project.properties.getProperty('cas.url')} )
+#set( $CAS_ATTR_DISPLAYNAME = ${project.properties.getProperty('cas.attr.displayname')} )
+#set( $CAS_ATTR_FIRSTNAME = ${project.properties.getProperty('cas.attr.firstname')} )
+#set( $CAS_ATTR_LASTNAME = ${project.properties.getProperty('cas.attr.lastname')} )
+#set( $CAS_ATTR_MAIL = ${project.properties.getProperty('cas.attr.mail')} )
 # # # # # # # # # # # # # # # # # #
 # GitLab application config file  #
 # # # # # # # # # # # # # # # # # #
@@ -357,10 +361,10 @@ production: &base
                   login_url: '/login',
                   service_validate_url: '/p3/serviceValidate',
                   logout_url: '/logout',
-                  email_key: 'mail',
-                  name_key: 'displayName',
-                  first_name_key: 'givenName',
-                  last_name_key: 'sn' } }
+                  email_key: '${CAS_ATTR_MAIL}',
+                  name_key: '${CAS_ATTR_DISPLAYNAME}',
+                  first_name_key: '${CAS_ATTR_FIRSTNAME}',
+                  last_name_key: '${CAS_ATTR_LASTNAME}' } }
       # - { name: 'github',
       #     app_id: 'YOUR_APP_ID',
       #     app_secret: 'YOUR_APP_SECRET',
