@@ -91,7 +91,7 @@ INSERT INTO `forum_keyvalue` (`key`, `value`)
 VALUES ('CAS_SERVER_URL', '@{cas.url}');
 
 INSERT INTO `forum_keyvalue` (`key`, `value`)
-VALUES ('CAS_PROTOCOL', 'cas2');
+VALUES ('CAS_PROTOCOL', 'cas3');
 
 INSERT INTO `forum_keyvalue` (`key`, `value`)
 VALUES ('CAS_ATTRIBUTE_NAME', 'displayName');

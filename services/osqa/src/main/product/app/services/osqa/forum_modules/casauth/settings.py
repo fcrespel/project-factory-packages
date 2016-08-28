@@ -4,7 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 
 CAS_PROTOCOL_CHOICES = (
 ('cas1', _('CAS 1.0')),
-('cas2', _('CAS 2.0'))
+('cas2', _('CAS 2.0')),
+('cas3', _('CAS 3.0'))
 )
 
 CAS_SET = SettingSet('cas', _('CAS settings'), _("CAS configuration for OSQA"), 4)
@@ -14,9 +15,9 @@ label = _("CAS Server URL"),
 help_text = _("The URL of the CAS server to use for authentication, e.g. https://cas.example.org or https://example.org/cas/"),
 required = False))
 
-CAS_PROTOCOL = Setting('CAS_PROTOCOL', 'cas2', CAS_SET, dict(
+CAS_PROTOCOL = Setting('CAS_PROTOCOL', 'cas3', CAS_SET, dict(
 label = _("CAS Protocol"),
-help_text = _("The CAS server protocol to use for ticket validation. Only CAS 2.0 supports attributes."),
+help_text = _("The CAS server protocol to use for ticket validation. Only CAS 3.0 supports attributes."),
 widget=Select(choices=CAS_PROTOCOL_CHOICES),
 required = False))
 

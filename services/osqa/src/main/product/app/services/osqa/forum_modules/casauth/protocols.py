@@ -71,7 +71,31 @@ def _verify_cas2(ticket, service):
     except ImportError:
         from elementtree import ElementTree
     params = {'ticket': ticket, 'service': service}
-    url = urljoin(settings.CAS_SERVER_URL, 'proxyValidate') + '?' + urlencode(params)
+    url = urljoin(settings.CAS_SERVER_URL, 'serviceValidate') + '?' + urlencode(params)
+    page = urlopen(url)
+    try:
+        user = None
+        attributes = {}
+        response = page.read()
+        tree = ElementTree.fromstring(response)
+        if tree[0].tag.endswith('authenticationSuccess'):
+            for element in tree[0]:
+                if element.tag.endswith('user'):
+                    user = element.text
+                elif element.tag.endswith('attributes'):
+                    for attribute in element:
+                        attributes[attribute.tag.split("}").pop()] = attribute.text
+        return user, attributes
+    finally:
+        page.close()
+
+def _verify_cas3(ticket, service):
+    try:
+        from xml.etree import ElementTree
+    except ImportError:
+        from elementtree import ElementTree
+    params = {'ticket': ticket, 'service': service}
+    url = urljoin(settings.CAS_SERVER_URL, 'p3/serviceValidate') + '?' + urlencode(params)
     page = urlopen(url)
     try:
         user = None
@@ -119,4 +143,4 @@ def _find_sessions_by_ticket(ticket):
             found.append(session)
     return found
 
-_PROTOCOLS = {'cas1': _verify_cas1, 'cas2': _verify_cas2}
+_PROTOCOLS = {'cas1': _verify_cas1, 'cas2': _verify_cas2, 'cas3': _verify_cas3}
