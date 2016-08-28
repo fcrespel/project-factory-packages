@@ -69,13 +69,13 @@ $tlCfg->authentication['SSO_method'] = 'CAS';
 $tlCfg->authentication['cas_host'] = '@{product.domain}';
 $tlCfg->authentication['cas_port'] = @{cas.port};
 $tlCfg->authentication['cas_context'] = '@{cas.context}';
-$tlCfg->authentication['cas_protocol'] = '2.0'; // 1.0, 2.0 or S1 (for SAML 1.1)
+$tlCfg->authentication['cas_protocol'] = 'S1'; // 1.0, 2.0 or S1 (for SAML 1.1)
 $tlCfg->authentication['cas_logout_requests_enabled'] = true;
 $tlCfg->authentication['cas_logout_requests_servers'] = array('@{product.domain}', 'localhost');
 $tlCfg->authentication['cas_onthefly_registration'] = true;
-$tlCfg->authentication['cas_firstname_attribute'] = 'givenName';
-$tlCfg->authentication['cas_lastname_attribute'] = 'sn';
-$tlCfg->authentication['cas_mail_attribute'] = 'mail';
+$tlCfg->authentication['cas_firstname_attribute'] = '@{cas.attr.firstname}';
+$tlCfg->authentication['cas_lastname_attribute'] = '@{cas.attr.lastname}';
+$tlCfg->authentication['cas_mail_attribute'] = '@{cas.attr.mail}';
 
 /** Enable/disable Users to create accounts on login page */
 $tlCfg->user_self_signup = false;
