@@ -1,6 +1,5 @@
 #set( $PRODUCT_NAME = ${project.properties.getProperty('product.name')} )
-#set( $PRODUCT_APP = ${project.properties.getProperty('product.app')} )
-#set( $PRODUCT_GROUP_ADMINS = ${project.properties.getProperty('product.group.admins')} )
+#set( $PRODUCT_GROUP_USERS = ${project.properties.getProperty('product.group.users')} )
 #set( $PACKAGE_PORT_AJP = ${project.properties.getProperty('package.port.ajp')} )
 #set( $LDAP_HOST = ${project.properties.getProperty('ldap.host')} )
 #set( $LDAP_PORT = ${project.properties.getProperty('ldap.port')} )
@@ -9,23 +8,35 @@
 #set( $LDAP_GROUPS_DN = ${project.properties.getProperty('ldap.groups.dn')} )
 #set( $LDAP_GROUP_RDN_ATTR = ${project.properties.getProperty('ldap.group.rdn.attr')} )
 #set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
+#set( $CAS_URL = ${project.properties.getProperty('cas.url')} )
+#set( $CAS_ATTR_GROUPS = ${project.properties.getProperty('cas.attr.groups')} )
 # Reverse proxy to Tomcat instance serving Rundeck
+
+Redirect /rundeck/cas/logout ${CAS_URL}logout
+<Location /rundeck/cas>
+	ProxyPass !
+	Header always add Set-Cookie "MOD_AUTH_CAS=; Path=/rundeck; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age: 0; HttpOnly"
+	Header always add Set-Cookie "MOD_AUTH_CAS_S=; Path=/rundeck; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age: 0; Secure; HttpOnly"
+</Location>
 
 <Location /rundeck>
 	ProxyPass ajp://127.0.0.1:${PACKAGE_PORT_AJP}/rundeck timeout=60 ttl=300
 
+#if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
+	AuthType CAS
+	Require valid-user
+	CASScope /rundeck
+	CASAuthNHeader X-CAS-User
+	CASScrubRequestHeaders On
+	
+	RewriteEngine on
+	RewriteRule (.*) - [E=AJP_REMOTE_USER_GROUPS:%{HTTP:CAS_${CAS_ATTR_GROUPS.toUpperCase()}}]
+#else
 	AuthName "${PRODUCT_NAME} Rundeck"
 	AuthType Basic
-#if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
-	AuthBasicProvider wsgi
-	WSGIAuthUserScript ${PRODUCT_APP}/system/httpd/scripts/cas_auth.wsgi
-	WSGIAuthGroupScript ${PRODUCT_APP}/system/httpd/scripts/cas_auth.wsgi
-	Require wsgi-group ${PRODUCT_GROUP_ADMINS}
-#else
 	AuthBasicProvider ldap
 	AuthLDAPUrl "ldap://${LDAP_HOST}:${LDAP_PORT}/${LDAP_USERS_DN}?${LDAP_USER_RDN_ATTR}"
-	Require ldap-group ${LDAP_GROUP_RDN_ATTR}=${PRODUCT_GROUP_ADMINS},${LDAP_GROUPS_DN}
+	Require ldap-group ${LDAP_GROUP_RDN_ATTR}=${PRODUCT_GROUP_USERS},${LDAP_GROUPS_DN}
+	SetEnv AJP_REMOTE_USER_GROUPS "${PRODUCT_GROUP_USERS}"
 #end
-
-	SetEnv AJP_REMOTE_USER_GROUPS "admin:user"
 </Location>

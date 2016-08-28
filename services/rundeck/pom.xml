@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>rundeck</artifactId>
-	<version>2.6.8-1-SNAPSHOT</version>
+	<version>2.6.9-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Rundeck</name>
@@ -162,6 +162,9 @@
 								<unzip
 									src="${project.downloaded.directory}/${package.src.file}"
 									dest="${project.app.directory}/webapps/${project.artifactId}">
+									<patternset>
+										<exclude name="WEB-INF/classes/gsp_rundeck_common_css_gsp*" />
+									</patternset>
 								</unzip>
 								<unzip
 									src="${project.app.directory}/webapps/${project.artifactId}/WEB-INF/lib/rundeck-core-${package.version}.jar"

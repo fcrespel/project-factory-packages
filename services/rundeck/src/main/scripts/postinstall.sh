@@ -9,9 +9,6 @@ if [ ! -e "@{package.data}/.ssh/id_rsa" ]; then
 	ssh-keygen -q -t rsa -C '' -N '' -f "@{package.data}/.ssh/id_rsa"
 fi
 
-# Remove precompiled CSS view to allow customization
-rm -f @{package.app}/webapps/rundeck/WEB-INF/classes/gsp_rundeck_common_css_gsp*
-
 # Fix data directory permissions
 chown -R @{package.user}:@{package.group} "@{package.data}"
 chmod +x @{package.data}/tools/bin/*

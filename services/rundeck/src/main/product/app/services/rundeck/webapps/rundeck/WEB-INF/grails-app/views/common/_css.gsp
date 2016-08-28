@@ -6,6 +6,9 @@
        value="${grailsApplication.config.rundeck.gui.'logo-width' ?: g.message(code: 'main.app.logo.width')}"/>
 <g:set var="appLogoH"
        value="${grailsApplication.config.rundeck.gui.'logo-height' ?: g.message(code: 'main.app.logo.height')}"/>
+<g:if test="${session[org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME]?.language=='de'}">
+    <g:set var="customCss" value=".navbar-brand,.navbar-default{border-radius: 0 0 10px 10px; }"/>
+</g:if>
 
 <style type="text/css">
 
@@ -32,6 +35,5 @@
         background-size: ${ enc(rawtext:appLogoW) } ${ enc(rawtext:appLogoH) };
     }
     }
+    ${enc(rawtext:customCss)}
 </style>
-<script type="text/javascript" src="/portal/toolbar.php?tab=rundeck&amp;format=js"></script>
-<link href="/portal/themes/current/css/rundeck.css" type="text/css" rel="stylesheet" />
