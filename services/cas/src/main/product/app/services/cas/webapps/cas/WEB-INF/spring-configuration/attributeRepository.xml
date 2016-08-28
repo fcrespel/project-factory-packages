@@ -34,15 +34,15 @@
 		</property>
 		<property name="resultAttributeMapping">
 			<map>
-				<entry key="${ldap.dn.attr}" value="entryDn" />
-				<entry key="${ldap.user.rdn.attr}" value="uid" />
-				<entry key="${ldap.user.commonname.attr}" value="cn"/>
-				<entry key="${ldap.user.firstname.attr}" value="givenName"/>
-				<entry key="${ldap.user.lastname.attr}" value="sn"/>
-				<entry key="${ldap.user.displayname.attr}" value="displayName"/>
-				<entry key="${ldap.user.mail.attr}" value="mail" />
-				<entry key="${ldap.user.telephone.attr}" value="telephoneNumber" />
-				<entry key="${ldap.user.organization.attr}" value="o" />
+				<entry key="${ldap.dn.attr}" value="${cas.attr.dn}" />
+				<entry key="${ldap.user.rdn.attr}" value="${cas.attr.uid}" />
+				<entry key="${ldap.user.commonname.attr}" value="${cas.attr.commonname}"/>
+				<entry key="${ldap.user.firstname.attr}" value="${cas.attr.firstname}"/>
+				<entry key="${ldap.user.lastname.attr}" value="${cas.attr.lastname}"/>
+				<entry key="${ldap.user.displayname.attr}" value="${cas.attr.displayname}"/>
+				<entry key="${ldap.user.mail.attr}" value="${cas.attr.mail}" />
+				<entry key="${ldap.user.telephone.attr}" value="${cas.attr.telephone}" />
+				<entry key="${ldap.user.organization.attr}" value="${cas.attr.organization}" />
 			</map>
 		</property>
 	</bean>
@@ -53,16 +53,16 @@
 		  p:baseDN="${ldap.groupsDn}"
 		  p:searchControls-ref="searchControls"
 		  p:searchFilter="(&amp;(objectClass=${ldap.group.class})(${ldap.group.member.attr}={0}))"
-		  p:unmappedUsernameAttribute="cn">
+		  p:unmappedUsernameAttribute="${ldap.group.rdn.attr}">
 		<property name="queryAttributeMapping">
 			<map>
-				<entry key="entryDn" value="${ldap.group.member.attr}" />
+				<entry key="${cas.attr.dn}" value="${ldap.group.member.attr}" />
 			</map>
 		</property>
 		<property name="resultAttributeMapping">
 			<map>
-				<entry key="${ldap.group.rdn.attr}" value="groups" />
-				<entry key="${ldap.group.member.attr}" value="entryDn" />
+				<entry key="${ldap.group.rdn.attr}" value="${cas.attr.groups}" />
+				<entry key="${ldap.group.member.attr}" value="${cas.attr.dn}" />
 			</map>
 		</property>
 	</bean>

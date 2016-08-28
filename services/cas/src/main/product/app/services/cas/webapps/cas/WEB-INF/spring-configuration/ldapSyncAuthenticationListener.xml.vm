@@ -35,13 +35,13 @@
 		</property>
 		<property name="mapAttributes">
 			<map>
-				<entry key="cn" value="${D}{ldap.user.commonname.attr}"/>
-				<entry key="givenName" value="${D}{ldap.user.firstname.attr}" />
-				<entry key="sn" value="${D}{ldap.user.lastname.attr}" />
-				<entry key="displayName" value="${D}{ldap.user.displayname.attr}" />
-				<entry key="mail" value="${D}{ldap.user.mail.attr}" />
-				<entry key="telephoneNumber" value="${D}{ldap.user.telephone.attr}" />
-				<entry key="o" value="${D}{ldap.user.organization.attr}" />
+				<entry key="${D}{cas.attr.commonname}" value="${D}{ldap.user.commonname.attr}"/>
+				<entry key="${D}{cas.attr.firstname}" value="${D}{ldap.user.firstname.attr}" />
+				<entry key="${D}{cas.attr.lastname}" value="${D}{ldap.user.lastname.attr}" />
+				<entry key="${D}{cas.attr.displayname}" value="${D}{ldap.user.displayname.attr}" />
+				<entry key="${D}{cas.attr.mail}" value="${D}{ldap.user.mail.attr}" />
+				<entry key="${D}{cas.attr.telephone}" value="${D}{ldap.user.telephone.attr}" />
+				<entry key="${D}{cas.attr.organization}" value="${D}{ldap.user.organization.attr}" />
 			</map>
 		</property>
 #if( ${CAS_LDAP_SYNC_PASSWORD} == "1" || ${CAS_LDAP_SYNC_PASSWORD} == "true" )
