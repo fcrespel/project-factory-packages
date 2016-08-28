@@ -30,7 +30,7 @@
     </bean>
     -->
     <bean id="authorizationGenerator" class="org.pac4j.core.authorization.FromAttributesAuthorizationGenerator"
-    	  c:roleAttributes="groups" c:permissionAttributes="" />
+    	  c:roleAttributes="${cas.attr.groups}" c:permissionAttributes="" />
 
     <!-- 
     Bean that defines the attributes that a service may return.  This example uses the Stub/Mock version.  A real implementation
@@ -41,16 +41,16 @@
     </bean>
 
     <util:map id="backingMap">
-        <entry key="entryDn" value="entryDn" />
-        <entry key="uid" value="uid" />
-        <entry key="cn" value="cn" />
-        <entry key="givenName" value="givenName" />
-        <entry key="sn" value="sn" />
-        <entry key="displayName" value="displayName" />
-        <entry key="mail" value="mail" />
-        <entry key="telephoneNumber" value="telephoneNumber" />
-        <entry key="o" value="o" />
-        <entry key="groups" value="groups" />
+        <entry key="${cas.attr.dn}" value="${cas.attr.dn}" />
+        <entry key="${cas.attr.uid}" value="${cas.attr.uid}" />
+        <entry key="${cas.attr.commonname}" value="${cas.attr.commonname}" />
+        <entry key="${cas.attr.firstname}" value="${cas.attr.firstname}" />
+        <entry key="${cas.attr.lastname}" value="${cas.attr.lastname}" />
+        <entry key="${cas.attr.displayname}" value="${cas.attr.displayname}" />
+        <entry key="${cas.attr.mail}" value="${cas.attr.mail}" />
+        <entry key="${cas.attr.telephone}" value="${cas.attr.telephone}" />
+        <entry key="${cas.attr.organization}" value="${cas.attr.organization}" />
+        <entry key="${cas.attr.groups}" value="${cas.attr.groups}" />
     </util:map>
 
     <alias name="jsonServiceRegistryDao" alias="serviceRegistryDao" />
