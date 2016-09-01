@@ -6,7 +6,7 @@ chown -R @{product.user}:@{product.group} "@{package.data}/repository"
 chmod -R ug=rwX "@{package.data}/repository"
 
 # Create trust store if necessary
-create_truststore "@{package.data}/trust.jks" @{product.user} @{product.group} "@{system.java7.app}/jre/lib/security/cacerts"
+create_truststore "@{package.data}/trust.jks" @{product.user} @{product.group} "@{system.java8.app}/jre/lib/security/cacerts"
 
 # Create link to repository in user home
 if [ ! -e "@{product.root}/.m2/repository" -a ! -h "@{product.root}/.m2/repository" ]; then

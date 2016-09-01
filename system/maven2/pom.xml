@@ -41,8 +41,8 @@
 		<package.src.file>apache-maven-${package.version}-bin.tar.gz</package.src.file>
 		<package.data>${product.data}/${package.type}/maven</package.data>
 		<package.dependencies>
-			${system.package.java7},
-			${system.package.java7-devel}
+			${system.package.java8},
+			${system.package.java8-devel}
 		</package.dependencies>
 	</properties>
 	
