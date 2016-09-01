@@ -25,7 +25,7 @@ fi
 ES_USER="@{package.user}"
 ES_GROUP="@{package.group}"
 ES_HOME="@{package.app}"
-MAX_OPEN_FILES=65535
+MAX_OPEN_FILES=65536
 MAX_MAP_COUNT=262144
 LOG_DIR="@{package.log}"
 DATA_DIR="@{package.data}"
@@ -51,6 +51,7 @@ export ES_JAVA_OPTS
 export ES_GC_LOG_FILE
 export ES_STARTUP_SLEEP_TIME
 export JAVA_HOME
+export ES_INCLUDE
 
 checkJava() {
 	if [ -x "$JAVA_HOME/bin/java" ]; then
