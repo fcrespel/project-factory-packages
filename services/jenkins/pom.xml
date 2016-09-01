@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>jenkins</artifactId>
-	<version>1.651.2-1-SNAPSHOT</version>
+	<version>1.651.2-2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Jenkins</name>
@@ -52,8 +52,8 @@
 			${package.prefix}-system-maven3,
 			${package.prefix}-system-tomcat,
 			${package.prefix}-service-portal,
-			${system.package.java6-devel},
 			${system.package.java7-devel},
+			${system.package.java8-devel},
 			${system.package.subversion},
 			${system.package.git}
 		</package.dependencies>

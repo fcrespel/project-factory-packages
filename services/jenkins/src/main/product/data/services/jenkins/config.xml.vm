@@ -13,8 +13,8 @@
 #set( $LDAP_GROUPS_RDN = ${project.properties.getProperty('ldap.groups.rdn')} )
 #set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
 #set( $CAS_URL = ${project.properties.getProperty('cas.url')} )
-#set( $SYSTEM_JAVA6_APP = ${project.properties.getProperty('system.java6.app')} )
 #set( $SYSTEM_JAVA7_APP = ${project.properties.getProperty('system.java7.app')} )
+#set( $SYSTEM_JAVA8_APP = ${project.properties.getProperty('system.java8.app')} )
 <?xml version='1.0' encoding='UTF-8'?>
 <hudson>
   <disabledAdministrativeMonitors/>
@@ -134,13 +134,13 @@
   </markupFormatter>
   <jdks>
     <jdk>
-      <name>java-1.6.0</name>
-      <home>${SYSTEM_JAVA6_APP}</home>
+      <name>java-1.7.0</name>
+      <home>${SYSTEM_JAVA7_APP}</home>
       <properties/>
     </jdk>
     <jdk>
-      <name>java-1.7.0</name>
-      <home>${SYSTEM_JAVA7_APP}</home>
+      <name>java-1.8.0</name>
+      <home>${SYSTEM_JAVA8_APP}</home>
       <properties/>
     </jdk>
   </jdks>
