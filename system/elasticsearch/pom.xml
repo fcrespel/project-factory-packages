@@ -45,7 +45,8 @@
 		<package.port.tcp>${elasticsearch.port.tcp}</package.port.tcp>
 		<package.java.opts>${elasticsearch.java.opts}</package.java.opts>
 		<package.dependencies>
-			${system.package.java7}
+			${system.package.java8},
+			${system.package.java8-devel}
 		</package.dependencies>
 	</properties>
 
