@@ -41,8 +41,8 @@
 		<package.src.url>http://archive.apache.org/dist/ant/binaries</package.src.url>
 		<package.src.file>apache-ant-${package.version}-bin.tar.bz2</package.src.file>
 		<package.dependencies>
-			${system.package.java7},
-			${system.package.java7-devel}
+			${system.package.java8},
+			${system.package.java8-devel}
 		</package.dependencies>
 	</properties>
 	
