@@ -47,8 +47,8 @@
 		<package.java.opts>${tomcat.java.opts}</package.java.opts>
 		<package.dependencies>
 			${package.prefix}-system-httpd,
-			${system.package.java7},
-			${system.package.java7-devel},
+			${system.package.java8},
+			${system.package.java8-devel},
 			${system.package.tomcat-native}
 		</package.dependencies>
 	</properties>
