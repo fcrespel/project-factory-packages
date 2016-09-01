@@ -5,7 +5,7 @@ interpolatetemplate_inplace "@{package.app}/conf/tomcat-users.xml"
 chown -R @{package.user}:@{package.group} "@{package.data}"
 
 # Create trust store if necessary
-create_truststore "@{package.app}/conf/trust.jks" @{package.user} @{package.group} "@{system.java7.app}/jre/lib/security/cacerts"
+create_truststore "@{package.app}/conf/trust.jks" @{package.user} @{package.group} "@{system.java8.app}/jre/lib/security/cacerts"
 
 # Enable service at startup
 if ! enableservice @{package.service}; then
