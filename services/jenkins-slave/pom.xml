@@ -42,8 +42,8 @@
 			${package.prefix}-system-ant,
 			${package.prefix}-system-maven2,
 			${package.prefix}-system-maven3,
-			${system.package.java6-devel},
 			${system.package.java7-devel},
+			${system.package.java8-devel},
 			${system.package.subversion},
 			${system.package.git}
 		</package.dependencies>
