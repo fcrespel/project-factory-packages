@@ -40,7 +40,8 @@
 		<package.disabled>${sonarqube-runner.disabled}</package.disabled>
 		<package.src.file>sonar-runner-dist-${package.version}.zip</package.src.file>
 		<package.dependencies>
-			${system.package.java7}
+			${system.package.java8},
+			${system.package.java8-devel}
 		</package.dependencies>
 	</properties>
 
