@@ -14,7 +14,7 @@ chown -R @{package.user}:@{package.group} "@{package.data}"
 chmod +x @{package.data}/tools/bin/*
 
 # Create trust store if necessary
-create_truststore "@{package.app}/conf/trust.jks" @{package.user} @{package.group} "@{system.java7.app}/jre/lib/security/cacerts"
+create_truststore "@{package.app}/conf/trust.jks" @{package.user} @{package.group} "@{system.java8.app}/jre/lib/security/cacerts"
 
 # Start MySQL if necessary
 if ! startservice @{mysql.service}; then
