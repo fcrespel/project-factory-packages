@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>cas</artifactId>
-	<version>4.2.4-1-SNAPSHOT</version>
+	<version>4.2.5-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - CAS</name>
@@ -58,12 +58,12 @@
 			${system.package.openssl-devel},
 			${system.package.pcre-devel}
 		</package.dependencies>
-		<cas.version>4.2.4</cas.version>
+		<cas.version>4.2.5</cas.version>
 		<cas.db.name>${product.id}_cas</cas.db.name>
 		<cas.db.user>${product.id}_cas</cas.db.user>
 		<cas.lang>${product.locale}</cas.lang>
 		<mod_auth_cas.version>1.1</mod_auth_cas.version>
-		<pac4j.version>1.8.8</pac4j.version>
+		<pac4j.version>1.8.9</pac4j.version>
 	</properties>
 
 	<dependencies>
