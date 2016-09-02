@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>cas-management</artifactId>
-	<version>4.2.4-1-SNAPSHOT</version>
+	<version>4.2.5-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Admin - CAS Management</name>
@@ -50,7 +50,7 @@
 			${package.prefix}-system-tomcat,
 			${package.prefix}-service-portal
 		</package.dependencies>
-		<cas.version>4.2.4</cas.version>
+		<cas.version>4.2.5</cas.version>
 	</properties>
 
 	<dependencies>
