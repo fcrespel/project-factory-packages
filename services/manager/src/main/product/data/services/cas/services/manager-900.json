@@ -1,7 +1,7 @@
 {
   "@class": "org.jasig.cas.support.oauth.services.OAuthRegisteredService",
   "serviceId": "^https?://\\Q@{product.domain}\\E/manager/.*",
-  "name": "Platform Manager",
+  "name": "@{product.id}-manager",
   "id": 900,
   "description": "@{product.name} Platform Manager",
   "evaluationOrder": 900,
