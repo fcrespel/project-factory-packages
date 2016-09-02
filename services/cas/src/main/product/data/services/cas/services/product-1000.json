@@ -1,7 +1,7 @@
 {
   "@class": "org.jasig.cas.services.RegexRegisteredService",
   "serviceId": "^https?://\\Q@{product.domain}\\E/.*",
-  "name": "@{product.domain}",
+  "name": "@{product.id}",
   "id": 1000,
   "description": "@{product.name}",
   "evaluationOrder": 1000,
