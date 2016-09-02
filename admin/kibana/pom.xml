@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>kibana</artifactId>
-	<version>4.5.2-1-SNAPSHOT</version>
+	<version>4.6.0-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Admin - Kibana</name>
@@ -39,7 +39,7 @@
 	<properties>
 		<package.disabled>${kibana.disabled}</package.disabled>
 		<package.src.url>https://download.elastic.co/kibana/kibana</package.src.url>
-		<package.src.file>kibana-${package.version}-linux-x64.tar.gz</package.src.file>
+		<package.src.file>kibana-${package.version}-linux-x86_64.tar.gz</package.src.file>
 		<package.arch>x86_64</package.arch>
 		<package.deb.arch>amd64</package.deb.arch>
 		<package.dependencies>
