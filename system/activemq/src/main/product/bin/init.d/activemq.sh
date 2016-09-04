@@ -21,29 +21,16 @@ else
 	exit 1
 fi
 
-# Default script variables
+# Local script variables
+SERVICENAME="@{package.service}"
 ACTIVEMQ_HOME="@{package.app}"
-ACTIVEMQ_USER="@{package.user}"
-ACTIVEMQ_OPTS_MEMORY="@{package.java.opts}"
-ACTIVEMQ_PORT_HTTP="@{activemq.port.http}"
 ACTIVEMQ_INITLOG="@{package.log}/initd.log"
 ACTIVEMQ_PIDFILE="@{package.data}/activemq.pid"
 ACTIVEMQ_LOCKFILE="@{package.data}/lockfile"
-
-# Source service configuration
-if [ -r "@{package.app}/conf/service.conf" ] ; then
-	. "@{package.app}/conf/service.conf"
-fi
-
-# Local script variables
-SERVICENAME="@{package.service}"
 ACTIVEMQ_SCRIPT="$ACTIVEMQ_HOME/bin/activemq"
 
 call_activemq() {
 	ACTIVEMQ_HOME="$ACTIVEMQ_HOME" \
-	ACTIVEMQ_USER="-s /bin/sh $ACTIVEMQ_USER" \
-	ACTIVEMQ_PIDFILE="$ACTIVEMQ_PIDFILE" \
-	ACTIVEMQ_OPTS_MEMORY="$ACTIVEMQ_OPTS_MEMORY -Djetty.port=$ACTIVEMQ_PORT_HTTP" \
 	$ACTIVEMQ_SCRIPT "$@" >> $ACTIVEMQ_INITLOG 2>&1
 }
 

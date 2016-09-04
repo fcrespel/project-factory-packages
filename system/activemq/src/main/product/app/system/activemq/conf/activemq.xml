@@ -28,7 +28,7 @@
     </bean>
 
    <!-- Allows accessing the server log -->
-    <bean id="logQuery" class="org.fusesource.insight.log.log4j.Log4jLogQuery"
+    <bean id="logQuery" class="io.fabric8.insight.log.log4j.Log4jLogQuery"
           lazy-init="false" scope="singleton"
           init-method="start" destroy-method="stop">
     </bean>
@@ -110,7 +110,9 @@
         <transportConnectors>
             <!-- DOS protection, limit concurrent connections to 1000 and frame size to 100MB -->
             <transportConnector name="openwire" uri="tcp://@{activemq.bind}:@{activemq.port.openwire}?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+            <transportConnector name="amqp" uri="amqp://@{activemq.bind}:@{activemq.port.amqp}?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
             <transportConnector name="stomp" uri="stomp://@{activemq.bind}:@{activemq.port.stomp}?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+            <transportConnector name="mqtt" uri="mqtt://@{activemq.bind}:@{activemq.port.mqtt}?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
         </transportConnectors>
 
         <!-- destroy the spring context on shutdown to stop jetty -->

@@ -6,8 +6,7 @@ chown -R @{package.user}:@{package.group} "@{package.data}" "@{package.log}"
 
 # Fix executable permissions
 chmod +x "@{package.app}/bin/activemq"
-chmod +x "@{package.app}/bin/activemq-admin"
-chmod +x "@{package.app}/bin/diag"
+chmod +x "@{package.app}/bin/activemq-diag"
 
 # Enable service at startup
 if ! enableservice @{package.service}; then

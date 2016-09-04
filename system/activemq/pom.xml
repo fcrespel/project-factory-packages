@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>activemq</artifactId>
-	<version>5.10.0-1-SNAPSHOT</version>
+	<version>5.14.0-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory System - ActiveMQ</name>
@@ -39,7 +39,7 @@
 	<properties>
 		<package.disabled>${activemq.disabled}</package.disabled>
 		<package.src.file>apache-activemq-${package.version}-bin.tar.gz</package.src.file>
-		<package.java.opts>${activemq.java.opts}</package.java.opts>
+		<package.java.opts>${activemq.java.opts} -Djetty.host=${activemq.bind} -Djetty.port=${activemq.port.http}</package.java.opts>
 		<package.dependencies>
 			${system.package.java8},
 			${system.package.java8-devel}
