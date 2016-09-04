@@ -38,15 +38,18 @@
 
 	<properties>
 		<package.disabled>${kibana.disabled}</package.disabled>
+		<package.arch>${system.arch}</package.arch>
 		<package.src.url>https://download.elastic.co/kibana/kibana</package.src.url>
-		<package.src.file>kibana-${package.version}-linux-x86_64.tar.gz</package.src.file>
-		<package.arch>x86_64</package.arch>
-		<package.deb.arch>amd64</package.deb.arch>
+		<package.src.file>${package.src.file.arch}</package.src.file>
+		<package.src.file.i386>kibana-${kibana.version}-linux-x86.tar.gz</package.src.file.i386>
+		<package.src.file.x86_64>kibana-${kibana.version}-linux-x86_64.tar.gz</package.src.file.x86_64>
+		<package.src.file.amd64>kibana-${kibana.version}-linux-x86_64.tar.gz</package.src.file.amd64>
 		<package.dependencies>
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-elasticsearch,
 			${package.prefix}-service-portal
 		</package.dependencies>
+		<kibana.version>4.6.0</kibana.version>
 	</properties>
 
 	<build>
