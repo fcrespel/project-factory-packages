@@ -34,6 +34,7 @@
 	Redirect permanent / https://${PRODUCT_DOMAIN}/
 #else
 	RequestHeader set X-Forwarded-Proto "http"
+	RequestHeader set X-Forwarded-Port "${HTTPD_VHOST_PORT_HTTP}"
 	SetEnv proxy-sendchunked 1
 	ProxyPass / http://${HTTPD_HOST}:${HTTPD_PORT_HTTP}/
 	ProxyPassReverse / http://${HTTPD_HOST}:${HTTPD_PORT_HTTP}/
@@ -62,6 +63,7 @@
 	TraceEnable off
 
 	RequestHeader set X-Forwarded-Proto "https"
+	RequestHeader set X-Forwarded-Port "${HTTPD_VHOST_PORT_HTTPS}"
 	SetEnv proxy-sendchunked 1
 	ProxyPass / http://${HTTPD_HOST}:${HTTPD_PORT_HTTPS}/
 	ProxyPassReverse / http://${HTTPD_HOST}:${HTTPD_PORT_HTTPS}/
