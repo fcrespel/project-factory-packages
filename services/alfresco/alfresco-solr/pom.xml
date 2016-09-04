@@ -26,7 +26,7 @@
 	<parent>
 		<groupId>fr.project-factory.packages.services</groupId>
 		<artifactId>alfresco</artifactId>
-		<version>4.2.f-1-SNAPSHOT</version>
+		<version>5.1.g-1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>alfresco-solr</artifactId>
@@ -37,7 +37,6 @@
 
 	<properties>
 		<package.disabled>${alfresco-solr.disabled}</package.disabled>
-		<package.src.file>alfresco-solr-${package.version}.zip</package.src.file>
 		<package.src.bundle>${package.bundle.tomcat}</package.src.bundle>
 		<package.bind>${alfresco-solr.bind}</package.bind>
 		<package.port.shutdown>${alfresco-solr.port.shutdown}</package.port.shutdown>
@@ -48,7 +47,6 @@
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-tomcat
 		</package.dependencies>
-		<solr.version>1.4.1-alfresco-patched</solr.version>
 	</properties>
 
 	<build>
@@ -133,19 +131,19 @@
 							<skip>${package.disabled}</skip>
 							<artifactItems>
 								<artifactItem>
-									<outputDirectory>${project.app.directory}/webapps/solr</outputDirectory>
-									<groupId>org.apache.solr</groupId>
-									<artifactId>apache-solr</artifactId>
-									<version>${solr.version}</version>
+									<outputDirectory>${project.app.directory}/webapps/solr4</outputDirectory>
+									<groupId>org.alfresco</groupId>
+									<artifactId>alfresco-solr4</artifactId>
+									<version>${package.version}</version>
 									<type>war</type>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.data.directory}</outputDirectory>
 									<groupId>org.alfresco</groupId>
-									<artifactId>alfresco-solr</artifactId>
+									<artifactId>alfresco-solr4</artifactId>
 									<version>${package.version}</version>
+									<classifier>config</classifier>
 									<type>zip</type>
-									<includes>solr.xml,lib/**,archive-SpacesStore/**,workspace-SpacesStore/**</includes>
 								</artifactItem>
 							</artifactItems>
 						</configuration>

@@ -2,36 +2,12 @@
 ensurepassword ALFRESCO_DB_PASSWORD
 interpolatetemplate_inplace "@{package.app}/conf/tomcat-users.xml"
 interpolatetemplate_inplace "@{package.app}/shared/classes/alfresco-global.properties"
-interpolatetemplate_inplace "@{package.app}/shared/classes/alfresco/extension/subsystems/Authentication/ldap/ldap1/ldap-authentication.properties"
 
 # Fix data directory permissions
 chown -R @{package.user}:@{package.group} "@{package.data}"
 
-# Fix SWFTools script permissions
-chmod +x "@{package.app}/swftools/src/config.guess"
-chmod +x "@{package.app}/swftools/src/configure"
-chmod +x "@{package.app}/swftools/src/install-sh"
-chmod +x "@{package.app}/swftools/src/missing"
-chmod +x "@{package.app}/swftools/src/mkinstalldirs"
-
-# Make and install SWFTools
-( cd "@{package.app}/swftools/src" && make distclean ) > /dev/null 2>&1
-if ! ( cd "@{package.app}/swftools/src" && ./configure --prefix=@{package.app}/swftools ); then
-	printerror "ERROR: failed to configure SWFTools"
-	exit 1
-fi
-if ! ( cd "@{package.app}/swftools/src" && make ); then
-	printerror "ERROR: failed to compile SWFTools"
-	exit 1
-fi
-if ! ( cd "@{package.app}/swftools/src" && make install ); then
-	printerror "ERROR: failed to install SWFTools"
-	exit 1
-fi
-( cd "@{package.app}/swftools/src" && make distclean ) > /dev/null 2>&1
-
 # Create trust store if necessary
-create_truststore "@{package.app}/conf/trust.jks" @{package.user} @{package.group}
+create_truststore "@{package.app}/conf/trust.jks" @{package.user} @{package.group} "@{system.java8.app}/jre/lib/security/cacerts"
 
 # Start MySQL if necessary
 if ! startservice @{mysql.service}; then

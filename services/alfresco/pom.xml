@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>alfresco</artifactId>
-	<version>4.2.f-1-SNAPSHOT</version>
+	<version>5.1.g-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Alfresco</name>
@@ -54,5 +54,17 @@
 			<url>https://artifacts.alfresco.com/nexus/content/groups/public/</url>
 		</pluginRepository>
 	</pluginRepositories>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.alfresco.maven.plugin</groupId>
+					<artifactId>alfresco-maven-plugin</artifactId>
+					<version>1.1.0</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 
 </project>

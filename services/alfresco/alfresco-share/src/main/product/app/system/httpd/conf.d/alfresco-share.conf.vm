@@ -1,0 +1,14 @@
+#set( $PACKAGE_PORT_AJP = ${project.properties.getProperty('package.port.ajp')} )
+#set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
+# Reverse proxy to Tomcat instance serving Alfresco Share
+
+<Location /alfresco-share>
+	ProxyPass ajp://127.0.0.1:${PACKAGE_PORT_AJP}/alfresco-share timeout=60 ttl=300
+#if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
+	AuthType CAS
+	Require valid-user
+	CASScope /alfresco-share
+	CASAuthNHeader X-CAS-User
+	CASScrubRequestHeaders On
+#end
+</Location>

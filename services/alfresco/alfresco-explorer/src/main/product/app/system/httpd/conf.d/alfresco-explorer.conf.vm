@@ -1,42 +1,37 @@
 #set( $PRODUCT_APP = ${project.properties.getProperty('product.app')} )
 #set( $PACKAGE_PORT_AJP = ${project.properties.getProperty('package.port.ajp')} )
-#set( $PACKAGE_PORT_SHAREPOINT = ${project.properties.getProperty('package.port.sharepoint')} )
 #set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
 # Reverse proxy to Tomcat instance serving Alfresco Explorer
 
-<Location /alfresco-explorer>
-	ProxyPass ajp://127.0.0.1:${PACKAGE_PORT_AJP}/alfresco-explorer timeout=60 ttl=300
-</Location>
-
-<LocationMatch ^/(alfresco-sharepoint.*|_vti_.*)$>
-	ProxyPassMatch http://127.0.0.1:${PACKAGE_PORT_SHAREPOINT}/$1 timeout=60 ttl=300
+# Sharepoint root OPTIONS/PROPFIND method
+<LocationMatch ^/$>
+	RewriteEngine On
+	RewriteCond %{REQUEST_METHOD} ^(OPTIONS|PROPFIND)$
+	RewriteRule .* ajp://127.0.0.1:${PACKAGE_PORT_AJP}/alfresco-explorer/AosResponder_ServerRoot [P,QSA]
 </LocationMatch>
-ProxyPassReverse / http://127.0.0.1:${PACKAGE_PORT_SHAREPOINT}/
+
+# Sharepoint and Alfresco reverse proxy
+<LocationMatch ^/(_vti_inf\.html|(_vti_bin|alfresco-explorer)(/.*)?)$>
+	ProxyPassMatch ajp://127.0.0.1:${PACKAGE_PORT_AJP}/$1 timeout=60 ttl=300
+</LocationMatch>
 
 #if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
-<LocationMatch ^/alfresco-explorer/(?!service/|service$|webdav/|webdav$|s/|s$|scripts/|css/|images/).*>
+# Sharepoint and WebDAV auth
+<LocationMatch ^/(_vti_bin|alfresco-explorer/(webdav|aos))(/.*)?$>
+	AuthName "Alfresco"
+	AuthType Basic
+	AuthBasicProvider wsgi
+	WSGIAuthUserScript ${PRODUCT_APP}/system/httpd/scripts/cas_auth.wsgi
+	WSGIAuthGroupScript ${PRODUCT_APP}/system/httpd/scripts/cas_auth.wsgi
+	Require valid-user
+</LocationMatch>
+
+# Alfresco auth
+<LocationMatch ^/alfresco-explorer/(?!(service|s|webdav|aos|_vti_bin|scripts|css|images|admin)(/|$))>
 	AuthType CAS
 	Require valid-user
 	CASScope /alfresco-explorer
 	CASAuthNHeader X-CAS-User
 	CASScrubRequestHeaders On
-</LocationMatch>
-
-<LocationMatch ^/alfresco-explorer/webdav(/.*)?$>
-	AuthName "Alfresco DAV Server"
-	AuthType Basic
-	AuthBasicProvider wsgi
-	WSGIAuthUserScript ${PRODUCT_APP}/system/httpd/scripts/cas_auth.wsgi
-	WSGIAuthGroupScript ${PRODUCT_APP}/system/httpd/scripts/cas_auth.wsgi
-	Require valid-user
-</LocationMatch>
-
-<LocationMatch ^/(alfresco-sharepoint.*|_vti_.*)$>
-	AuthName "Alfresco Server"
-	AuthType Basic
-	AuthBasicProvider wsgi
-	WSGIAuthUserScript ${PRODUCT_APP}/system/httpd/scripts/cas_auth.wsgi
-	WSGIAuthGroupScript ${PRODUCT_APP}/system/httpd/scripts/cas_auth.wsgi
-	Require valid-user
 </LocationMatch>
 #end
