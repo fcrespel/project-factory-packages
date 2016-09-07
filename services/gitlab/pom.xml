@@ -45,7 +45,7 @@
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-mysql,
 			${package.prefix}-system-redis,
-			${package.prefix}-system-ruby >= 2.2.0,
+			${package.prefix}-system-ruby >= 2.3.0,
 			${package.prefix}-service-portal,
 			${system.package.cmake},
 			${system.package.git} >= 1.7.10,
