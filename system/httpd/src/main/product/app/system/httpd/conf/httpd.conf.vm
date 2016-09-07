@@ -69,18 +69,11 @@ DocumentRoot "${PACKAGE_DATA}/www/html"
 HostnameLookups Off
 ErrorLog logs/error_log
 LogLevel warn
-<IfVersion < 2.4>
-	LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
-	LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined_proxy
-	SetEnvIf X-Forwarded-For ".+" IS_FORWARDED
-	CustomLog logs/access_log combined env=!IS_FORWARDED
-	CustomLog logs/access_log combined_proxy env=IS_FORWARDED
-</IfVersion>
-<IfVersion >= 2.4>
-	LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
-	CustomLog logs/access_log combined
-	RemoteIPHeader X-Forwarded-For
-</IfVersion>
+LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined_proxy
+SetEnvIf X-Forwarded-For ".+" IS_FORWARDED
+CustomLog logs/access_log combined env=!IS_FORWARDED
+CustomLog logs/access_log combined_proxy env=IS_FORWARDED
 
 # Server status configuration
 <Location /server-status>
