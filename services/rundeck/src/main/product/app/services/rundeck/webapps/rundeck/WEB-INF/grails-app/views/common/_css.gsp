@@ -37,3 +37,5 @@
     }
     ${enc(rawtext:customCss)}
 </style>
+<script type="text/javascript" src="/portal/toolbar.php?tab=rundeck&amp;format=js"></script>
+<link href="/portal/themes/current/css/rundeck.css" type="text/css" rel="stylesheet" />
