@@ -1,8 +1,5 @@
 # Check required config vars
-if [ -z "$JENKINS_MASTER_URL" ]; then
-	printerror "ERROR: missing JENKINS_MASTER_URL configuration value, please configure it manually."
-	exit 1
-elif [ -z "$JENKINS_SLAVE_NODENAME" ]; then
+if [ -z "$JENKINS_SLAVE_NODENAME" ]; then
 	printerror "ERROR: missing JENKINS_SLAVE_NODENAME configuration value, please configure it manually."
 	exit 1
 elif [ -z "$JENKINS_SLAVE_SECRET" ]; then
