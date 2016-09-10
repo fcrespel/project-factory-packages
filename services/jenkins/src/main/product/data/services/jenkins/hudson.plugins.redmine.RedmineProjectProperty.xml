@@ -4,7 +4,7 @@
     <hudson.plugins.redmine.RedmineWebsiteConfig>
       <name>@{product.name}</name>
       <baseUrl>@{product.scheme}://@{product.domain}/redmine/</baseUrl>
-      <versionNumber>2.6.0</versionNumber>
+      <versionNumber>3.3.0</versionNumber>
     </hudson.plugins.redmine.RedmineWebsiteConfig>
   </redmineWebsites>
 </hudson.plugins.redmine.RedmineProjectProperty_-DescriptorImpl>

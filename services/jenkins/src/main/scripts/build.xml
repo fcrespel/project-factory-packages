@@ -1,0 +1,15 @@
+<project>
+	<target name="install">
+		<chmod perm="+x" verbose="true">
+			<fileset dir="${project.product.directory}" erroronmissingdir="false">
+				<include name="**/*.sh" />
+			</fileset>
+		</chmod>
+		<move todir="${project.data.directory}/plugins">
+			<fileset dir="${project.data.directory}/plugins">
+				<include name="*.hpi" />
+			</fileset>
+			<mapper type="glob" from="*.hpi" to="*.jpi" />
+		</move>
+	</target>
+</project>

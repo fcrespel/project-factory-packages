@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context reloadable="false">
   <Environment name="JENKINS_HOME" value="@{package.data}" type="java.lang.String"/>
+  <Resources cachingAllowed="true" cacheMaxSize="20480" />
 </Context>
