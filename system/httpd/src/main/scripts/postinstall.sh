@@ -8,7 +8,7 @@ if [ ! -e "@{package.app}/ssl/servercert.pem" ]; then
 	# Generate a new certificate
 	if ! openssl req -x509 -nodes -days 3652 \
 		-subj "/C=FR/O=@{product.name}/CN=@{product.domain}" \
-		-newkey rsa:1024 -keyout "@{package.app}/ssl/serverkey.pem" -out "@{package.app}/ssl/servercert.pem" > /dev/null 2>&1; then
+		-newkey rsa:2048 -sha256 -keyout "@{package.app}/ssl/serverkey.pem" -out "@{package.app}/ssl/servercert.pem" > /dev/null 2>&1; then
 		printerror "ERROR: failed to generate a self-signed certificate for @{product.domain}"
 		exit 1
 	fi
