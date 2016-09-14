@@ -9,6 +9,7 @@
 #set( $LDAP_GROUPS_DN = ${project.properties.getProperty('ldap.groups.dn')} )
 #set( $LDAP_GROUP_RDN_ATTR = ${project.properties.getProperty('ldap.group.rdn.attr')} )
 #set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
+#set( $CAS_ATTR_GROUPS = ${project.properties.getProperty('cas.attr.groups')} )
 # phpLDAPadmin configuration
 
 Alias /admin/phpldapadmin ${PLA_APP}/htdocs
@@ -18,14 +19,14 @@ Alias /admin/phpldapadmin ${PLA_APP}/htdocs
 		Allow from all
 	</IfVersion>
 
-	AuthName "${PRODUCT_NAME} Administration"
-	AuthType Basic
 #if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
-	AuthBasicProvider wsgi
-	WSGIAuthUserScript ${PRODUCT_APP}/system/httpd/scripts/cas_auth.wsgi
-	WSGIAuthGroupScript ${PRODUCT_APP}/system/httpd/scripts/cas_auth.wsgi
-	Require wsgi-group ${PRODUCT_GROUP_ADMINS}
+	AuthType CAS
+	CASScope /admin/phpldapadmin
+	CASScrubRequestHeaders On
+	Require cas-attribute ${CAS_ATTR_GROUPS}:${PRODUCT_GROUP_ADMINS}
 #else
+	AuthName "${PRODUCT_NAME}"
+	AuthType Basic
 	AuthBasicProvider ldap
 	AuthLDAPUrl "ldap://${LDAP_HOST}:${LDAP_PORT}/${LDAP_USERS_DN}?${LDAP_USER_RDN_ATTR}"
 	Require ldap-group ${LDAP_GROUP_RDN_ATTR}=${PRODUCT_GROUP_ADMINS},${LDAP_GROUPS_DN}
