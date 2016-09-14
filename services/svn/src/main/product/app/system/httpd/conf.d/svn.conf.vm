@@ -23,7 +23,7 @@ CustomLog ${SVN_LOG}/svn_log svnaction env=SVN-ACTION
 	SVNListParentPath On
 	SVNIndexXSLT "/portal/themes/current/css/svn.xsl"
 
-	AuthName "${PRODUCT_NAME} Subversion (SVN)"
+	AuthName "${PRODUCT_NAME}"
 	AuthType Basic
 #if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
 	AuthBasicProvider wsgi
