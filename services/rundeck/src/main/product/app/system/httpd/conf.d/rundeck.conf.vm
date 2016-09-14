@@ -32,7 +32,7 @@ Redirect /rundeck/cas/logout ${CAS_URL}logout
 	RewriteEngine on
 	RewriteRule (.*) - [E=AJP_REMOTE_USER_GROUPS:%{HTTP:CAS_${CAS_ATTR_GROUPS.toUpperCase()}}]
 #else
-	AuthName "${PRODUCT_NAME} Rundeck"
+	AuthName "${PRODUCT_NAME}"
 	AuthType Basic
 	AuthBasicProvider ldap
 	AuthLDAPUrl "ldap://${LDAP_HOST}:${LDAP_PORT}/${LDAP_USERS_DN}?${LDAP_USER_RDN_ATTR}"
