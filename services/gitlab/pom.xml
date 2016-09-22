@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>gitlab</artifactId>
-	<version>8.11.6-1-SNAPSHOT</version>
+	<version>8.12.0-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - GitLab</name>
@@ -58,10 +58,10 @@
 		<gitlab.db.name>${product.id}_gitlab</gitlab.db.name>
 		<gitlab.db.user>${product.id}_gitlab</gitlab.db.user>
 		<gitlab.bundler.exclude>development:test:postgres:aws:kerberos</gitlab.bundler.exclude>
-		<gitlab.shell.version>3.4.0</gitlab.shell.version>
+		<gitlab.shell.version>3.6.0</gitlab.shell.version>
 		<gitlab.shell.url>https://github.com/gitlabhq/gitlab-shell/archive</gitlab.shell.url>
 		<gitlab.shell.file>v${gitlab.shell.version}.zip</gitlab.shell.file>
-		<gitlab.workhorse.version>0.7.11</gitlab.workhorse.version>
+		<gitlab.workhorse.version>0.8.2</gitlab.workhorse.version>
 		<gitlab.workhorse.url>https://gitlab.com/gitlab-org/gitlab-workhorse/repository</gitlab.workhorse.url>
 		<gitlab.workhorse.file>archive.zip?ref=v${gitlab.workhorse.version}</gitlab.workhorse.file>
 	</properties>

@@ -89,6 +89,7 @@ su -s /bin/bash - @{package.user} -c "git config --global user.name GitLab"
 su -s /bin/bash - @{package.user} -c "git config --global user.email gitlab@@{product.domain}"
 su -s /bin/bash - @{package.user} -c "git config --global core.autocrlf input"
 su -s /bin/bash - @{package.user} -c "git config --global gc.auto 0"
+su -s /bin/bash - @{package.user} -c "git config --global repack.writeBitmaps true"
 
 # Enable service at startup
 if ! enableservice @{package.service}; then
