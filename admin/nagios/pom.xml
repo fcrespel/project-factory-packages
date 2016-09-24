@@ -43,7 +43,6 @@
 		<package.src.file>nagios-${package.version}.tar.gz</package.src.file>
 		<package.dependencies>
 			${package.prefix}-system-httpd,
-			${package.prefix}-system-python,
 			${package.prefix}-system-php,
 			${package.prefix}-service-portal,
 			${system.package.sudo},
