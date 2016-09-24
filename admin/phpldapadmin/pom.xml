@@ -42,7 +42,6 @@
 		<package.src.file>phpldapadmin-${package.version}.zip</package.src.file>
 		<package.dependencies>
 			${package.prefix}-system-httpd,
-			${package.prefix}-system-python,
 			${package.prefix}-system-php,
 			${package.prefix}-service-portal
 		</package.dependencies>
