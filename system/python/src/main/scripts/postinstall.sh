@@ -18,4 +18,5 @@ fi
 ( cd "$MOD_WSGI_DIR" && make distclean ) > /dev/null 2>&1
 
 # Reload HTTPD if already running
-reloadservice @{httpd.service}
+stopservice @{httpd.service}
+startservice @{httpd.service}
