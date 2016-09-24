@@ -27,7 +27,7 @@ CustomLog ${SVN_LOG}/svn_log svnaction env=SVN-ACTION
 	AuthType Basic
 #if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
 	AuthBasicProvider wsgi
-	WSGIAuthUserScript ${PRODUCT_APP}/system/httpd/scripts/cas_auth.wsgi
+	WSGIAuthUserScript ${PRODUCT_APP}/system/python/scripts/cas_auth.wsgi
 #else
 	AuthBasicProvider ldap
 	AuthLDAPUrl "ldap://${LDAP_HOST}:${LDAP_PORT}/${LDAP_USERS_DN}?${LDAP_USER_RDN_ATTR}"
