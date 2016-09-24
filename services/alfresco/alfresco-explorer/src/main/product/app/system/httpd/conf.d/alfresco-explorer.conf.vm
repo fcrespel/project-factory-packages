@@ -21,8 +21,8 @@
 	AuthName "Alfresco"
 	AuthType Basic
 	AuthBasicProvider wsgi
-	WSGIAuthUserScript ${PRODUCT_APP}/system/httpd/scripts/cas_auth.wsgi
-	WSGIAuthGroupScript ${PRODUCT_APP}/system/httpd/scripts/cas_auth.wsgi
+	WSGIAuthUserScript ${PRODUCT_APP}/system/python/scripts/cas_auth.wsgi
+	WSGIAuthGroupScript ${PRODUCT_APP}/system/python/scripts/cas_auth.wsgi
 	Require valid-user
 </LocationMatch>
 

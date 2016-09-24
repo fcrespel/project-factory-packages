@@ -47,6 +47,7 @@
 		<package.dependencies>
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-mysql,
+			${package.prefix}-system-python,
 			${package.prefix}-system-tomcat,
 			${system.package.imagemagick},
 			${system.package.openoffice},
