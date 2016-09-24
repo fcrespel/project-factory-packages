@@ -42,7 +42,6 @@
 		<package.src.file>phpMyAdmin-${package.version}-all-languages.tar.bz2</package.src.file>
 		<package.dependencies>
 			${package.prefix}-system-httpd,
-			${package.prefix}-system-python,
 			${package.prefix}-system-php,
 			${package.prefix}-system-mysql,
 			${package.prefix}-service-portal
