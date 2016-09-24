@@ -1,3 +1,4 @@
+APXS="@{system.httpd.bin.apxs}"
 APXS_LIBEXECDIR="@{product.app}/system/httpd/modules"
 MOD_AUTH_CAS_DIR="$APXS_LIBEXECDIR/mod_auth_cas"
 
@@ -28,7 +29,7 @@ if ! ( cd "$MOD_AUTH_CAS_DIR" && ./configure && make ); then
 	printerror "ERROR: failed to compile mod_auth_cas"
 	exit 1
 fi
-if ! ( cd "$MOD_AUTH_CAS_DIR" && apxs -i -S LIBEXECDIR="$APXS_LIBEXECDIR" src/mod_auth_cas.la ); then
+if ! ( cd "$MOD_AUTH_CAS_DIR" && $APXS -i -S LIBEXECDIR="$APXS_LIBEXECDIR" src/mod_auth_cas.la ); then
 	printerror "ERROR: failed to install mod_auth_cas"
 	exit 1
 fi
