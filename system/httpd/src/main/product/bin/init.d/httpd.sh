@@ -33,6 +33,7 @@ HTTPD_LANG=${HTTPD_LANG-"C"}
 PIDFILE=${PIDFILE-/var/run/httpd/httpd.pid}
 LOCKFILE=${LOCKFILE-/var/lock/subsys/httpd}
 STATUSURL="http://localhost:$PORT/server-status"
+STOPTIMEOUT="60"
 if [ -x "/usr/bin/links" ]; then
 	LYNX="/usr/bin/links -dump -width ${COLUMNS:-80}"
 elif [ -x "/usr/bin/w3m" ]; then
@@ -56,9 +57,16 @@ start() {
 
 stop() {
 	echo -n $"Stopping $SERVICENAME: "
+	kpid=`pidofproc -p $PIDFILE $HTTPD`
 	killproc -p $PIDFILE $HTTPD
 	RETVAL=$?
 	if [ $RETVAL -eq 0 ]; then
+		TIMEOUT="$STOPTIMEOUT"
+		while [ $TIMEOUT -gt 0 ]; do
+			kill -0 "$kpid" >/dev/null 2>&1 || break
+			sleep 1
+			let TIMEOUT=${TIMEOUT}-1
+		done
 		rm -f $LOCKFILE $PIDFILE
 		log_success_msg
 	else
