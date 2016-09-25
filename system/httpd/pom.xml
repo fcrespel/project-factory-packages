@@ -44,10 +44,16 @@
 		<package.dependencies>
 			${system.package.httpd},
 			${system.package.httpd-devel},
+			${system.package.mod_ldap},
+			${system.package.mod_ssl},
 			${system.package.apr-devel},
 			${system.package.apr-util-devel},
-			${system.package.mod_ldap},
-			${system.package.mod_ssl}
+			${system.package.gcc},
+			${system.package.libtool},
+			${system.package.libcurl-devel},
+			${system.package.make},
+			${system.package.openssl-devel},
+			${system.package.pcre-devel}
 		</package.dependencies>
 		<package.src.url>https://github.com/Jasig/mod_auth_cas/archive</package.src.url>
 		<package.src.file>v${mod_auth_cas.version}.tar.gz</package.src.file>
