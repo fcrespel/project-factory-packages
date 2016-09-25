@@ -1,7 +1,3 @@
-APXS="@{system.httpd.bin.apxs}"
-APXS_LIBEXECDIR="@{product.app}/system/httpd/modules"
-MOD_AUTH_CAS_DIR="$APXS_LIBEXECDIR/mod_auth_cas"
-
 # Generate encryption keys
 [ -z "$CAS_TGC_ENCRYPTION_KEY" ] && storevar CAS_TGC_ENCRYPTION_KEY "$(cat /dev/urandom | head -c 32 | base64 -w 0)"
 [ -z "$CAS_TGC_SIGNING_KEY" ] && storevar CAS_TGC_SIGNING_KEY "$(cat /dev/urandom | head -c 64 | base64 -w 0)"
@@ -15,29 +11,6 @@ interpolatetemplate_inplace "@{package.app}/webapps/@{project.artifactId}/WEB-IN
 
 # Fix permissions
 chown -R @{package.user}:@{package.group} "@{package.data}" "@{package.log}"
-chmod +x "$MOD_AUTH_CAS_DIR/compile"
-chmod +x "$MOD_AUTH_CAS_DIR/config.guess"
-chmod +x "$MOD_AUTH_CAS_DIR/config.sub"
-chmod +x "$MOD_AUTH_CAS_DIR/configure"
-chmod +x "$MOD_AUTH_CAS_DIR/depcomp"
-chmod +x "$MOD_AUTH_CAS_DIR/install-sh"
-chmod +x "$MOD_AUTH_CAS_DIR/missing"
-
-# Make and install mod_auth_cas
-( cd "$MOD_AUTH_CAS_DIR" && make distclean ) > /dev/null 2>&1
-if ! ( cd "$MOD_AUTH_CAS_DIR" && ./configure && make ); then
-	printerror "ERROR: failed to compile mod_auth_cas"
-	exit 1
-fi
-if ! ( cd "$MOD_AUTH_CAS_DIR" && $APXS -i -S LIBEXECDIR="$APXS_LIBEXECDIR" src/mod_auth_cas.la ); then
-	printerror "ERROR: failed to install mod_auth_cas"
-	exit 1
-fi
-( cd "$MOD_AUTH_CAS_DIR" && make distclean ) > /dev/null 2>&1
-
-# Create mod_auth_cas cookie directory
-mkdir -p "@{product.data}/system/httpd/mod_auth_cas"
-chown -R @{httpd.user}:@{httpd.group} "@{product.data}/system/httpd/mod_auth_cas"
 
 # Create trust store if necessary
 create_truststore "@{package.app}/conf/trust.jks" @{package.user} @{package.group}
@@ -58,8 +31,7 @@ if ! enableservice @{package.service}; then
 fi
 
 # Reload HTTPD and Nagios if already running
-stopservice @{httpd.service}
-startservice @{httpd.service}
+reloadservice @{httpd.service}
 reloadservice @{nagios.service}
 
 # Enable user access to the service
