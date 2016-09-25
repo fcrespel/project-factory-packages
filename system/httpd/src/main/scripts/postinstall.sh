@@ -1,3 +1,29 @@
+APXS="@{system.httpd.bin.apxs}"
+APXS_LIBEXECDIR="@{package.app}/modules"
+MOD_AUTH_CAS_DIR="$APXS_LIBEXECDIR/mod_auth_cas"
+
+# Fix permissions
+chown -R @{package.user}:@{package.group} "@{package.data}/mod_auth_cas"
+chmod +x "$MOD_AUTH_CAS_DIR/compile"
+chmod +x "$MOD_AUTH_CAS_DIR/config.guess"
+chmod +x "$MOD_AUTH_CAS_DIR/config.sub"
+chmod +x "$MOD_AUTH_CAS_DIR/configure"
+chmod +x "$MOD_AUTH_CAS_DIR/depcomp"
+chmod +x "$MOD_AUTH_CAS_DIR/install-sh"
+chmod +x "$MOD_AUTH_CAS_DIR/missing"
+
+# Make and install mod_auth_cas
+( cd "$MOD_AUTH_CAS_DIR" && make distclean ) > /dev/null 2>&1
+if ! ( cd "$MOD_AUTH_CAS_DIR" && ./configure && make ); then
+	printerror "ERROR: failed to compile mod_auth_cas"
+	exit 1
+fi
+if ! ( cd "$MOD_AUTH_CAS_DIR" && $APXS -i -S LIBEXECDIR="$APXS_LIBEXECDIR" src/mod_auth_cas.la ); then
+	printerror "ERROR: failed to install mod_auth_cas"
+	exit 1
+fi
+( cd "$MOD_AUTH_CAS_DIR" && make distclean ) > /dev/null 2>&1
+
 # Initialize logs
 for LOGFILE in access_log error_log; do
 	touch "@{package.log}/$LOGFILE" && chown @{package.user}:@{package.group} "@{package.log}/$LOGFILE"
@@ -34,7 +60,7 @@ if which a2ensite > /dev/null 2>&1; then
 fi
 
 # Enable service at startup
-if ! enableservice @{package.service} reload; then
+if ! enableservice @{package.service} restart; then
 	exit 1
 fi
 
