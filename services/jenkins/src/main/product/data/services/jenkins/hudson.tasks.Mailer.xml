@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<hudson.tasks.Mailer_-DescriptorImpl>
-  <helpRedirect/>
+<hudson.tasks.Mailer_-DescriptorImpl plugin="mailer@1.18">
   <hudsonUrl>@{product.scheme}://@{product.domain}/jenkins/</hudsonUrl>
   <adminAddress>jenkins@@{product.domain}</adminAddress>
   <smtpHost>@{smtp.host}</smtpHost>

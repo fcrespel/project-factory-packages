@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<hudson.plugins.page__markup.PageMarkupPageDecorator>
-  <helpRedirect/>
+<hudson.plugins.page__markup.PageMarkupPageDecorator plugin="page-markup@0.3">
   <headerHtmlFragment>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/portal/themes/current/css/jenkins.css&quot; /&gt;
 &lt;script type=&quot;text/javascript&quot; src=&quot;/portal/toolbar.php?tab=jenkins&amp;amp;format=js&quot;&gt;&lt;/script&gt;</headerHtmlFragment>
   <footerHtmlFragment></footerHtmlFragment>

@@ -10,3 +10,10 @@ fi
 
 # Stop the service for safety
 stopservice @{package.service}
+
+# Rename existing HPI plugins to JPI
+if [ -e "@{package.data}/plugins" ]; then
+	find "@{package.data}/plugins" -maxdepth 1 -name '*.hpi' | while read FILE; do
+		mv "$FILE" "${FILE%.hpi}.jpi"
+	done
+fi
