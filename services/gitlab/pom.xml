@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>gitlab</artifactId>
-	<version>8.12.6-1-SNAPSHOT</version>
+	<version>8.13.0-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - GitLab</name>
@@ -39,8 +39,8 @@
 	<properties>
 		<package.disabled>${gitlab.disabled}</package.disabled>
 		<package.root>${package.data}</package.root>
-		<package.src.url>https://github.com/gitlabhq/gitlabhq/archive</package.src.url>
-		<package.src.file>v${package.version}.zip</package.src.file>
+		<package.src.url>https://gitlab.com/gitlab-org/gitlab-ce/repository</package.src.url>
+		<package.src.file>archive.zip?ref=v${package.version}</package.src.file>
 		<package.dependencies>
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-mysql,
@@ -58,10 +58,10 @@
 		<gitlab.db.name>${product.id}_gitlab</gitlab.db.name>
 		<gitlab.db.user>${product.id}_gitlab</gitlab.db.user>
 		<gitlab.bundler.exclude>development:test:postgres:aws:kerberos</gitlab.bundler.exclude>
-		<gitlab.shell.version>3.6.1</gitlab.shell.version>
-		<gitlab.shell.url>https://github.com/gitlabhq/gitlab-shell/archive</gitlab.shell.url>
-		<gitlab.shell.file>v${gitlab.shell.version}.zip</gitlab.shell.file>
-		<gitlab.workhorse.version>0.8.2</gitlab.workhorse.version>
+		<gitlab.shell.version>3.6.6</gitlab.shell.version>
+		<gitlab.shell.url>https://gitlab.com/gitlab-org/gitlab-shell/repository</gitlab.shell.url>
+		<gitlab.shell.file>archive.zip?ref=v${gitlab.shell.version}</gitlab.shell.file>
+		<gitlab.workhorse.version>0.8.5</gitlab.workhorse.version>
 		<gitlab.workhorse.url>https://gitlab.com/gitlab-org/gitlab-workhorse/repository</gitlab.workhorse.url>
 		<gitlab.workhorse.file>archive.zip?ref=v${gitlab.workhorse.version}</gitlab.workhorse.file>
 	</properties>
