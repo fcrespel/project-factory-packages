@@ -5,6 +5,7 @@
 #set( $PACKAGE_BIND = ${project.properties.getProperty('package.bind')} )
 #set( $PACKAGE_PORT_HTTP = ${project.properties.getProperty('package.port.http')} )
 #set( $PACKAGE_PORT_AJP = ${project.properties.getProperty('package.port.ajp')} )
+#set( $PACKAGE_JAVA_OPTS = ${project.properties.getProperty('package.java.opts')} )
 #set( $SONARQUBE_DB_USER = ${project.properties.getProperty('sonarqube.db.user')} )
 #set( $SONARQUBE_DB_NAME = ${project.properties.getProperty('sonarqube.db.name')} )
 #set( $BOT_USER = ${project.properties.getProperty('bot.user')} )
@@ -46,7 +47,7 @@ sonar.jdbc.timeBetweenEvictionRunsMillis=30000
 #--------------------------------------------------------------------------------------------------
 # WEB SERVER
 
-sonar.web.javaOpts=-server -Xmx768m -XX:MaxPermSize=160m -XX:+HeapDumpOnOutOfMemoryError -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Djruby.management.enabled=false -Djavax.net.ssl.trustStore=${PACKAGE_APP}/conf/trust.jks
+sonar.web.javaOpts=-server ${PACKAGE_JAVA_OPTS} -XX:+HeapDumpOnOutOfMemoryError -Djava.net.preferIPv4Stack=true -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Djruby.management.enabled=false -Djavax.net.ssl.trustStore=${PACKAGE_APP}/conf/trust.jks
 sonar.web.host=${PACKAGE_BIND}
 sonar.web.context=/sonarqube
 sonar.web.port=${PACKAGE_PORT_HTTP}

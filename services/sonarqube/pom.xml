@@ -44,6 +44,7 @@
 		<package.port.shutdown>${sonarqube.port.shutdown}</package.port.shutdown>
 		<package.port.ajp>${sonarqube.port.ajp}</package.port.ajp>
 		<package.port.http>${sonarqube.port.http}</package.port.http>
+		<package.java.opts>${sonarqube.java.opts}</package.java.opts>
 		<package.dependencies>
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-mysql,
