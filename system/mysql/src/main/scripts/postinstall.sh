@@ -19,8 +19,7 @@ fi
 # Configure root user
 ensurepassword MYSQL_ROOT_PASSWORD
 if echo "SELECT 1 FROM DUAL;" | mysql_exec_nopw > /dev/null 2>&1; then
-	MYSQL_ROOT_PASSWORD_ESCAPED=`basic_single_escape "$MYSQL_ROOT_PASSWORD"`
-	if ! echo "UPDATE mysql.user SET Password=PASSWORD('$MYSQL_ROOT_PASSWORD_ESCAPED') WHERE User='root'; FLUSH PRIVILEGES;" | mysql_exec_nopw; then
+	if ! echo "UPDATE mysql.user SET Password=PASSWORD('$MYSQL_ROOT_PASSWORD') WHERE User='root'; FLUSH PRIVILEGES;" | mysql_exec_nopw; then
 		printerror "ERROR: failed to set MySQL root password"
 		exit 1
 	fi
