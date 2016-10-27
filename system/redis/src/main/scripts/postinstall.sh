@@ -1,5 +1,4 @@
 # Fix script permissions
-chmod +x "@{package.app}/src/deps/jemalloc/bin/pprof"
 chmod +x "@{package.app}/src/deps/jemalloc/config.guess"
 chmod +x "@{package.app}/src/deps/jemalloc/config.sub"
 chmod +x "@{package.app}/src/deps/jemalloc/configure"
