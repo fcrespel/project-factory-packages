@@ -86,6 +86,7 @@ CustomLog logs/access_log combined_proxy env=IS_FORWARDED
 	<IfVersion >= 2.4>
 		<RequireAll>
 			Require local
+			Require not env IS_FORWARDED
 		</RequireAll>
 	</IfVersion>
 </Location>
@@ -169,12 +170,7 @@ Listen ${HTTPD_PORT_HTTP}
 #if( ${HTTPD_XFRAMEOPTIONS_ENABLED} == "1" || ${HTTPD_XFRAMEOPTIONS_ENABLED} == "true" )
 	Header always set X-Frame-Options SAMEORIGIN
 #end
-	<IfVersion < 2.4>
-		Include conf/maintenance?conf
-	</IfVersion>
-	<IfVersion >= 2.4>
-		IncludeOptional conf/maintenance?conf
-	</IfVersion>
+	Include conf/maintenance.conf
 </VirtualHost>
 
 # HTTPS port and VirtualHost
@@ -193,10 +189,5 @@ Listen ${HTTPD_PORT_HTTPS}
 #if( ${HTTPD_XFRAMEOPTIONS_ENABLED} == "1" || ${HTTPD_XFRAMEOPTIONS_ENABLED} == "true" )
 	Header always set X-Frame-Options SAMEORIGIN
 #end
-	<IfVersion < 2.4>
-		Include conf/maintenance?conf
-	</IfVersion>
-	<IfVersion >= 2.4>
-		IncludeOptional conf/maintenance?conf
-	</IfVersion>
+	Include conf/maintenance.conf
 </VirtualHost>
