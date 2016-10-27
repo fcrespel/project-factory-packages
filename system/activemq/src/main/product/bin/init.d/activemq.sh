@@ -25,7 +25,7 @@ fi
 SERVICENAME="@{package.service}"
 ACTIVEMQ_HOME="@{package.app}"
 ACTIVEMQ_INITLOG="@{package.log}/initd.log"
-ACTIVEMQ_PIDFILE="@{package.data}/activemq.pid"
+ACTIVEMQ_PIDFILE="@{package.data}/data/activemq.pid"
 ACTIVEMQ_LOCKFILE="@{package.data}/lockfile"
 ACTIVEMQ_SCRIPT="$ACTIVEMQ_HOME/bin/activemq"
 
