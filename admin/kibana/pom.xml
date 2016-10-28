@@ -26,11 +26,11 @@
 	<parent>
 		<groupId>fr.project-factory.packages.admin</groupId>
 		<artifactId>admin</artifactId>
-		<version>3.3.0-SNAPSHOT</version>
+		<version>3.3.0</version>
 	</parent>
 
 	<artifactId>kibana</artifactId>
-	<version>4.6.2-1-SNAPSHOT</version>
+	<version>4.6.2-1</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Admin - Kibana</name>

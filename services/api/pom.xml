@@ -26,11 +26,11 @@
 	<parent>
 		<groupId>fr.project-factory.packages.services</groupId>
 		<artifactId>services</artifactId>
-		<version>3.3.0-SNAPSHOT</version>
+		<version>3.3.0</version>
 	</parent>
 
 	<artifactId>api</artifactId>
-	<version>3.3.0-1-SNAPSHOT</version>
+	<version>3.3.0-1</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - API</name>
@@ -48,7 +48,7 @@
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-tomcat
 		</package.dependencies>
-		<api.version>${package.version}-SNAPSHOT</api.version>
+		<api.version>${package.version}</api.version>
 	</properties>
 
 	<build>
