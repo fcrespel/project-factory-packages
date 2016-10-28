@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>nagios</artifactId>
-	<version>3.5.1-4-SNAPSHOT</version>
+	<version>3.5.1-5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Admin - Nagios</name>
