@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>testlink</artifactId>
-	<version>1.9.11-1-SNAPSHOT</version>
+	<version>1.9.11-2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - TestLink</name>
