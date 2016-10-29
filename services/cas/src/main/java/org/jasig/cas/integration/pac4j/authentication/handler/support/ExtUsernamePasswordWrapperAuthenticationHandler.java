@@ -4,6 +4,7 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.FailedLoginException;
 
 import org.apache.commons.lang3.StringUtils;
@@ -53,7 +54,7 @@ public class ExtUsernamePasswordWrapperAuthenticationHandler extends UsernamePas
 	protected HandlerResult doAuthentication(Credential credential) throws GeneralSecurityException, PreventedException {
 		Pattern excludedUsernamesPattern = getExcludedUsernamesPattern();
 		if (excludedUsernamesPattern != null && excludedUsernamesPattern.matcher(credential.getId()).find())
-			throw new PreventedException("User ID '" + credential.getId() + "' is excluded from authenticating with this handler", null);
+			throw new AccountNotFoundException("User ID '" + credential.getId() + "' is excluded from authenticating with this handler");
 
 		try {
 			HandlerResult result = super.doAuthentication(credential);
