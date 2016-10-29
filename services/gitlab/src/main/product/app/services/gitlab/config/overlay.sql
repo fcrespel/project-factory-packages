@@ -21,8 +21,12 @@ REPLACE INTO `users` (`id`, `email`, `encrypted_password`, `created_at`, `update
 
 -- Identities
 REPLACE INTO `identities` (`id`, `extern_uid`, `provider`, `user_id`, `created_at`, `updated_at`) VALUES
-(1, 'root', CASE '@{cas.enabled}' WHEN 'true' THEN 'cas3' WHEN '1' THEN 'cas' ELSE 'ldap' END, 1, SYSDATE(), SYSDATE()),
-(2, 'bot', CASE '@{cas.enabled}' WHEN 'true' THEN 'cas3' WHEN '1' THEN 'cas' ELSE 'ldap' END, 2, SYSDATE(), SYSDATE());
+(1, 'root', CASE '@{cas.enabled}' WHEN 'true' THEN 'cas3' WHEN '1' THEN 'cas3' ELSE 'ldap' END, 1, SYSDATE(), SYSDATE()),
+(2, 'bot', CASE '@{cas.enabled}' WHEN 'true' THEN 'cas3' WHEN '1' THEN 'cas3' ELSE 'ldap' END, 2, SYSDATE(), SYSDATE());
+
+UPDATE `identities`
+SET `provider` = 'cas3'
+WHERE `provider` = 'cas';
 
 -- Settings
 UPDATE `application_settings`
