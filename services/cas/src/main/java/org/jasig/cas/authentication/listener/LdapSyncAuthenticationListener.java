@@ -19,8 +19,6 @@ import org.jasig.cas.authentication.HandlerResult;
 import org.jasig.cas.authentication.PreventedException;
 import org.jasig.cas.authentication.UsernamePasswordCredential;
 import org.jasig.cas.authentication.principal.Principal;
-import org.ldaptive.BindOperation;
-import org.ldaptive.BindRequest;
 import org.ldaptive.Connection;
 import org.ldaptive.ConnectionFactory;
 import org.ldaptive.LdapAttribute;
@@ -51,8 +49,6 @@ public class LdapSyncAuthenticationListener implements AuthenticationListener {
 	private static final Random random;
 	
 	private @NotNull ConnectionFactory connectionFactory;
-	private @NotNull String bindDn;
-	private @NotNull String bindPassword;
 	private @NotNull String dnTemplate;
 
 	private Map<String, Object> defaultAttributes;
@@ -83,10 +79,6 @@ public class LdapSyncAuthenticationListener implements AuthenticationListener {
 		try {
 			conn = connectionFactory.getConnection();
 			try {
-				// Bind to LDAP
-				BindOperation bind = new BindOperation(conn);
-				bind.execute(new BindRequest(bindDn, new org.ldaptive.Credential(bindPassword)));
-				
 				// Build the user DN
 				String userDN = dnTemplate.replaceAll("%u", LdapAttribute.escapeValue(principal.getId().toLowerCase(Locale.ROOT)));
 				
@@ -288,34 +280,6 @@ public class LdapSyncAuthenticationListener implements AuthenticationListener {
 	 */
 	public void setConnectionFactory(ConnectionFactory connectionFactory) {
 		this.connectionFactory = connectionFactory;
-	}
-
-	/**
-	 * @return the bindDn
-	 */
-	public String getBindDn() {
-		return bindDn;
-	}
-
-	/**
-	 * @param bindDn the bindDn to set
-	 */
-	public void setBindDn(String bindDn) {
-		this.bindDn = bindDn;
-	}
-
-	/**
-	 * @return the bindPassword
-	 */
-	public String getBindPassword() {
-		return bindPassword;
-	}
-
-	/**
-	 * @param bindPassword the bindPassword to set
-	 */
-	public void setBindPassword(String bindPassword) {
-		this.bindPassword = bindPassword;
 	}
 
 	/**
