@@ -17,6 +17,8 @@ import org.jasig.services.persondir.support.NamedPersonImpl;
  * Merger that matches pairs of persons by attribute value and
  * delegates actual merging to a nested IAttributeMerger.
  * 
+ * If no joining attribute is set, all persons will be merged in the first one.
+ * 
  * @author Fabien Crespel <fabien@crespel.net>
  */
 public class JoiningAttributeMerger implements IAttributeMerger {
@@ -62,16 +64,31 @@ public class JoiningAttributeMerger implements IAttributeMerger {
 	}
 
 	protected IPersonAttributes findMatchingResult(final Map<Object, IPersonAttributes> toModifyPeople, IPersonAttributes toConsiderPerson) {
-		final List<Object> toConsiderNames = getJoinAttributeValues(toConsiderPerson);
-		if (toConsiderNames != null) {
-			for (Object toConsiderName : toConsiderNames) {
-				IPersonAttributes toModifyPerson = toModifyPeople.get(toConsiderName);
-				if (toModifyPerson != null) {
-					return toModifyPerson;
+		if (joinAttributeName == null) {
+			if (!toModifyPeople.isEmpty()) {
+				return toModifyPeople.values().iterator().next();
+			}
+		} else {
+			final List<Object> toConsiderNames = getJoinAttributeValues(toConsiderPerson);
+			if (toConsiderNames != null) {
+				for (Object toConsiderName : toConsiderNames) {
+					IPersonAttributes toModifyPerson = toModifyPeople.get(toConsiderName);
+					if (toModifyPerson != null) {
+						return toModifyPerson;
+					}
 				}
 			}
 		}
 		return null;
+	}
+
+	protected void populateJoinAttributeMap(Map<Object, IPersonAttributes> people, IPersonAttributes person) {
+		final List<Object> names = getJoinAttributeValues(person);
+		if (names != null) {
+			for (Object name : names) {
+				people.put(name, person);
+			}
+		}
 	}
 
 	@Override
@@ -82,12 +99,7 @@ public class JoiningAttributeMerger implements IAttributeMerger {
 		// Convert the toModify Set into a Map to allow for easier lookups
 		final Map<Object, IPersonAttributes> toModifyPeople = new LinkedHashMap<>();
 		for (final IPersonAttributes toModifyPerson : toModify) {
-			final List<Object> toModifyNames = getJoinAttributeValues(toModifyPerson);
-			if (toModifyNames != null) {
-				for (Object toModifyName : toModifyNames) {
-					toModifyPeople.put(toModifyName, toModifyPerson);
-				}
-			}
+			populateJoinAttributeMap(toModifyPeople, toModifyPerson);
 		}
 
 		// Merge in the toConsider people
@@ -97,6 +109,7 @@ public class JoiningAttributeMerger implements IAttributeMerger {
 			// No matching toModify person, just add the new person
 			if (toModifyPerson == null) {
 				toModify.add(toConsiderPerson);
+				populateJoinAttributeMap(toModifyPeople, toConsiderPerson);
 			}
 			// Matching toModify person, merge their attributes
 			else {
