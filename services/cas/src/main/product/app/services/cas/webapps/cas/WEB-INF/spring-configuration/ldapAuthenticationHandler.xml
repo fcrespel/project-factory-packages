@@ -14,8 +14,10 @@
 		  c:authenticator-ref="ldapAuthenticator"
 	/>
 
-	<ldaptive:anonymous-search-authenticator id="ldapAuthenticator"
+	<ldaptive:bind-search-authenticator id="ldapAuthenticator"
 		  ldapUrl="${ldap.url}"
+		  bindDn="${ldap.managerDn}"
+		  bindCredential="${ldap.managerPassword}"
 		  connectTimeout="${ldap.connectTimeout}"
 		  validateOnCheckOut="${ldap.pool.validateOnCheckout}"
 		  failFastInitialize="true"
