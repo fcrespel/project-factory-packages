@@ -32,7 +32,7 @@
 	<bean id="casRestAuthenticatorTarget"
 		  class="org.pac4j.cas.credentials.authenticator.CasRestAuthenticator"
 		  c:casServerPrefixUrl="${D}{cas.rest.auth.server}"
-		  c:casRestUrl="${D}{cas.rest.auth.server}/${D}{cas.rest.auth.ticket.url}">
+		  c:casRestUrl="${D}{cas.rest.auth.ticket.url}">
 		<property name="ticketValidator">
 			<bean class="org.jasig.cas.client.validation.Saml11TicketValidator"
 				  c:casServerUrlPrefix="${D}{cas.rest.auth.server}"

@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>cas</artifactId>
-	<version>4.2.4-3-SNAPSHOT</version>
+	<version>4.2.4-4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - CAS</name>
