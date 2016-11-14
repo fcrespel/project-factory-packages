@@ -21,8 +21,15 @@ if ! startservice @{mysql.service}; then
 fi
 
 # Create database and user if necessary
+DB_EXISTS=`if mysql_dbexists "@{cas.db.name}"; then echo 1; else echo 0; fi`
 if ! mysql_createdb "@{cas.db.name}" || ! mysql_createuser "@{cas.db.user}" "$CAS_DB_PASSWORD" "@{cas.db.name}"; then
 	exit 1
+fi
+
+# Clean some tables between upgrades
+if [ "$DB_EXISTS" -eq 1 ]; then
+	echo "delete from locks" | mysql_exec "@{cas.db.name}"
+	echo "delete from TICKETGRANTINGTICKET" | mysql_exec "@{cas.db.name}"
 fi
 
 # Enable service at startup
