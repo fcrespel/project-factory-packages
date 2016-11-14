@@ -11,6 +11,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
+import javax.naming.NameNotFoundException;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
@@ -110,8 +111,17 @@ public class LdapSyncAuthenticationListener implements AuthenticationListener {
 		
 		// Search the user
 		SearchOperation search = new SearchOperation(conn);
-		Response<SearchResult> response = search.execute(SearchRequest.newObjectScopeSearchRequest(userDN));
-		LdapEntry entry = response.getResult().getEntry();
+		LdapEntry entry = null;
+		try {
+			Response<SearchResult> response = search.execute(SearchRequest.newObjectScopeSearchRequest(userDN));
+			entry = response.getResult().getEntry();
+		} catch (LdapException e) {
+			if (e.getCause() instanceof NameNotFoundException) {
+				// Ignore
+			} else {
+				throw e;
+			}
+		}
 		if (entry == null) {
 			log.info("User DN '" + userDN + "' not found, will be created");
 			entry = new LdapEntry(userDN);
@@ -137,8 +147,17 @@ public class LdapSyncAuthenticationListener implements AuthenticationListener {
 			for (String groupDN : groupDNs) {
 				// Search the group
 				SearchOperation search = new SearchOperation(conn);
-				Response<SearchResult> response = search.execute(SearchRequest.newObjectScopeSearchRequest(groupDN));
-				LdapEntry entry = response.getResult().getEntry();
+				LdapEntry entry = null;
+				try {
+					Response<SearchResult> response = search.execute(SearchRequest.newObjectScopeSearchRequest(groupDN));
+					entry = response.getResult().getEntry();
+				} catch (LdapException e) {
+					if (e.getCause() instanceof NameNotFoundException) {
+						// Ignore
+					} else {
+						throw e;
+					}
+				}
 				if (entry == null) {
 					log.warn("Group DN '" + groupDN + "' does not exist in LDAP directory");
 				} else {
