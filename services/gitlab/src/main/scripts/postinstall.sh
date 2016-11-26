@@ -78,7 +78,7 @@ fi
 # Fix permissions
 chown -R @{package.user}:@{package.group} "@{package.app}" "@{package.data}" "@{package.log}"
 chmod 0600 "@{package.app}/config/secrets.yml"
-chmod 0700 "@{package.data}/uploads"
+chmod 0750 "@{package.data}/uploads"
 chmod -R ug+rwX,o-rwx "@{package.data}/repositories/"
 chmod -R ug-s "@{package.data}/repositories/"
 find "@{package.data}/repositories/" -type d -print0 | xargs -0 chmod g+s
