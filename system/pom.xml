@@ -42,19 +42,20 @@
 	</properties>
 
 	<modules>
-		<module>httpd</module>
-		<module>php</module>
-		<module>mysql</module>
-		<module>ldap</module>
-		<module>ruby</module>
-		<module>tomcat</module>
+		<module>activemq</module>
 		<module>ant</module>
+		<module>elasticsearch</module>
+		<module>git</module>
+		<module>httpd</module>
+		<module>ldap</module>
 		<module>maven2</module>
 		<module>maven3</module>
+		<module>mysql</module>
+		<module>php</module>
 		<module>python</module>
-		<module>activemq</module>
 		<module>redis</module>
-		<module>elasticsearch</module>
+		<module>ruby</module>
+		<module>tomcat</module>
 	</modules>
 
 </project>
