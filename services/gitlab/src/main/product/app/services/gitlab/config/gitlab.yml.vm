@@ -2,6 +2,7 @@
 #set( $PRODUCT_NAME = ${project.properties.getProperty('product.name')} )
 #set( $PRODUCT_DOMAIN = ${project.properties.getProperty('product.domain')} )
 #set( $PRODUCT_SCHEME = ${project.properties.getProperty('product.scheme')} )
+#set( $PRODUCT_APP = ${project.properties.getProperty('product.app')} )
 #set( $PACKAGE_USER = ${project.properties.getProperty('package.user')} )
 #set( $PACKAGE_APP = ${project.properties.getProperty('package.app')} )
 #set( $PACKAGE_BACKUP = ${project.properties.getProperty('package.backup')} )
@@ -487,7 +488,7 @@ production: &base
   # CAUTION!
   # Use the default values unless you really know what you are doing
   git:
-    bin_path: /usr/bin/git
+    bin_path: ${PRODUCT_APP}/system/git/bin/git
     # The next value is the maximum memory size grit can use
     # Given in number of bytes per git object (e.g. a commit)
     # This value can be increased if you have very large commits

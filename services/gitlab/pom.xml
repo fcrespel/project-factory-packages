@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>gitlab</artifactId>
-	<version>8.14.0-1</version>
+	<version>8.14.4-1</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - GitLab</name>
@@ -42,13 +42,13 @@
 		<package.src.url>https://gitlab.com/gitlab-org/gitlab-ce/repository</package.src.url>
 		<package.src.file>archive.zip?ref=v${package.version}</package.src.file>
 		<package.dependencies>
+			${package.prefix}-system-git,
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-mysql,
 			${package.prefix}-system-redis,
 			${package.prefix}-system-ruby >= 2.3.0,
 			${package.prefix}-service-portal,
 			${system.package.cmake},
-			${system.package.git} >= 1.7.10,
 			${system.package.golang},
 			${system.package.nodejs},
 			${system.package.libxml2-devel},
@@ -58,10 +58,10 @@
 		<gitlab.db.name>${product.id}_gitlab</gitlab.db.name>
 		<gitlab.db.user>${product.id}_gitlab</gitlab.db.user>
 		<gitlab.bundler.exclude>development:test:postgres:aws:kerberos</gitlab.bundler.exclude>
-		<gitlab.shell.version>4.0.0</gitlab.shell.version>
+		<gitlab.shell.version>4.0.3</gitlab.shell.version>
 		<gitlab.shell.url>https://gitlab.com/gitlab-org/gitlab-shell/repository</gitlab.shell.url>
 		<gitlab.shell.file>archive.zip?ref=v${gitlab.shell.version}</gitlab.shell.file>
-		<gitlab.workhorse.version>1.0.0</gitlab.workhorse.version>
+		<gitlab.workhorse.version>1.1.1</gitlab.workhorse.version>
 		<gitlab.workhorse.url>https://gitlab.com/gitlab-org/gitlab-workhorse/repository</gitlab.workhorse.url>
 		<gitlab.workhorse.file>archive.zip?ref=v${gitlab.workhorse.version}</gitlab.workhorse.file>
 	</properties>
