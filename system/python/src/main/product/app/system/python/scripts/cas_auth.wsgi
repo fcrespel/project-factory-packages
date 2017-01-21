@@ -63,7 +63,11 @@ def _cleanup_cache():
 
 # Perform CAS authentication
 def _cas_auth(environ, user, password):
-    tgt_url = _create_tgt(user, password)
+    try:
+        tgt_url = _create_tgt(user, password)
+    except IOError as e:
+        logging.info(e)
+        tgt_url = None
     if not tgt_url:
         logging.info('CAS Auth: failed to create TGT for user ' + user)
         return None, {}
@@ -107,7 +111,7 @@ def _grant_st(tgt_url, service):
     try:
         return response.readline().strip()
     finally:
-        response.close();
+        response.close()
 
 # Validate a Service Ticket (CAS 2.0-style)
 def _validate_st(ticket, service):
