@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>redmine</artifactId>
-	<version>3.3.1-1</version>
+	<version>3.3.2-1</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Redmine</name>
@@ -56,13 +56,13 @@
 		<redmine.lang>${product.locale}</redmine.lang>
 		<redmine.plugins>
 			hooks_manager=http://projects.andriylesyuk.com/attachments/download/607/hooks_manager-1.0.1.tar.bz2
-			redmine_bootstrap_kit=https://github.com/jbox-web/redmine_bootstrap_kit/archive/0.2.4.zip
+			redmine_bootstrap_kit=https://github.com/jbox-web/redmine_bootstrap_kit/archive/0.2.5.zip
 			redmine_code_review=https://bitbucket.org/haru_iida/redmine_code_review/get/0.7.0.tar.bz2
 			redmine_dashboard=https://github.com/jgraichen/redmine_dashboard/releases/download/v2.7.1/redmine_dashboard-v2.7.1.zip
 			redmine_embedded_flash=https://github.com/fcrespel/redmine_embedded_flash/archive/1.0.0.zip
 			redmine_jenkins=https://github.com/jbox-web/redmine_jenkins/archive/1.0.1.zip
 			redmine_ldap_sync=https://github.com/thorin/redmine_ldap_sync/archive/2.0.7.zip
-			redmine_lightbox2=https://github.com/paginagmbh/redmine_lightbox2/archive/v0.3.0.zip
+			redmine_lightbox2=https://github.com/paginagmbh/redmine_lightbox2/archive/v0.3.2.zip
 			redmine_monitoring_controlling=https://github.com/alexmonteiro/Redmine-Monitoring-Controlling/archive/3eaf10245ba73ddd8f67f4cc8c6b8a18c18300fe.zip
 			redmine_omniauth_cas=https://github.com/fcrespel/redmine_omniauth_cas/archive/6f6affe47ef5c7918c2c38cb8e1c8facefbfd9d6.zip
 			redmine_private_wiki=https://github.com/f0y/redmine_private_wiki/archive/f36984dea8eb48443127c4626d5e248108e366a6.zip
