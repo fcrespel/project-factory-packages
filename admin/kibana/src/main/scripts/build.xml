@@ -5,6 +5,11 @@
 				<include name="**/*.sh" />
 			</fileset>
 		</chmod>
+		<delete includeemptydirs="true">
+			<fileset dir="${project.app.directory}">
+				<include name="**/.idea/" />
+			</fileset>
+		</delete>
 		<concat destfile="${project.app.directory}/src/ui/views/ui_app.jade" append="true"><![CDATA[
 block head
   link(rel='stylesheet', type='text/css', href='/portal/themes/current/css/kibana.css')
