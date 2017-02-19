@@ -165,6 +165,12 @@ production: &base
     # The location where LFS objects are stored (default: shared/lfs-objects).
     storage_path: ${PACKAGE_DATA}/shared/lfs-objects
 
+  $H$H Mattermost
+  $H$H For enabling Add to Mattermost button
+  mattermost:
+    enabled: false
+    host: 'https://mattermost.example.com'
+
   $H$H Gravatar
   $H$H For Libravatar see: http://doc.gitlab.com/ce/customization/libravatar.html
   gravatar:
@@ -369,6 +375,16 @@ production: &base
                   name_key: '${CAS_ATTR_DISPLAYNAME}',
                   first_name_key: '${CAS_ATTR_FIRSTNAME}',
                   last_name_key: '${CAS_ATTR_LASTNAME}' } }
+      # - { name: 'authentiq',
+      #     # for client credentials (client ID and secret), go to https://www.authentiq.com/
+      #     app_id: 'YOUR_CLIENT_ID',
+      #     app_secret: 'YOUR_CLIENT_SECRET',
+      #     args: {
+      #             scope: 'aq:name email~rs address aq:push'
+      #             # redirect_uri parameter is optional except when 'gitlab.host' in this file is set to 'localhost'
+      #             # redirect_uri: 'YOUR_REDIRECT_URI'
+      #           }
+      #   }
       # - { name: 'github',
       #     app_id: 'YOUR_APP_ID',
       #     app_secret: 'YOUR_APP_SECRET',
