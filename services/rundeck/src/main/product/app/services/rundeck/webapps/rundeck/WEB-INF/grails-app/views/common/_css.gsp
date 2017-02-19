@@ -35,6 +35,13 @@
         background-size: ${ enc(rawtext:appLogoW) } ${ enc(rawtext:appLogoH) };
     }
     }
+
+    <g:if test="${grailsApplication.config.rundeck.gui.navbar.background}">
+    .navbar-overrides {
+        background: ${grailsApplication.config.rundeck.gui.navbar.background};
+    }
+    </g:if>
+
     ${enc(rawtext:customCss)}
 </style>
 <script type="text/javascript" src="/portal/toolbar.php?tab=rundeck&amp;format=js"></script>
