@@ -1,4 +1,4 @@
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" metadata-complete="true" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" metadata-complete="true" version="3.0" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<display-name>/rundeck-production-@{package.version}</display-name>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -15,14 +15,17 @@
 	<filter>
 		<filter-name>AuthFilter</filter-name>
 		<filter-class>com.dtolabs.rundeck.server.filters.AuthFilter</filter-class>
+		<async-supported>true</async-supported>
 	</filter>
 	<filter>
 		<filter-name>AssetPipelineFilter</filter-name>
-		<filter-class>asset.pipeline.AssetPipelineFilter</filter-class>
+		<filter-class>asset.pipeline.grails.AssetPipelineFilter</filter-class>
+		<async-supported>true</async-supported>
 	</filter>
 	<filter>
 		<filter-name>instrumentedFilter</filter-name>
 		<filter-class>com.codahale.metrics.servlet.InstrumentedFilter</filter-class>
+		<async-supported>true</async-supported>
 	</filter>
 	<security-role>
 		<role-name>user</role-name>
@@ -125,6 +128,7 @@
 	<filter>
 		<filter-name>charEncodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<async-supported>true</async-supported>
 		<init-param>
 			<param-name>targetBeanName</param-name>
 			<param-value>characterEncodingFilter</param-value>
@@ -137,18 +141,22 @@
 	<filter>
 		<filter-name>urlMapping</filter-name>
 		<filter-class>org.codehaus.groovy.grails.web.mapping.filter.UrlMappingsFilter</filter-class>
+		<async-supported>true</async-supported>
 	</filter>
 	<filter>
 		<filter-name>hiddenHttpMethod</filter-name>
 		<filter-class>org.codehaus.groovy.grails.web.filters.HiddenHttpMethodFilter</filter-class>
+		<async-supported>true</async-supported>
 	</filter>
 	<filter>
 		<filter-name>grailsWebRequest</filter-name>
 		<filter-class>org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequestFilter</filter-class>
+		<async-supported>true</async-supported>
 	</filter>
 	<filter>
 		<filter-name>grailsCacheFilter</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<async-supported>true</async-supported>
 		<init-param>
 			<param-name>targetFilterLifecycle</param-name>
 			<param-value>true</param-value>
@@ -210,6 +218,7 @@
 			<param-value>true</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
+		<async-supported>true</async-supported>
 	</servlet>
 	<servlet>
 		<servlet-name>gsp</servlet-name>
