@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 #
 # gitlab       Startup script for the GitLab repository manager
 #
