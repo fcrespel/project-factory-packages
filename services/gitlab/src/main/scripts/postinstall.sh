@@ -69,8 +69,14 @@ if ! cat "@{package.app}/config/overlay.sql" | mysql_exec "@{gitlab.db.name}"; t
 	exit 1
 fi
 
+# Install required Node.js packages
+if ! ( cd "@{package.app}" && npm install --production ); then
+	printerror "ERROR: failed to install Node.js packages"
+	exit 1
+fi
+
 # Clean up assets and cache
-if ! ( cd "@{package.app}" && rvm default do bundle exec rake assets:clean assets:precompile cache:clear RAILS_RELATIVE_URL_ROOT=/gitlab ); then
+if ! ( cd "@{package.app}" && rvm default do bundle exec rake gitlab:assets:clean gitlab:assets:compile cache:clear RAILS_RELATIVE_URL_ROOT=/gitlab ); then
 	printerror "ERROR: failed to clean up assets and cache for GitLab"
 	exit 1
 fi
