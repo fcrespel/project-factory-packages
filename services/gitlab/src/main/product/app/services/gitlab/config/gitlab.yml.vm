@@ -165,6 +165,26 @@ production: &base
     # The location where LFS objects are stored (default: shared/lfs-objects).
     storage_path: ${PACKAGE_DATA}/shared/lfs-objects
 
+  $H$H GitLab Pages
+  pages:
+    enabled: false
+    # The location where pages are stored (default: shared/pages).
+    path: ${PACKAGE_DATA}/shared/pages
+
+    # The domain under which the pages are served:
+    # http://group.example.com/project
+    # or project path can be a group page: group.example.com
+    host: ${PRODUCT_DOMAIN}
+#if( ${PRODUCT_SCHEME} == "https" )
+    port: 443
+    https: true
+#else
+    port: 80
+    https: false
+#end
+    # external_http: "1.1.1.1:80" # If defined, enables custom domain support in GitLab Pages
+    # external_https: "1.1.1.1:443" # If defined, enables custom domain and certificate support in GitLab Pages
+
   $H$H Mattermost
   $H$H For enabling Add to Mattermost button
   mattermost:
@@ -511,6 +531,16 @@ production: &base
     max_size: 20971520 # 20.megabytes
     # Git timeout to read a commit, in seconds
     timeout: 10
+
+  $H$H Webpack settings
+  # If enabled, this will tell rails to serve frontend assets from the webpack-dev-server running
+  # on a given port instead of serving directly from /assets/webpack. This is only indended for use
+  # in development.
+  webpack:
+    # dev_server:
+    #   enabled: true
+    #   host: localhost
+    #   port: 3808
 
   #
   # 5. Extra customization
