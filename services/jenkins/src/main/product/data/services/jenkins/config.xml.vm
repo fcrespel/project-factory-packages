@@ -17,7 +17,9 @@
 #set( $SYSTEM_JAVA8_APP = ${project.properties.getProperty('system.java8.app')} )
 <?xml version='1.0' encoding='UTF-8'?>
 <hudson>
-  <disabledAdministrativeMonitors/>
+  <disabledAdministrativeMonitors>
+    <string>hudson.diagnosis.ReverseProxySetupMonitor</string>
+  </disabledAdministrativeMonitors>
   <version>${PACKAGE_VERSION}</version>
   <numExecutors>2</numExecutors>
   <mode>NORMAL</mode>
@@ -45,6 +47,8 @@
     <permission>hudson.model.Computer.Delete:${ROOT_USER}</permission>
     <permission>hudson.model.Computer.Disconnect:${PRODUCT_GROUP_ADMINS}</permission>
     <permission>hudson.model.Computer.Disconnect:${ROOT_USER}</permission>
+    <permission>hudson.model.Computer.Provision:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>hudson.model.Computer.Provision:${ROOT_USER}</permission>
     <permission>hudson.model.Hudson.Administer:${PRODUCT_GROUP_ADMINS}</permission>
     <permission>hudson.model.Hudson.Administer:${ROOT_USER}</permission>
     <permission>hudson.model.Hudson.ConfigureUpdateCenter:${PRODUCT_GROUP_ADMINS}</permission>
@@ -104,7 +108,7 @@
     <permission>hudson.scm.SCM.Tag:${ROOT_USER}</permission>
   </authorizationStrategy>
 #if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
-  <securityRealm class="org.jenkinsci.plugins.cas.CasSecurityRealm" plugin="cas-plugin@1.3.0">
+  <securityRealm class="org.jenkinsci.plugins.cas.CasSecurityRealm" plugin="cas-plugin@1.4.0">
     <casServerUrl>${CAS_URL}</casServerUrl>
     <casProtocol class="org.jenkinsci.plugins.cas.protocols.Saml11Protocol">
       <authoritiesAttribute>groups,roles</authoritiesAttribute>
@@ -170,7 +174,7 @@
         <hudson.views.LastSuccessColumn/>
         <hudson.views.LastFailureColumn/>
         <hudson.views.LastDurationColumn/>
-        <hudson.plugins.favorite.column.FavoriteColumn plugin="favorite@1.16"/>
+        <hudson.plugins.favorite.column.FavoriteColumn plugin="favorite@2.3.0"/>
         <org.jenkins.ci.plugins.column.console.LastBuildColumn plugin="console-column-plugin@1.5"/>
         <hudson.views.BuildButtonColumn/>
       </columns>
@@ -188,7 +192,7 @@
         <comparator class="hudson.util.CaseInsensitiveComparator" reference="../../../listView/jobNames/comparator"/>
       </jobNames>
       <jobFilters>
-        <hudson.plugins.favorite.filter.FavoriteFilter plugin="favorite@1.16"/>
+        <hudson.plugins.favorite.filter.FavoriteFilter plugin="favorite@2.3.0"/>
       </jobFilters>
       <columns>
         <hudson.views.StatusColumn/>
@@ -197,7 +201,7 @@
         <hudson.views.LastSuccessColumn/>
         <hudson.views.LastFailureColumn/>
         <hudson.views.LastDurationColumn/>
-        <hudson.plugins.favorite.column.FavoriteColumn plugin="favorite@1.16"/>
+        <hudson.plugins.favorite.column.FavoriteColumn plugin="favorite@2.3.0"/>
         <org.jenkins.ci.plugins.column.console.LastBuildColumn plugin="console-column-plugin@1.5"/>
         <hudson.views.BuildButtonColumn/>
       </columns>
