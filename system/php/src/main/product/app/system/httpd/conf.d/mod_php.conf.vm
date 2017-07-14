@@ -1,0 +1,21 @@
+#set( $D = '$' )
+#set( $PHP5_MODULE = ${project.properties.getProperty('system.httpd.app.modules.php5')} )
+#set( $PHP7_MODULE = ${project.properties.getProperty('system.httpd.app.modules.php7')} )
+#set( $PACKAGE_APP = ${project.properties.getProperty('package.app')} )
+#set( $PACKAGE_DATA = ${project.properties.getProperty('package.data')} )
+# mod_php configuration
+
+#if( ${PHP7_MODULE} )
+LoadModule php7_module ${PHP7_MODULE}
+#else
+LoadModule php5_module ${PHP5_MODULE}
+#end
+
+<FilesMatch "\.ph(p[345]?|tml)${D}">
+	SetHandler application/x-httpd-php
+</FilesMatch>
+
+DirectoryIndex index.php
+
+php_value include_path ".:${PACKAGE_APP}/pear/php"
+php_value session.save_path "${PACKAGE_DATA}/sessions"
