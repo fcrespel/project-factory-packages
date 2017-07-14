@@ -57,12 +57,27 @@
 		<for list="${pear.packages}" delimiter="&#9;&#10; " trim="true" param="pear.package">
 			<sequential>
 				<echo message="==> Installing PEAR package @{pear.package}" />
-				<exec executable="${pear.bin}" failonerror="true">
-					<arg value="-c" />
-					<arg value="${pear.cfg}" />
-					<arg value="install" />
-					<arg value="@{pear.package}" />
-				</exec>
+				<if>
+					<matches string="@{pear.package}" pattern="^https?://" />
+					<then>
+						<basename file="@{pear.package}" property="pear.package.file" />
+						<get src="@{pear.package}" dest="${pear.tmp}/download/${pear.package.file}" />
+						<exec executable="${pear.bin}" failonerror="true">
+							<arg value="-c" />
+							<arg value="${pear.cfg}" />
+							<arg value="install" />
+							<arg value="${pear.tmp}/download/${pear.package.file}" />
+						</exec>
+					</then>
+					<else>
+						<exec executable="${pear.bin}" failonerror="true">
+							<arg value="-c" />
+							<arg value="${pear.cfg}" />
+							<arg value="install" />
+							<arg value="@{pear.package}" />
+						</exec>
+					</else>
+				</if>
 			</sequential>
 		</for>
 	</target>
