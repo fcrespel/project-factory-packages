@@ -6,9 +6,20 @@ chown -R @{package.user}:@{package.group} "@{package.data}"
 chown -R @{package.user}:@{package.group} "@{package.app}/run"
 
 # Fill the data directory
-if ! mysql_install_db --defaults-file="@{package.app}/conf/my.cnf" > /dev/null; then
-	printerror "ERROR: failed to initialize MySQL data directory"
-	exit 1
+if [ ! -e "@{package.data}/mysql" ]; then
+	MYSQL_VERSION=`@{system.mysql.bin.mysqld} --version`
+	if [[ "$MYSQL_VERSION" =~ 5\.[7-9]\. ]]; then
+		rm -f "@{package.data}/.flag"
+		if ! @{system.mysql.bin.mysqld} --defaults-file="@{package.app}/conf/my.cnf" --initialize-insecure; then
+			printerror "ERROR: failed to initialize MySQL data directory"
+			exit 1
+		fi
+	else
+		if ! mysql_install_db --defaults-file="@{package.app}/conf/my.cnf"; then
+			printerror "ERROR: failed to initialize MySQL data directory"
+			exit 1
+		fi
+	fi
 fi
 
 # Enable service at startup
