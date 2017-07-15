@@ -30,7 +30,7 @@ fi
 # Configure root user
 ensurepassword MYSQL_ROOT_PASSWORD
 if echo "SELECT 1 FROM DUAL;" | mysql_exec_nopw > /dev/null 2>&1; then
-	if ! echo "UPDATE mysql.user SET Password=PASSWORD('$MYSQL_ROOT_PASSWORD') WHERE User='root'; FLUSH PRIVILEGES;" | mysql_exec_nopw; then
+	if ! echo "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$MYSQL_ROOT_PASSWORD'); FLUSH PRIVILEGES;" | mysql_exec_nopw; then
 		printerror "ERROR: failed to set MySQL root password"
 		exit 1
 	fi
@@ -61,8 +61,8 @@ fi
 # Drop anonymous user
 echo "DELETE FROM mysql.user WHERE User='';" | mysql_exec > /dev/null 2>&1
 
-# Drop remote root user
-echo "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');" | mysql_exec > /dev/null 2>&1
+# Drop other root users
+echo "DELETE FROM mysql.user WHERE User='root' AND Host <> 'localhost';" | mysql_exec > /dev/null 2>&1
 
 # Drop test database and privileges
 echo "DROP DATABASE test;" | mysql_exec > /dev/null 2>&1
