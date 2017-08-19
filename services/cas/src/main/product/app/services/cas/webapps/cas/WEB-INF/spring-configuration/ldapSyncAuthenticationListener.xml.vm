@@ -36,7 +36,6 @@
 				<entry key="${D}{cas.attr.lastname}" value="${D}{ldap.user.lastname.attr}" />
 				<entry key="${D}{cas.attr.displayname}" value="${D}{ldap.user.displayname.attr}" />
 				<entry key="${D}{cas.attr.mail}" value="${D}{ldap.user.mail.attr}" />
-				<entry key="${D}{cas.attr.telephone}" value="${D}{ldap.user.telephone.attr}" />
 				<entry key="${D}{cas.attr.organization}" value="${D}{ldap.user.organization.attr}" />
 			</map>
 		</property>
