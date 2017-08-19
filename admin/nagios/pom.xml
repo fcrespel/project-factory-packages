@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>nagios</artifactId>
-	<version>3.5.1-5</version>
+	<version>3.5.1-6</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Admin - Nagios</name>
@@ -39,7 +39,7 @@
 	<properties>
 		<package.disabled>${nagios.disabled}</package.disabled>
 		<package.arch>${system.arch}</package.arch>
-		<package.src.url>http://downloads.sourceforge.net/project/nagios/nagios-3.x/nagios-${package.version}</package.src.url>
+		<package.src.url>https://assets.nagios.com/downloads/nagioscore/releases</package.src.url>
 		<package.src.file>nagios-${package.version}.tar.gz</package.src.file>
 		<package.dependencies>
 			${package.prefix}-system-httpd,
