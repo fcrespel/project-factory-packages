@@ -18,6 +18,11 @@ if ! grep -q "@{package.user}.*restart-service" "$SUDOERS_FILE"; then
 	echo "@{package.user} ALL= NOPASSWD: @{package.app}/eventhandlers/restart-service.sh" >> "$SUDOERS_FILE"
 fi
 
+# Fix compatibility with Nagios 4+
+if ! ( "@{system.nagios.bin.nagios}" --version | grep -q "Nagios Core 3" ); then
+	sed -i 's/^#query_socket=/query_socket=/g' "@{package.app}/conf/nagios.cfg"
+fi
+
 # Fix data directory and sudoers file permissions
 chown -R @{package.user}:@{package.group} "@{package.data}"
 chmod 0440 "$SUDOERS_FILE"
