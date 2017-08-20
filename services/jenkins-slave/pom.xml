@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>jenkins-slave</artifactId>
-	<version>3.9-1</version>
+	<version>3.11-1</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Jenkins Slave</name>
