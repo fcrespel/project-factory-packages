@@ -106,7 +106,7 @@
 			<dependency>
 				<groupId>rubygems</groupId>
 				<artifactId>bundler</artifactId>
-				<version>1.15.4</version>
+				<version>1.14.6</version>
 				<type>gem</type>
 			</dependency>
 		</dependencies>
