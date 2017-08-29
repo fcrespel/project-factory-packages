@@ -70,7 +70,7 @@
 		<ruby.version>2.3.4</ruby.version>
 		<ruby.src.url>https://cache.ruby-lang.org/pub/ruby</ruby.src.url>
 		<ruby.src.file>ruby-${ruby.version}.tar.bz2</ruby.src.file>
-		<rubygems.version>2.6.12</rubygems.version>
+		<rubygems.version>2.6.13</rubygems.version>
 		<rubygems.src.url>https://rubygems.org/rubygems</rubygems.src.url>
 		<rubygems.src.file>rubygems-${rubygems.version}.tgz</rubygems.src.file>
 		<ruby.gems>rake rack passenger bundler</ruby.gems>
