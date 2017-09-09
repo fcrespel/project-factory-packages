@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>manager</artifactId>
-	<version>3.3.0-1</version>
+	<version>3.3.0-2</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Manager</name>

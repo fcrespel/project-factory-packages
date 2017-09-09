@@ -23,5 +23,6 @@ fi
 
 # Enable Nagios monitoring
 if type -t nagios_enable_service >/dev/null; then
-	nagios_enable_service "Platform Manager"
+	nagios_enable_service "Platform Manager AJP"
+	nagios_enable_service "Platform Manager HTTP"
 fi
