@@ -37,5 +37,6 @@ fi
 
 # Enable Nagios monitoring
 if type -t nagios_enable_service >/dev/null; then
-	nagios_enable_service "Jenkins"
+	nagios_enable_service "Jenkins AJP"
+	nagios_enable_service "Jenkins HTTP"
 fi
