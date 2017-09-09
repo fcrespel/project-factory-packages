@@ -23,5 +23,6 @@ fi
 
 # Enable Nagios monitoring
 if type -t nagios_enable_service >/dev/null; then
-	nagios_enable_service "Nexus"
+	nagios_enable_service "Nexus AJP"
+	nagios_enable_service "Nexus HTTP"
 fi
