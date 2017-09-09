@@ -1,6 +1,7 @@
 # Disable Nagios monitoring
 if type -t nagios_disable_service >/dev/null; then
-	nagios_disable_service "Alfresco Share"
+	nagios_disable_service "Alfresco Share AJP"
+	nagios_disable_service "Alfresco Share HTTP"
 fi
 
 # Disable user access to the service

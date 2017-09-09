@@ -20,5 +20,6 @@ fi
 
 # Enable Nagios monitoring
 if type -t nagios_enable_service >/dev/null; then
-	nagios_enable_service "Alfresco Share"
+	nagios_enable_service "Alfresco Share AJP"
+	nagios_enable_service "Alfresco Share HTTP"
 fi

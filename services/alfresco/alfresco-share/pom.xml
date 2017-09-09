@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>alfresco-share</artifactId>
-	<version>5.1.g-2</version>
+	<version>5.1.g-3</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Alfresco Share</name>
