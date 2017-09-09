@@ -78,5 +78,6 @@ fi
 
 # Enable Nagios monitoring
 if type -t nagios_enable_service >/dev/null; then
-	nagios_enable_service "SonarQube"
+	nagios_enable_service "SonarQube AJP"
+	nagios_enable_service "SonarQube HTTP"
 fi
