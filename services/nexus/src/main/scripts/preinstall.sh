@@ -1,6 +1,7 @@
 # Disable Nagios monitoring
 if type -t nagios_disable_service >/dev/null; then
-	nagios_disable_service "Nexus"
+	nagios_disable_service "Nexus AJP"
+	nagios_disable_service "Nexus HTTP"
 fi
 
 # Disable user access to the service
