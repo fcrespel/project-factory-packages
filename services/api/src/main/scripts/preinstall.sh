@@ -1,6 +1,7 @@
 # Disable Nagios monitoring
 if type -t nagios_disable_service >/dev/null; then
-	nagios_disable_service "Platform API"
+	nagios_disable_service "Platform API AJP"
+	nagios_disable_service "Platform API HTTP"
 fi
 
 # Disable user access to the service

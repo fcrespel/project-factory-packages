@@ -22,5 +22,6 @@ fi
 
 # Enable Nagios monitoring
 if type -t nagios_enable_service >/dev/null; then
-	nagios_enable_service "Platform API"
+	nagios_enable_service "Platform API AJP"
+	nagios_enable_service "Platform API HTTP"
 fi
