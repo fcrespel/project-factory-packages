@@ -1,6 +1,7 @@
 # Disable Nagios monitoring
 if type -t nagios_disable_service >/dev/null; then
-	nagios_disable_service "CAS Management"
+	nagios_disable_service "CAS Management AJP"
+	nagios_disable_service "CAS Management HTTP"
 fi
 
 # Disable user access to the service

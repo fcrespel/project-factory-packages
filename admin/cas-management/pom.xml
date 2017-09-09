@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>cas-management</artifactId>
-	<version>4.2.4-1</version>
+	<version>4.2.4-2</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Admin - CAS Management</name>
