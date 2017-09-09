@@ -48,5 +48,6 @@ fi
 
 # Enable Nagios monitoring
 if type -t nagios_enable_service >/dev/null; then
-	nagios_enable_service "CAS"
+	nagios_enable_service "CAS AJP"
+	nagios_enable_service "CAS HTTP"
 fi
