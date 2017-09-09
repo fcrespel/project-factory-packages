@@ -35,5 +35,6 @@ fi
 
 # Enable Nagios monitoring
 if type -t nagios_enable_service >/dev/null; then
-	nagios_enable_service "Alfresco Explorer"
+	nagios_enable_service "Alfresco Explorer AJP"
+	nagios_enable_service "Alfresco Explorer HTTP"
 fi

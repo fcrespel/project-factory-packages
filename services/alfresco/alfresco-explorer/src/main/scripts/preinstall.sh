@@ -5,7 +5,8 @@ fi
 
 # Disable Nagios monitoring
 if type -t nagios_disable_service >/dev/null; then
-	nagios_disable_service "Alfresco Explorer"
+	nagios_disable_service "Alfresco Explorer AJP"
+	nagios_disable_service "Alfresco Explorer HTTP"
 fi
 
 # Disable user access to the service
