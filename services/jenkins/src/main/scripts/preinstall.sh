@@ -1,6 +1,7 @@
 # Disable Nagios monitoring
 if type -t nagios_disable_service >/dev/null; then
-	nagios_disable_service "Jenkins"
+	nagios_disable_service "Jenkins AJP"
+	nagios_disable_service "Jenkins HTTP"
 fi
 
 # Disable user access to the service
