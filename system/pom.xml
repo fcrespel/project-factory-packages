@@ -46,6 +46,7 @@
 		<module>ant</module>
 		<module>elasticsearch</module>
 		<module>git</module>
+		<module>go</module>
 		<module>httpd</module>
 		<module>ldap</module>
 		<module>maven2</module>
