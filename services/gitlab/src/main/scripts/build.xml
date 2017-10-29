@@ -29,5 +29,8 @@
 			<arg value="no_install" />
 		</exec>
 		<delete dir="${project.app.directory}/vendor/bundle" />
+		<concat destfile="${project.app.directory}/app/assets/javascripts/main.js" append="true"><![CDATA[
+import './projectfactory.js';
+]]></concat>
 	</target>
 </project>
