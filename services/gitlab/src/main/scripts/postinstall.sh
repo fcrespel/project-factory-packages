@@ -11,15 +11,21 @@ if [ ! -e "@{package.app}/config/secrets.yml" ]; then
 fi
 
 # Fix execute permissions
-chmod +x @{package.app}/bin/* @{package.app}/lib/support/init.d/gitlab @{package.app}/shell/bin/* @{package.app}/shell/hooks/*
+chmod +x @{package.app}/bin/* @{package.app}/lib/support/init.d/gitlab @{package.app}/shell/bin/* @{package.app}/shell/hooks/* @{package.app}/gitaly/ruby/bin/*
 
 # Configure user
 usermod -s /bin/bash @{package.user} > /dev/null 2>&1
 mkdir -p "@{package.root}/.ssh" && touch "@{package.root}/.ssh/authorized_keys"
 
 # Build workhorse
-if ! ( cd "@{package.app}/workhorse" && make ); then
+if ! ( chown -R @{package.user}:@{package.group} "@{package.app}/workhorse" && su -c "cd @{package.app}/workhorse && make" - @{package.user} ); then
 	printerror "ERROR: failed to build Gitlab Workhorse"
+	exit 1
+fi
+
+# Build Gitaly
+if ! ( chown -R @{package.user}:@{package.group} "@{package.app}/gitaly" && su -c "cd @{package.app}/gitaly && make" - @{package.user} ); then
+	printerror "ERROR: failed to build Gitaly"
 	exit 1
 fi
 
@@ -69,26 +75,26 @@ if ! cat "@{package.app}/config/overlay.sql" | mysql_exec "@{gitlab.db.name}"; t
 	exit 1
 fi
 
-# Install required Node.js packages
-if ! ( cd "@{package.app}" && npm install --production ); then
-	printerror "ERROR: failed to install Node.js packages"
+# Compile GetText PO files
+if ! ( cd "@{package.app}" && rvm default do bundle exec rake gettext:compile ); then
+	printerror "ERROR: failed to compile GetText PO files for GitLab"
 	exit 1
 fi
 
-# Clean up assets and cache
-if ! ( cd "@{package.app}" && rvm default do bundle exec rake gitlab:assets:clean gitlab:assets:compile cache:clear RAILS_RELATIVE_URL_ROOT=/gitlab ); then
-	printerror "ERROR: failed to clean up assets and cache for GitLab"
+# Compile assets and clean up cache
+if ! ( cd "@{package.app}" && rvm default do bundle exec rake yarn:install gitlab:assets:clean gitlab:assets:compile cache:clear RAILS_RELATIVE_URL_ROOT=/gitlab ); then
+	printerror "ERROR: failed to compile assets and clean up cache for GitLab"
 	exit 1
 fi
 
 # Fix permissions
 chown -R @{package.user}:@{package.group} "@{package.app}" "@{package.data}" "@{package.log}"
 chmod 0600 "@{package.app}/config/secrets.yml"
-chmod 0750 "@{package.data}/uploads"
+chmod 0700 "@{package.data}/uploads"
+chmod 0700 "@{package.data}/tmp/sockets/private"
 chmod -R ug+rwX,o-rwx "@{package.data}/repositories/"
 chmod -R ug-s "@{package.data}/repositories/"
 find "@{package.data}/repositories/" -type d -print0 | xargs -0 chmod g+s
-chmod u+rwx,g=rx,o-rwx "@{package.data}/satellites"
 
 # Configure Git
 su -s /bin/bash - @{package.user} -c "git config --global user.name GitLab"

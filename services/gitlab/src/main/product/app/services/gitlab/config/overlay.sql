@@ -7,7 +7,6 @@
 UPDATE `users`
 SET `email` = '@{root.user}@@{product.domain}',
 `name` = 'System Administrator',
-`theme_id` = 1,
 `authentication_token` = '%{ROOT_PASSWORD_MD5}',
 `username` = '@{root.user}',
 `password_expires_at` = NULL,
@@ -32,7 +31,6 @@ WHERE `provider` = 'cas';
 UPDATE `application_settings`
 SET `default_projects_limit` = 100,
 `signup_enabled` = 0,
-`signin_enabled` = 0,
 `version_check_enabled` = 0,
 `default_group_visibility` = 0;
 

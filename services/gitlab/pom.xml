@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>gitlab</artifactId>
-	<version>8.17.8-2</version>
+	<version>10.1.0-1</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - GitLab</name>
@@ -43,27 +43,32 @@
 		<package.src.file>archive.zip?ref=v${package.version}</package.src.file>
 		<package.dependencies>
 			${package.prefix}-system-git,
+			${package.prefix}-system-go,
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-mysql,
 			${package.prefix}-system-redis,
 			${package.prefix}-system-ruby >= 2.3.0,
 			${package.prefix}-service-portal,
 			${system.package.cmake},
-			${system.package.golang},
 			${system.package.nodejs} >= 4.3.0,
+			${system.package.yarn} >= 0.17.0,
 			${system.package.libxml2-devel},
 			${system.package.libxslt-devel},
-			${system.package.libicu-devel}
+			${system.package.libicu-devel},
+			${system.package.re2-devel}
 		</package.dependencies>
 		<gitlab.db.name>${product.id}_gitlab</gitlab.db.name>
 		<gitlab.db.user>${product.id}_gitlab</gitlab.db.user>
 		<gitlab.bundler.exclude>development:test:postgres:aws:kerberos</gitlab.bundler.exclude>
-		<gitlab.shell.version>4.1.1</gitlab.shell.version>
+		<gitlab.shell.version>5.9.3</gitlab.shell.version>
 		<gitlab.shell.url>https://gitlab.com/gitlab-org/gitlab-shell/repository</gitlab.shell.url>
 		<gitlab.shell.file>archive.zip?ref=v${gitlab.shell.version}</gitlab.shell.file>
-		<gitlab.workhorse.version>1.3.0</gitlab.workhorse.version>
+		<gitlab.workhorse.version>3.2.0</gitlab.workhorse.version>
 		<gitlab.workhorse.url>https://gitlab.com/gitlab-org/gitlab-workhorse/repository</gitlab.workhorse.url>
 		<gitlab.workhorse.file>archive.zip?ref=v${gitlab.workhorse.version}</gitlab.workhorse.file>
+		<gitlab.gitaly.version>0.43.0</gitlab.gitaly.version>
+		<gitlab.gitaly.url>https://gitlab.com/gitlab-org/gitaly/repository</gitlab.gitaly.url>
+		<gitlab.gitaly.file>archive.zip?ref=v${gitlab.gitaly.version}</gitlab.gitaly.file>
 	</properties>
 	
 	<build>
@@ -135,6 +140,16 @@
 									</data>
 									<data>
 										<type>link</type>
+										<linkName>${package.app}/public/uploads</linkName>
+										<linkTarget>${package.data}/uploads</linkTarget>
+										<mapper>
+											<type>perm</type>
+											<user>${package.user}</user>
+											<group>${package.group}</group>
+										</mapper>
+									</data>
+									<data>
+										<type>link</type>
 										<linkName>${package.app}/tmp</linkName>
 										<linkTarget>${package.data}/tmp</linkTarget>
 										<mapper>
@@ -191,6 +206,19 @@
 							<toDir>${project.downloaded.directory}</toDir>
 						</configuration>
 					</execution>
+					<execution>
+						<id>generate-resources-download-gitaly</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>download-single</goal>
+						</goals>
+						<configuration>
+							<skip>${package.disabled}</skip>
+							<url>${gitlab.gitaly.url}</url>
+							<fromFile>${gitlab.gitaly.file}</fromFile>
+							<toDir>${project.downloaded.directory}</toDir>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>
@@ -222,6 +250,11 @@
 								<unzip
 									src="${project.downloaded.directory}/${gitlab.workhorse.file}"
 									dest="${project.app.directory}/workhorse">
+									<cutdirsmapper dirs="1" />
+								</unzip>
+								<unzip
+									src="${project.downloaded.directory}/${gitlab.gitaly.file}"
+									dest="${project.app.directory}/gitaly">
 									<cutdirsmapper dirs="1" />
 								</unzip>
 								<copy file="${project.app.directory}/config/initializers/rack_attack.rb.example"
