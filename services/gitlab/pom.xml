@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>gitlab</artifactId>
-	<version>10.1.0-1</version>
+	<version>10.1.0-2</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - GitLab</name>
