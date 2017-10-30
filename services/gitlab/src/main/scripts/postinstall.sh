@@ -54,6 +54,10 @@ if ! mysql_createdb "@{gitlab.db.name}" || ! mysql_createuser "@{gitlab.db.user}
 	exit 1
 fi
 
+# Fix MySQL settings and elevate privileges
+echo "SET GLOBAL log_bin_trust_function_creators = 1;" | mysql_exec
+echo "GRANT ALL PRIVILEGES ON *.* TO '@{gitlab.db.user}'@'localhost';" | mysql_exec
+
 # Initialize database content
 if [ "$DO_DBINIT" -eq 1 ]; then
 	# Create schema and load default data
@@ -68,6 +72,9 @@ else
 		exit 1
 	fi
 fi
+
+# Revoke MySQL privileges
+echo "REVOKE ALL PRIVILEGES ON *.* FROM '@{gitlab.db.user}'@'localhost';" | mysql_exec
 
 # Apply SQL overlay
 if ! cat "@{package.app}/config/overlay.sql" | mysql_exec "@{gitlab.db.name}"; then
