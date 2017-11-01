@@ -97,7 +97,7 @@ fi
 # Fix permissions
 chown -R @{package.user}:@{package.group} "@{package.app}" "@{package.data}" "@{package.log}"
 chmod 0600 "@{package.app}/config/secrets.yml"
-chmod 0700 "@{package.data}/uploads"
+chmod 0750 "@{package.data}/uploads"
 chmod 0700 "@{package.data}/tmp/sockets/private"
 chmod -R ug+rwX,o-rwx "@{package.data}/repositories/"
 chmod -R ug-s "@{package.data}/repositories/"
