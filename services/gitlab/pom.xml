@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>gitlab</artifactId>
-	<version>10.1.0-3</version>
+	<version>10.1.1-1</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - GitLab</name>
@@ -66,7 +66,7 @@
 		<gitlab.workhorse.version>3.2.0</gitlab.workhorse.version>
 		<gitlab.workhorse.url>https://gitlab.com/gitlab-org/gitlab-workhorse/repository</gitlab.workhorse.url>
 		<gitlab.workhorse.file>archive.zip?ref=v${gitlab.workhorse.version}</gitlab.workhorse.file>
-		<gitlab.gitaly.version>0.43.0</gitlab.gitaly.version>
+		<gitlab.gitaly.version>0.43.1</gitlab.gitaly.version>
 		<gitlab.gitaly.url>https://gitlab.com/gitlab-org/gitaly/repository</gitlab.gitaly.url>
 		<gitlab.gitaly.file>archive.zip?ref=v${gitlab.gitaly.version}</gitlab.gitaly.file>
 	</properties>
