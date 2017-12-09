@@ -1,10 +1,4 @@
 @{package.log}/svn_log {
-    missingok
-    notifempty
-    weekly
-    rotate 52
-    dateext
-    compress
     delaycompress
     create 0644 @{httpd.user} @{httpd.group}
     sharedscripts
@@ -14,12 +8,6 @@
 }
 
 @{package.log}/ldap_sync.log {
-    missingok
-    notifempty
-    weekly
-    rotate 52
-    dateext
-    compress
     delaycompress
     create 0644 @{product.user} @{product.group}
 }
