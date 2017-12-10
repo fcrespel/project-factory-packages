@@ -1,10 +1,4 @@
 @{package.log}/production.log {
-    missingok
-    notifempty
-    weekly
-    rotate 52
-    dateext
-    compress
     delaycompress
     create 0644 @{package.user} @{package.group}
     sharedscripts
@@ -14,12 +8,6 @@
 }
 
 @{package.log}/*_sync.log {
-    missingok
-    notifempty
-    weekly
-    rotate 52
-    dateext
-    compress
     delaycompress
     create 0644 @{product.user} @{product.group}
 }

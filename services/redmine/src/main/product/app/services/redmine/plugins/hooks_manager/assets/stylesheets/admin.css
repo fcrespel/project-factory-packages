@@ -1,0 +1,179 @@
+#hooks-data textarea {
+    width: 98%;
+}
+#hooks-data #form-content {
+    padding-left: 10px;
+    overflow: auto;
+}
+#hooks-data #form-content p {
+    margin: 0.5em 0;
+}
+#hooks-data #form-content p.instruction {
+    font-weight: bold;
+    margin: 0;
+}
+#hooks-data #form-content p.instruction code {
+    font-weight: normal;
+}
+#hooks-data #hook option {
+    padding-left: 16px;
+}
+#hooks-data #hook option.hook {
+    background-image: url(../../../images/toggle_check.png);
+    background-position: 2px 2px;
+    background-repeat: no-repeat;
+}
+#hooks-data .tabs {
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+}
+div.hooks-navigation {
+    float: left;
+}
+div.hooks-navigation p {
+    margin: 0.75em 0;
+}
+#outline {
+    width: 300px;
+    border: 1px solid #DDD;
+}
+#outline .hooks-top-menu {
+    height: 4px;
+    background-color: #2C4056;
+}
+#outline .hooks-header {
+    height: 14px;
+    background-color: #507AAA;
+}
+#outline .hooks-main .hooks-sidebar {
+    padding: 2px 2px 2px 0;
+    width: 22%;
+    float: right;
+}
+#outline .hooks-main .hooks-content {
+    padding: 5px 2px 20px 2px;
+    width: 75%;
+    border-right: 1px solid #DDD;
+    overflow: hidden;
+}
+#outline .hooks-main.nosidebar .hooks-content {
+    border-right: none;
+    width: auto;
+}
+#outline .hooks-main .hooks-contextual {
+    position: relative;
+    height: 5px;
+}
+#outline .hooks-contextual #hook-content {
+    position: absolute;
+    height: 5px;
+    width: 30px;
+    top: -2px;
+    right: 2px;
+}
+#outline .hooks-main .hooks-left {
+    padding: 0px 2px 5px 2px;
+    width: 48%;
+    float: left;
+    overflow: hidden;
+}
+#outline .hooks-main .hooks-right {
+    padding: 0px 2px 5px 2px;
+    width: 48%;
+    float: right;
+    overflow: hidden;
+}
+#outline .hooks-main .hooks-table {
+    height: 75px;
+    margin: 5px 0 10px 0;
+    background-color: #F6F7F8;
+    border: 1px solid #E4E4E4;
+}
+#outline .hooks-main .hooks-issue {
+    height: 75px;
+    background-color: #FFD;
+    border: 1px solid #D7D7D7;
+}
+#outline .hooks-content .hooks-data,
+#outline .hooks-left .hooks-data,
+#outline .hooks-right .hooks-data {
+    height: 75px;
+    margin: 2px 0;
+    background-color: #F6F6F6;
+    border: 1px solid #E4E4E4;
+}
+#outline .hooks-left .hooks-data {
+    height: 50px;
+}
+#outline .hooks-box {
+    height: 15px;
+    margin: 2px 0;
+    background-color: #F6F6F6;
+    border: 1px solid #E4E4E4;
+}
+#outline .hooks-login {
+    height: 30px;
+    margin: 2px 0;
+    background-color: #F6F6F6;
+    border: 1px solid #E4E4E4;
+}
+#outline .hooks-form {
+    height: 30px;
+    margin: 2px 0;
+    background-color: #F6F6F6;
+    border: 1px solid #E4E4E4;
+}
+#outline .hooks-left .hooks-box,
+#outline .hooks-right .hooks-box {
+    height: 50px;
+}
+#outline .hooks-content .hooks-left .hooks-box,
+#outline .hooks-content .hooks-right .hooks-box {
+    height: 30px;
+}
+#outline .hooks-admin .hooks-sidebar .hooks-box {
+    height: 75px;
+}
+#outline .hooks-footer {
+    clear: both;
+}
+#outline #hook-content {
+    height: 10px;
+}
+#outline .hooks-issue #hook-content {
+    margin-top: 50px;
+}
+#outline .hooks-sidebar #hook-content {
+    height: 25px;
+}
+#outline .hooks-data #hook-content,
+#outline .hooks-form #hook-content,
+#outline .hooks-issue #hook-content {
+    margin: 2px;
+}
+#outline #hook-content {
+    background-color: #FFEBC1;
+    border: 1px solid #FDBF3B;
+}
+table.hooks {
+    border-collapse: collapse;
+    border: 1px solid #DDDDDD;
+    width: 300px;
+    height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: block;
+    white-space: nowrap;
+}
+table.hooks tr.group td {
+    padding: 2px;
+    border: none;
+}
+table.hooks a {
+    padding-right: 1px;
+}
+table.hooks a.selected {
+    background-color: #9DB9D5;
+    color: #FFFFFF;
+    border-radius: 2px;
+}

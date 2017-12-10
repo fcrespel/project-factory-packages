@@ -18,7 +18,7 @@ class HooksManagerHook  < Redmine::Hook::ViewListener
     def method_missing(symbol, *args, &block)
         if HooksManager::Placeholders[symbol]
             hook = Hook.find_by_hook(symbol.to_s)
-            return hook.html_code if hook
+            return hook.html_code.html_safe if hook
         end
         return ''
     end

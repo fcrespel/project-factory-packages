@@ -1,0 +1,2 @@
+gem 'jenkins_api_client'
+gem 'haml-rails'
