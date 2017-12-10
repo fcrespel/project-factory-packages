@@ -54,8 +54,7 @@ if ! mysql_createdb "@{gitlab.db.name}" || ! mysql_createuser "@{gitlab.db.user}
 	exit 1
 fi
 
-# Fix MySQL settings and elevate privileges
-echo "SET GLOBAL log_bin_trust_function_creators = 1;" | mysql_exec
+# Grant MYSQL privileges
 echo "GRANT ALL PRIVILEGES ON *.* TO '@{gitlab.db.user}'@'localhost';" | mysql_exec
 
 # Initialize database content
@@ -79,6 +78,12 @@ echo "REVOKE ALL PRIVILEGES ON *.* FROM '@{gitlab.db.user}'@'localhost';" | mysq
 # Apply SQL overlay
 if ! cat "@{package.app}/config/overlay.sql" | mysql_exec "@{gitlab.db.name}"; then
 	printerror "ERROR: failed to apply overlay to GitLab database"
+	exit 1
+fi
+
+# Update MySQL strings limits
+if ! ( cd "@{package.app}" && rvm default do bundle exec rake add_limits_mysql ); then
+	printerror "ERROR: failed to set MySQL strings limits for GitLab"
 	exit 1
 fi
 
