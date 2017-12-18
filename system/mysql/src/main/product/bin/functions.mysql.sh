@@ -7,11 +7,7 @@
 # Execute a MySQL command from standard input as the root user (without password)
 function mysql_exec_nopw
 {
-	if [ -z "$MYSQL_SOCKET" ]; then
-		printerror "ERROR: MySQL socket path is not defined or is empty"
-		return 1
-	fi
-	mysql --socket=$MYSQL_SOCKET -uroot $@
+	mysql --defaults-file="$PRODUCT_APP/system/mysql/conf/my.cnf" -uroot $@
 }
 
 # Execute a MySQL command from standard input as the root user (with password)
@@ -40,6 +36,30 @@ function mysql_createdb
 			printerror "ERROR: failed to create '$DBNAME' MySQL database"
 			return 1
 		fi
+	fi
+}
+
+# Upgrade a MySQL database's storage engine and encoding
+function mysql_upgradedb
+{
+	local DBNAME="$1"
+	if [ -z "$MYSQL_CHARSET" ]; then
+		MYSQL_CHARSET="utf8"
+	fi
+	if [ -z "$MYSQL_COLLATION" ]; then
+		MYSQL_COLLATION="${MYSQL_CHARSET}_general_ci"
+	fi
+	if ! ( echo "SELECT CONCAT('ALTER TABLE \`', TABLE_NAME,'\` ENGINE=InnoDB;') AS 'Statements' FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='${DBNAME}' AND TABLE_TYPE='BASE TABLE';" | mysql_exec | tail -n +2 ) | mysql_exec "${DBNAME}"; then
+		printerror "ERROR: failed to set ENGINE=InnoDB for '$DBNAME' MySQL database"
+		return 1
+	fi
+	if ! ( echo "SELECT CONCAT('ALTER TABLE \`', TABLE_NAME,'\` ROW_FORMAT=DYNAMIC;') AS 'Statements' FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='${DBNAME}' AND TABLE_TYPE='BASE TABLE' AND ROW_FORMAT!='Dynamic';" | mysql_exec | tail -n +2 ) | mysql_exec "${DBNAME}"; then
+		printerror "ERROR: failed to set ROW_FORMAT=DYNAMIC for '$DBNAME' MySQL database"
+		return 1
+	fi
+	if ! ( echo "SET foreign_key_checks = 0;"; echo "SELECT CONCAT('ALTER TABLE \`', TABLE_NAME,'\` CONVERT TO CHARACTER SET ${MYSQL_CHARSET} COLLATE ${MYSQL_COLLATION};') AS 'Statements' FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='${DBNAME}' AND TABLE_COLLATION!='${MYSQL_COLLATION}' AND TABLE_TYPE='BASE TABLE';" | mysql_exec | tail -n +2; echo "SET foreign_key_checks = 1;" ) | mysql_exec "${DBNAME}"; then
+		printerror "ERROR: failed to convert tables to '$MYSQL_CHARSET' charset for '$DBNAME' MySQL database"
+		return 1
 	fi
 }
 
