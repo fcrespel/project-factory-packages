@@ -1,13 +1,21 @@
+MYSQL_VERSION=`@{system.mysql.bin.mysqld} --version`
+
 # Store configuration
 storevar MYSQL_SOCKET "@{package.data}/mysql.sock"
+storevar MYSQL_CHARSET "@{mysql.charset}"
+storevar MYSQL_COLLATION "@{mysql.collation}"
 
 # Fix data and app/run directory permissions
 chown -R @{package.user}:@{package.group} "@{package.data}"
 chown -R @{package.user}:@{package.group} "@{package.app}/run"
 
+# Enable config options for MySQL 5.5+
+if [[ "$MYSQL_VERSION" =~ 5\.[5-9]\. ]]; then
+	sed -i 's/^#innodb/innodb/g' "@{package.app}/conf/my.cnf"
+fi
+
 # Fill the data directory
 if [ ! -e "@{package.data}/mysql" ]; then
-	MYSQL_VERSION=`@{system.mysql.bin.mysqld} --version`
 	if [[ "$MYSQL_VERSION" =~ 5\.[7-9]\. ]]; then
 		rm -f "@{package.data}/.flag"
 		if ! @{system.mysql.bin.mysqld} --defaults-file="@{package.app}/conf/my.cnf" --initialize-insecure; then
@@ -70,6 +78,9 @@ echo "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';" | mysql_exec > /de
 
 # Flush privileges
 echo "FLUSH PRIVILEGES;" | mysql_exec > /dev/null 2>&1
+
+# Upgrade tables
+mysql_upgrade --defaults-file="@{package.app}/conf/my.cnf" -uroot -p$MYSQL_ROOT_PASSWORD
 
 # Reload Nagios if already running
 reloadservice @{nagios.service}
