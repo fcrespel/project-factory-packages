@@ -81,6 +81,15 @@ if ! cat "@{package.app}/config/overlay.sql" | mysql_exec "@{gitlab.db.name}"; t
 	exit 1
 fi
 
+# Upgrade database storage and encoding if necessary
+if ! mysql_upgradedb "@{gitlab.db.name}"; then
+	exit 1
+fi
+
+# Set database encoding in config
+sed -i 's#encoding: utf8$#encoding: @{mysql.charset}#g' "@{package.app}/config/database.yml"
+sed -i 's#collation: utf8_general_ci$#collation: @{mysql.collation}#g' "@{package.app}/config/database.yml"
+
 # Update MySQL strings limits
 if ! ( cd "@{package.app}" && rvm default do bundle exec rake add_limits_mysql ); then
 	printerror "ERROR: failed to set MySQL strings limits for GitLab"
