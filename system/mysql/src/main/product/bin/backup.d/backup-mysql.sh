@@ -12,11 +12,11 @@ TMP_DIR=`mktemp -d --tmpdir=@{product.tmp}`
 MYSQLSHOW=/usr/bin/mysqlshow
 MYSQLDUMP=/usr/bin/mysqldump
 
-MYSQL_SOCKET="@{package.data}/mysql.sock"
+MYSQL_CONF="@{package.app}/conf/my.cnf"
 MYSQL_USER="@{mysql.backup.user}"
 MYSQL_PW="%{MYSQL_BACKUP_PASSWORD}"
 
-DB_EXCLUDE="test information_schema"
+DB_EXCLUDE="test information_schema performance_schema"
 
 
 ### DO NOT MODIFY BELOW THIS LINE #############################################
@@ -32,9 +32,12 @@ elif [ ! -d "$TMP_DIR" ]; then
 	FAILURE=1
 
 else
-	DB_LIST=`$MYSQLSHOW --socket=$MYSQL_SOCKET -u$MYSQL_USER -p$MYSQL_PW | tail -n+4 | head -n-1 | cut -d' ' -f2`
-	
-	for DB in $DB_LIST ; do
+	DB_LIST="$1"
+	if [ -z "$DB_LIST" ]; then
+		DB_LIST=`$MYSQLSHOW --defaults-file="$MYSQL_CONF" -u$MYSQL_USER -p$MYSQL_PW | tail -n+4 | head -n-1 | cut -d' ' -f2`
+	fi
+
+	for DB in $DB_LIST; do
 		ISEXCLUDED=0
 		for EXCL in $DB_EXCLUDE ; do
 			if [ "$DB" = "$EXCL" ] ; then
@@ -59,7 +62,7 @@ else
 		
 		# Create backup archive
 		echo "Backing up '$DB' ..."
-		if $MYSQLDUMP -c --opt --socket=$MYSQL_SOCKET -u$MYSQL_USER -p$MYSQL_PW $DB | xz > "$TMP_DIR/$ARCHIVE_NAME" ; then
+		if $MYSQLDUMP --defaults-file="$MYSQL_CONF" -c --opt -u$MYSQL_USER -p$MYSQL_PW $DB | xz > "$TMP_DIR/$ARCHIVE_NAME" ; then
 			if touch "$ARCHIVE_DIR/$ARCHIVE_NAME" && cp "$TMP_DIR/$ARCHIVE_NAME" "$ARCHIVE_DIR/$ARCHIVE_NAME"; then
 				rm -f "$TMP_DIR/$ARCHIVE_NAME"
 				NUMBER=1
