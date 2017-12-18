@@ -60,6 +60,15 @@ if [ "$DO_DBINIT" -eq 1 ]; then
 	fi
 fi
 
+# Upgrade database storage and encoding if necessary
+if ! mysql_upgradedb "@{redmine.db.name}"; then
+	exit 1
+fi
+
+# Set database encoding in config
+sed -i 's#encoding: utf8$#encoding: @{mysql.charset}#g' "@{package.app}/config/database.yml"
+sed -i 's#collation: utf8_general_ci$#collation: @{mysql.collation}#g' "@{package.app}/config/database.yml"
+
 # Move attachment files to subdirectories
 ( cd "@{package.app}" && rvm default do bundle exec rake redmine:attachments:move_to_subdirectories ) > /dev/null 2>&1
 
