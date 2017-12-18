@@ -9,7 +9,7 @@ MAX_BACKUPS=30
 BACKUP_DIR="@{package.backup}"
 TMP_DIR=`mktemp -d --tmpdir=@{product.tmp}`
 
-SLAPCAT=/usr/sbin/slapcat
+SLAPCAT="@{system.openldap.bin.slapcat}"
 
 SLAPD_CONF_DIR="@{package.app}/conf.d"
 BASEDN_LIST="@{ldap.base.dn}"
