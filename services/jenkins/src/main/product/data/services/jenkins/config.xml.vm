@@ -82,6 +82,7 @@
     <permission>hudson.model.Item.Release:${ROOT_USER}</permission>
     <permission>hudson.model.Item.ViewStatus:anonymous</permission>
     <permission>hudson.model.Item.ViewStatus:authenticated</permission>
+    <permission>hudson.model.Item.ViewStatus:${BOT_USER}</permission>
     <permission>hudson.model.Item.ViewStatus:${PRODUCT_GROUP_ADMINS}</permission>
     <permission>hudson.model.Item.ViewStatus:${PRODUCT_GROUP_USERS}</permission>
     <permission>hudson.model.Item.ViewStatus:${ROOT_USER}</permission>
@@ -104,9 +105,18 @@
     <permission>hudson.model.View.Read:${ROOT_USER}</permission>
     <permission>hudson.scm.SCM.Tag:${PRODUCT_GROUP_ADMINS}</permission>
     <permission>hudson.scm.SCM.Tag:${ROOT_USER}</permission>
+    <permission>jenkins.metrics.api.Metrics.HealthCheck:${BOT_USER}</permission>
+    <permission>jenkins.metrics.api.Metrics.HealthCheck:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>jenkins.metrics.api.Metrics.HealthCheck:${ROOT_USER}</permission>
+    <permission>jenkins.metrics.api.Metrics.ThreadDump:${BOT_USER}</permission>
+    <permission>jenkins.metrics.api.Metrics.ThreadDump:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>jenkins.metrics.api.Metrics.ThreadDump:${ROOT_USER}</permission>
+    <permission>jenkins.metrics.api.Metrics.View:${BOT_USER}</permission>
+    <permission>jenkins.metrics.api.Metrics.View:${PRODUCT_GROUP_ADMINS}</permission>
+    <permission>jenkins.metrics.api.Metrics.View:${ROOT_USER}</permission>
   </authorizationStrategy>
 #if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
-  <securityRealm class="org.jenkinsci.plugins.cas.CasSecurityRealm" plugin="cas-plugin@1.4.0">
+  <securityRealm class="org.jenkinsci.plugins.cas.CasSecurityRealm" plugin="cas-plugin@1.4.1">
     <casServerUrl>${CAS_URL}</casServerUrl>
     <casProtocol class="org.jenkinsci.plugins.cas.protocols.Saml11Protocol">
       <authoritiesAttribute>groups,roles</authoritiesAttribute>
@@ -172,7 +182,7 @@
         <hudson.views.LastSuccessColumn/>
         <hudson.views.LastFailureColumn/>
         <hudson.views.LastDurationColumn/>
-        <hudson.plugins.favorite.column.FavoriteColumn plugin="favorite@2.3.0"/>
+        <hudson.plugins.favorite.column.FavoriteColumn plugin="favorite@2.3.1"/>
         <org.jenkins.ci.plugins.column.console.LastBuildColumn plugin="console-column-plugin@1.5"/>
         <hudson.views.BuildButtonColumn/>
       </columns>
@@ -190,7 +200,7 @@
         <comparator class="hudson.util.CaseInsensitiveComparator" reference="../../../listView/jobNames/comparator"/>
       </jobNames>
       <jobFilters>
-        <hudson.plugins.favorite.filter.FavoriteFilter plugin="favorite@2.3.0"/>
+        <hudson.plugins.favorite.filter.FavoriteFilter plugin="favorite@2.3.1"/>
       </jobFilters>
       <columns>
         <hudson.views.StatusColumn/>
@@ -199,7 +209,7 @@
         <hudson.views.LastSuccessColumn/>
         <hudson.views.LastFailureColumn/>
         <hudson.views.LastDurationColumn/>
-        <hudson.plugins.favorite.column.FavoriteColumn plugin="favorite@2.3.0"/>
+        <hudson.plugins.favorite.column.FavoriteColumn plugin="favorite@2.3.1"/>
         <org.jenkins.ci.plugins.column.console.LastBuildColumn plugin="console-column-plugin@1.5"/>
         <hudson.views.BuildButtonColumn/>
       </columns>
@@ -209,7 +219,14 @@
   </views>
   <primaryView>Tous</primaryView>
   <slaveAgentPort>${PACKAGE_PORT_JNLP}</slaveAgentPort>
+  <disabledAgentProtocols>
+    <string>JNLP-connect</string>
+    <string>JNLP2-connect</string>
+  </disabledAgentProtocols>
   <label></label>
+  <crumbIssuer class="hudson.security.csrf.DefaultCrumbIssuer">
+    <excludeClientIPFromCrumb>true</excludeClientIPFromCrumb>
+  </crumbIssuer>
   <nodeProperties/>
   <globalNodeProperties/>
   <noUsageStatistics>true</noUsageStatistics>
