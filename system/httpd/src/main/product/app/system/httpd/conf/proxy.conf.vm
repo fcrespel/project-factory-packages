@@ -35,8 +35,7 @@
 #else
 	RequestHeader set X-Forwarded-Proto "http"
 	RequestHeader set X-Forwarded-Port "${HTTPD_VHOST_PORT_HTTP}"
-	SetEnv proxy-sendchunked 1
-	AllowEncodedSlashes NoDecode
+	Include ${HTTPD_APP}/conf/proxy_common.conf
 	ProxyPass / http://${HTTPD_HOST}:${HTTPD_PORT_HTTP}/ nocanon
 	ProxyPassReverse / http://${HTTPD_HOST}:${HTTPD_PORT_HTTP}/
 #end
@@ -65,8 +64,7 @@
 
 	RequestHeader set X-Forwarded-Proto "https"
 	RequestHeader set X-Forwarded-Port "${HTTPD_VHOST_PORT_HTTPS}"
-	SetEnv proxy-sendchunked 1
-	AllowEncodedSlashes NoDecode
+	Include ${HTTPD_APP}/conf/proxy_common.conf
 	ProxyPass / http://${HTTPD_HOST}:${HTTPD_PORT_HTTPS}/ nocanon
 	ProxyPassReverse / http://${HTTPD_HOST}:${HTTPD_PORT_HTTPS}/
 
