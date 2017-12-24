@@ -53,7 +53,7 @@ fi
 
 # Configure system HTTPD
 if which a2enmod > /dev/null 2>&1; then
-	a2enmod ssl proxy proxy_http proxy_ajp headers version > /dev/null 2>&1
+	a2enmod ssl proxy proxy_http proxy_ajp headers rewrite version > /dev/null 2>&1
 fi
 if which a2ensite > /dev/null 2>&1; then
 	a2ensite "@{product.id}.conf" > /dev/null 2>&1

@@ -1,0 +1,23 @@
+#set( $D = '$' )
+#set( $PACKAGE_APP = ${project.properties.getProperty('package.app')} )
+#set( $HTTPD_XFRAMEOPTIONS_ENABLED = ${project.properties.getProperty('httpd.xframeoptions.enabled')} )
+# httpd common VirtualHost configuration
+
+AllowEncodedSlashes NoDecode
+RequestHeader unset Proxy early
+#if( ${HTTPD_XFRAMEOPTIONS_ENABLED} == "1" || ${HTTPD_XFRAMEOPTIONS_ENABLED} == "true" )
+Header always set X-Frame-Options SAMEORIGIN
+#end
+
+# Maintenance redirection
+RewriteEngine On
+RewriteCond ${PACKAGE_APP}/run/maintenance/${D}1 -f
+RewriteRule ^/(?:admin/)?([^/]+)(?:/|${D}) - [R=503,L]
+
+# Include optional local configuration
+<IfVersion < 2.4>
+	Include conf/httpd_local?conf
+</IfVersion>
+<IfVersion >= 2.4>
+	IncludeOptional conf/httpd_local?conf
+</IfVersion>
