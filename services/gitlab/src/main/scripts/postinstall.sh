@@ -17,6 +17,12 @@ chmod +x @{package.app}/bin/* @{package.app}/lib/support/init.d/gitlab @{package
 usermod -s /bin/bash @{package.user} > /dev/null 2>&1
 mkdir -p "@{package.root}/.ssh" && touch "@{package.root}/.ssh/authorized_keys"
 
+# Build shell
+if ! ( chown -R @{package.user}:@{package.group} "@{package.app}/shell" && su -c "cd @{package.app}/shell && bin/compile" - @{package.user} ); then
+	printerror "ERROR: failed to build Gitlab Shell"
+	exit 1
+fi
+
 # Build workhorse
 if ! ( chown -R @{package.user}:@{package.group} "@{package.app}/workhorse" && su -c "cd @{package.app}/workhorse && make" - @{package.user} ); then
 	printerror "ERROR: failed to build Gitlab Workhorse"
