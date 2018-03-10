@@ -3,9 +3,23 @@ NPROC=`nproc`
 
 # Interpolate templates
 ensurepassword GITLAB_DB_PASSWORD
+GITLAB_UUID=`uuidgen`
+GITLAB_RUNNERS_TOKEN=`genpassword 20`
+GITLAB_HEALTHCHECK_TOKEN=`genpassword 20`
+if which htpasswd >/dev/null 2>&1; then
+	ROOT_PASSWORD_BCRYPT=`htpasswd -bnBC 10 "" "$ROOT_PASSWORD" | tr -d ':\n' | sed 's/$2y/$2a/'`
+	BOT_PASSWORD_BCRYPT=`htpasswd -bnBC 10 "" "$BOT_PASSWORD" | tr -d ':\n' | sed 's/$2y/$2a/'`
+elif which htpasswd2 >/dev/null 2>&1; then
+	ROOT_PASSWORD_BCRYPT=`htpasswd2 -bnBC 10 "" "$ROOT_PASSWORD" | tr -d ':\n' | sed 's/$2y/$2a/'`
+	BOT_PASSWORD_BCRYPT=`htpasswd2 -bnBC 10 "" "$BOT_PASSWORD" | tr -d ':\n' | sed 's/$2y/$2a/'`
+else
+	printerror "ERROR: failed to generate bcrypt password for GitLab"
+	exit 1
+fi
 interpolatetemplate_inplace "@{package.app}/config/database.yml"
 interpolatetemplate_inplace "@{package.app}/config/gitlab.yml"
-interpolatetemplate_inplace "@{package.app}/config/overlay.sql"
+interpolatetemplate_inplace "@{package.app}/config/db_data.sql"
+interpolatetemplate_inplace "@{package.app}/config/db_overlay.sql"
 if [ ! -e "@{package.app}/config/secrets.yml" ]; then
 	cp "@{package.app}/config/secrets.yml.example" "@{package.app}/config/secrets.yml"
 fi
@@ -65,29 +79,40 @@ echo "GRANT ALL PRIVILEGES ON *.* TO '@{gitlab.db.user}'@'localhost';" | mysql_e
 
 # Initialize database content
 if [ "$DO_DBINIT" -eq 1 ]; then
-	# Create schema and load default data
-	if ! ( cd "@{package.app}" && rvm default do bundle exec rake gitlab:setup force=yes GITLAB_ROOT_PASSWORD="$ROOT_PASSWORD" GITLAB_ROOT_EMAIL="@{root.user}@@{product.domain}" ); then
+	# Create schema
+	if ! cat "@{package.app}/config/db_schema.sql" | mysql_exec "@{gitlab.db.name}"; then
 		printerror "ERROR: failed to initialize GitLab database"
 		exit 1
 	fi
-else
-	# Migrate schema and data
-	if ! ( cd "@{package.app}" && rvm default do bundle exec rake db:migrate ); then
-		printerror "ERROR: failed to migrate GitLab database"
+	
+	# Load default data
+	if ! cat "@{package.app}/config/db_data.sql" | mysql_exec "@{gitlab.db.name}"; then
+		printerror "ERROR: failed to load default data into GitLab database"
 		exit 1
 	fi
+fi
+
+# Upgrade database storage and encoding if necessary (step 1)
+if ! mysql_upgradedb "@{gitlab.db.name}"; then
+	exit 1
+fi
+
+# Migrate schema and data
+if ! ( cd "@{package.app}" && rvm default do bundle exec rake db:migrate ); then
+	printerror "ERROR: failed to migrate GitLab database"
+	exit 1
+fi
+
+# Apply SQL overlay
+if ! cat "@{package.app}/config/db_overlay.sql" | mysql_exec "@{gitlab.db.name}"; then
+	printerror "ERROR: failed to apply overlay to GitLab database"
+	exit 1
 fi
 
 # Revoke MySQL privileges
 echo "REVOKE ALL PRIVILEGES ON *.* FROM '@{gitlab.db.user}'@'localhost';" | mysql_exec
 
-# Apply SQL overlay
-if ! cat "@{package.app}/config/overlay.sql" | mysql_exec "@{gitlab.db.name}"; then
-	printerror "ERROR: failed to apply overlay to GitLab database"
-	exit 1
-fi
-
-# Upgrade database storage and encoding if necessary
+# Upgrade database storage and encoding if necessary (step 2)
 if ! mysql_upgradedb "@{gitlab.db.name}"; then
 	exit 1
 fi
