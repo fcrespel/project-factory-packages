@@ -1,5 +1,5 @@
 --
--- Project Factory Setup - GitLab
+-- Project Factory Setup - GitLab overlay
 -- By Fabien CRESPEL <fabien@crespel.net>
 --
 
@@ -9,6 +9,7 @@ SET foreign_key_checks = 0;
 -- Root user
 UPDATE `users`
 SET `email` = '@{root.user}@@{product.domain}',
+`encrypted_password` = '%{ROOT_PASSWORD_BCRYPT}',
 `name` = 'System Administrator',
 `username` = '@{root.user}',
 `password_expires_at` = NULL,
@@ -18,7 +19,7 @@ WHERE `id` = 1;
 
 -- Bot user
 REPLACE INTO `users` (`id`, `email`, `encrypted_password`, `created_at`, `updated_at`, `name`, `admin`, `projects_limit`, `username`, `can_create_group`, `can_create_team`, `state`, `confirmed_at`, `notification_email`, `password_automatically_set`) VALUES
-(2, '@{bot.user}@@{product.domain}', '$2a$10$Nprk4jXZzKbHaFLNtG64auCOe4OMCjYe/iNwnkTcTvmmfPjvXyRmO', SYSDATE(), SYSDATE(), 'System Bot', 1, 0, '@{bot.user}', 0, 0, 'active', SYSDATE(), '@{bot.user}@@{product.domain}', 1);
+(2, '@{bot.user}@@{product.domain}', '%{BOT_PASSWORD_BCRYPT}', SYSDATE(), SYSDATE(), 'System Bot', 1, 0, '@{bot.user}', 0, 0, 'active', SYSDATE(), '@{bot.user}@@{product.domain}', 1);
 
 -- Identities
 REPLACE INTO `identities` (`id`, `extern_uid`, `provider`, `user_id`, `created_at`, `updated_at`) VALUES
