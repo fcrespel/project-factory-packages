@@ -164,6 +164,12 @@ production: &base
     # The location where LFS objects are stored (default: shared/lfs-objects).
     storage_path: ${PACKAGE_DATA}/shared/lfs-objects
 
+  $H$H Uploads (attachments, avatars, etc...)
+  uploads:
+    # The location where uploads objects are stored (default: public/).
+    # storage_path: public/
+    # base_dir: uploads/-/system
+
   $H$H GitLab Pages
   pages:
     enabled: false
@@ -182,8 +188,8 @@ production: &base
     https: false
 #end
     artifacts_server: true
-    # external_http: "1.1.1.1:80" # If defined, enables custom domain support in GitLab Pages
-    # external_https: "1.1.1.1:443" # If defined, enables custom domain and certificate support in GitLab Pages
+    # external_http: ["1.1.1.1:80", "[2001::1]:80"] # If defined, enables custom domain support in GitLab Pages
+    # external_https: ["1.1.1.1:443", "[2001::1]:443"] # If defined, enables custom domain and certificate support in GitLab Pages
 
   $H$H Mattermost
   $H$H For enabling Add to Mattermost button
@@ -192,14 +198,16 @@ production: &base
     host: 'https://mattermost.example.com'
 
   $H$H Gravatar
-  $H$H For Libravatar see: http://doc.gitlab.com/ce/customization/libravatar.html
+  $H$H If using gravatar.com, there's nothing to change here. For Libravatar
+  $H$H you'll need to provide the custom URLs. For more information,
+  $H$H see: https://docs.gitlab.com/ee/customization/libravatar.html
   gravatar:
-    # gravatar urls: possible placeholders: %{hash} %{size} %{email} %{username}
-    # plain_url: "http://..."     # default: http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon
+    # Gravatar/Libravatar URLs: possible placeholders: %{hash} %{size} %{email} %{username}
+    # plain_url: "http://..."     # default: https://www.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon
     # ssl_url:   "https://..."    # default: https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon
 
   $H$H Auxiliary jobs
-  # Periodically executed jobs, to self-heal Gitlab, do external synchronizations, etc.
+  # Periodically executed jobs, to self-heal GitLab, do external synchronizations, etc.
   # Please read here for more information: https://github.com/ondrejbartas/sidekiq-cron#adding-cron-job
   cron_jobs:
     # Flag stuck CI jobs as failed
@@ -222,6 +230,10 @@ production: &base
     # Remove outdated repository archives
     repository_archive_cache_worker:
       cron: "0 * * * *"
+
+    # Verify custom GitLab Pages domains
+    pages_domain_verification_cron_worker:
+      cron: "*/15 * * * *"
 
   registry:
     # enabled: true
@@ -369,6 +381,9 @@ production: &base
           name:       ['${LDAP_USER_DISPLAYNAME_ATTR}', '${LDAP_USER_COMMONNAME_ATTR}']
           first_name: '${LDAP_USER_FIRSTNAME_ATTR}'
           last_name:  '${LDAP_USER_LASTNAME_ATTR}'
+
+        # If lowercase_usernames is enabled, GitLab will lower case the username.
+        lowercase_usernames: false
 
       # GitLab EE only: add more LDAP servers
       # Choose an ID made of a-z and 0-9 . This ID will be stored in the database
@@ -652,6 +667,10 @@ test:
     enabled: true
   lfs:
     enabled: false
+  artifacts:
+    path: tmp/tests/artifacts
+  uploads:
+    storage_path: tmp/tests/public
   gitlab:
     host: localhost
     port: 80
@@ -662,8 +681,6 @@ test:
     # user: YOUR_USERNAME
   pages:
     path: tmp/tests/pages
-  artifacts:
-    path: tmp/tests/artifacts
   repositories:
     storages:
       default:

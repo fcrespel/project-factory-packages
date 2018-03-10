@@ -19,22 +19,12 @@ http_settings:
 #  ca_path: /etc/pki/tls/certs
   self_signed_cert: true
 
-# Repositories path
-# Give the canonicalized absolute pathname,
-# REPOS_PATH MUST NOT CONTAIN ANY SYMLINK!!!
-# Check twice that none of the components is a symlink, including "/home".
-repos_path: "@{package.data}/repositories"
-
 # File used as authorized_keys for gitlab user
 auth_file: "@{package.root}/.ssh/authorized_keys"
 
 # File that contains the secret key for verifying access to GitLab.
-# Default is .gitlab_shell_secret in the gitlab-shell directory.
+# Default is .gitlab_shell_secret in the root directory.
 # secret_file: "/home/git/gitlab-shell/.gitlab_shell_secret"
-
-# Parent directory for global custom hook directories (pre-receive.d, update.d, post-receive.d)
-# Default is hooks in the gitlab-shell directory.
-# custom_hooks_dir: "/home/git/gitlab-shell/hooks"
 
 # Redis settings used for pushing commit notices to gitlab
 redis:
@@ -73,10 +63,3 @@ audit_usernames: false
 # For Debian and Ubuntu systems this can be done with: sudo apt-get install git-annex
 # For CentOS: sudo yum install epel-release && sudo yum install git-annex
 git_annex_enabled: false
-
-# Git trace log file.
-# If set, git commands receive GIT_TRACE* environment variables
-# See https://git-scm.com/book/es/v2/Git-Internals-Environment-Variables#Debugging for documentation
-# An absolute path starting with / – the trace output will be appended to that file.
-# It needs to exist so we can check permissions and avoid to throwing warnings to the users.
-git_trace_log_file:
