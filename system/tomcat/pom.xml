@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>tomcat</artifactId>
-	<version>8.0.46-1</version>
+	<version>8.0.50-1</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory System - Tomcat</name>
