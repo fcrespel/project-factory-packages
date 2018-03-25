@@ -1,33 +1,23 @@
 server:
   port: @{package.port.http}
-  contextPath: /manager
-management:
-  contextPath: /management
 security:
   user:
     name: @{root.user}
     password: %{ROOT_PASSWORD}
     role: USER,ADMIN
-spring:
   oauth2:
-    sso:
-      home:
-        secure: true
-        path: /
     client:
       accessTokenUri: @{cas.url}oauth2.0/accessToken
       userAuthorizationUri: @{cas.url}oauth2.0/authorize
       clientId: @{product.id}-manager
       clientSecret: %{MANAGER_OAUTH_PASSWORD}
-      clientAuthenticationScheme: query
-      authenticationScheme: query
     resource:
       userInfoUri: @{cas.url}oauth2.0/profile
       preferTokenInfo: false
-zuul:
-  routes:
-    resource:
-      path: /v1/**
-      url: http://@{api.host}:@{api.port.http}/api/v1
 logging:
   path: @{package.log}
+zuul:
+  routes:
+    api-v1:
+      path: /v1/**
+      url: http://@{api.host}:@{api.port.http}/api/v1
