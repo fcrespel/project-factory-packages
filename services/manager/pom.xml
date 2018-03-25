@@ -26,11 +26,11 @@
 	<parent>
 		<groupId>fr.project-factory.packages.services</groupId>
 		<artifactId>services</artifactId>
-		<version>3.3.1-SNAPSHOT</version>
+		<version>3.4.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>manager</artifactId>
-	<version>3.3.1-1-SNAPSHOT</version>
+	<version>3.4.0-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Manager</name>
@@ -43,7 +43,7 @@
 		<package.port.shutdown>${manager.port.shutdown}</package.port.shutdown>
 		<package.port.ajp>${manager.port.ajp}</package.port.ajp>
 		<package.port.http>${manager.port.http}</package.port.http>
-		<package.java.opts>${manager.java.opts}</package.java.opts>
+		<package.java.opts>${manager.java.opts} -Dspring.profiles.active=pf</package.java.opts>
 		<package.dependencies>
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-tomcat,
