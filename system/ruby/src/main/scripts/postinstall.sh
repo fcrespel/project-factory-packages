@@ -8,7 +8,7 @@ rvm_quiet autolibs read-fail
 rvm_quiet repair symlinks
 
 # Install Ruby if necessary
-if ! rvm install @{ruby.version} --disable-binary --rubygems @{rubygems.version}; then
+if ! rvm install @{ruby.version} --disable-binary --rubygems ignore; then
 	printerror "ERROR: failed to install Ruby @{ruby.version}"
 	exit 1
 fi
