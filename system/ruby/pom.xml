@@ -67,10 +67,10 @@
 		<rvm.version>1.29.3</rvm.version>
 		<rvm.src.url>https://github.com/rvm/rvm/archive</rvm.src.url>
 		<rvm.src.file>${rvm.version}.tar.gz</rvm.src.file>
-		<ruby.version>2.3.5</ruby.version>
+		<ruby.version>2.3.7</ruby.version>
 		<ruby.src.url>https://cache.ruby-lang.org/pub/ruby</ruby.src.url>
 		<ruby.src.file>ruby-${ruby.version}.tar.bz2</ruby.src.file>
-		<rubygems.version>2.6.14</rubygems.version>
+		<rubygems.version>2.7.6</rubygems.version>
 		<rubygems.src.url>https://rubygems.org/rubygems</rubygems.src.url>
 		<rubygems.src.file>rubygems-${rubygems.version}.tgz</rubygems.src.file>
 		<ruby.gems>rake rack passenger bundler</ruby.gems>
