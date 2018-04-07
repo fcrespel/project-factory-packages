@@ -9,6 +9,9 @@ LDAP_BASE_DN_ARRAY=`/usr/bin/php -r "echo serialize(array('@{ldap.base.dn}'));"`
 LDAP_AUTHORIZATION_MAPPINGS=`/usr/bin/php -r "echo serialize(array(array('user_entered' => 'administrator', 'from' => '@{product.group.admins}', 'normalized' => 'administrator', 'simplified' => 'administrator', 'valid' => false, 'error_message' => 'Role <em class="placeholder">administrator</em>_name does not exist and role creation is not enabled.')));"`
 interpolatetemplate_inplace "@{package.app}/scripts/overlay.sql"
 
+# Fix for PHP7
+sed -i 's#self::#Vars::#g' "@{package.app}/sites/all/modules/vars/vars.module"
+
 # Start MySQL if necessary
 if ! startservice @{mysql.service}; then
 	exit 1

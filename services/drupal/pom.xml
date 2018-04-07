@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>drupal</artifactId>
-	<version>7.58-1-SNAPSHOT</version>
+	<version>7.58-2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Drupal</name>
