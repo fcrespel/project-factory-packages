@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>mysql</artifactId>
-	<version>3.4.0-1-SNAPSHOT</version>
+	<version>5.7-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory System - MySQL</name>
@@ -41,7 +41,7 @@
 		<mysql.backup.user>${product.id}_backup</mysql.backup.user>
 		<mysql.nagios.user>${product.id}_nagios</mysql.nagios.user>
 		<package.dependencies>
-			${system.package.mysql-server},
+			${system.package.mysql-server} >= 5.7,
 			${system.package.mysql-devel}
 		</package.dependencies>
 	</properties>

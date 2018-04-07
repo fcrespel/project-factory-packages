@@ -8,6 +8,7 @@ storevar MYSQL_COLLATION "@{mysql.collation}"
 # Fix data and app/run directory permissions
 chown -R @{package.user}:@{package.group} "@{package.data}"
 chown -R @{package.user}:@{package.group} "@{package.app}/run"
+chmod +x "@{package.app}/bin/mysqld_safe"
 
 # Enable config options for MySQL 5.5+
 if [[ "$MYSQL_VERSION" =~ 5\.[5-9]\. ]]; then
@@ -23,7 +24,7 @@ if [ ! -e "@{package.data}/mysql" ]; then
 			exit 1
 		fi
 	else
-		if ! mysql_install_db --defaults-file="@{package.app}/conf/my.cnf"; then
+		if ! @{system.mysql.bin}/mysql_install_db --defaults-file="@{package.app}/conf/my.cnf"; then
 			printerror "ERROR: failed to initialize MySQL data directory"
 			exit 1
 		fi
@@ -80,7 +81,7 @@ echo "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';" | mysql_exec > /de
 echo "FLUSH PRIVILEGES;" | mysql_exec > /dev/null 2>&1
 
 # Upgrade tables
-mysql_upgrade --defaults-file="@{package.app}/conf/my.cnf" -uroot -p$MYSQL_ROOT_PASSWORD
+@{system.mysql.bin}/mysql_upgrade --defaults-file="@{package.app}/conf/my.cnf" -uroot -p$MYSQL_ROOT_PASSWORD
 
 # Reload Nagios if already running
 reloadservice @{nagios.service}

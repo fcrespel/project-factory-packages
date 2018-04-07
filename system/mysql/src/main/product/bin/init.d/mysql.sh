@@ -35,7 +35,7 @@ get_mysql_option(){
 # Local script variables and default values
 SERVICENAME="@{package.service}"
 BASEDIR="@{system.mysql.app}"
-MYSQLD="@{system.mysql.bin}/mysqld_safe"
+MYSQLD="@{package.app}/bin/mysqld_safe"
 MYSQLADMIN="@{system.mysql.bin}/mysqladmin"
 MY_PRINT_DEFAULTS="@{system.mysql.bin}/my_print_defaults"
 MYSQL_INSTALL_DB="@{system.mysql.bin}/mysql_install_db"

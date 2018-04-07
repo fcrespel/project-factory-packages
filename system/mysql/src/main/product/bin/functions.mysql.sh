@@ -7,7 +7,7 @@
 # Execute a MySQL command from standard input as the root user (without password)
 function mysql_exec_nopw
 {
-	mysql --defaults-file="$PRODUCT_APP/system/mysql/conf/my.cnf" -uroot $@
+	@{system.mysql.bin}/mysql --defaults-file="$PRODUCT_APP/system/mysql/conf/my.cnf" -uroot $@
 }
 
 # Execute a MySQL command from standard input as the root user (with password)
