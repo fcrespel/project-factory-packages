@@ -63,7 +63,7 @@
 		<alfresco.db.name>${product.id}_alfresco</alfresco.db.name>
 		<alfresco.db.user>${product.id}_alfresco</alfresco.db.user>
 		<alfresco.aos-module.version>1.1-65</alfresco.aos-module.version>
-		<alfresco.aos-module.url>https://s3-eu-west-1.amazonaws.com/eu.dl.alfresco.com/release/community/201605-build-00010</alfresco.aos-module.url>
+		<alfresco.aos-module.url>https://download.alfresco.com/release/community/201605-build-00010</alfresco.aos-module.url>
 		<alfresco.aos-module.file>alfresco-aos-module-${alfresco.aos-module.version}.zip</alfresco.aos-module.file>
 		<alfresco.googledocs-repo.version>3.0.3</alfresco.googledocs-repo.version>
 	</properties>
