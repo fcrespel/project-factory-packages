@@ -12,6 +12,9 @@
 		<tempfile property="pear.tmp" destDir="${java.io.tmpdir}" prefix="pear" />
 		<property name="pear.cfg" value="${pear.tmp}/.pearrc" />
 		<mkdir dir="${pear.tmp}" />
+		<mkdir dir="${pear.tmp}/cache" />
+		<mkdir dir="${pear.tmp}/download" />
+		<mkdir dir="${pear.tmp}/temp" />
 		<exec executable="${pear.bin}" failonerror="true">
 			<arg value="config-create" />
 			<arg value="${pear.dir}" />
