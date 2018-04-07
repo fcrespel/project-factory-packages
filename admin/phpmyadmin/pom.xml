@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>phpmyadmin</artifactId>
-	<version>4.0.10.19-1-SNAPSHOT</version>
+	<version>4.7.9-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Admin - phpMyAdmin</name>
@@ -39,7 +39,7 @@
 	<properties>
 		<package.disabled>${phpmyadmin.disabled}</package.disabled>
 		<package.src.url>https://files.phpmyadmin.net/phpMyAdmin/${package.version}</package.src.url>
-		<package.src.file>phpMyAdmin-${package.version}-all-languages.tar.bz2</package.src.file>
+		<package.src.file>phpMyAdmin-${package.version}-all-languages.tar.gz</package.src.file>
 		<package.dependencies>
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-php,
@@ -68,7 +68,7 @@
 						<configuration>
 							<skip>${package.disabled}</skip>
 							<target>
-								<untar compression="bzip2"
+								<untar compression="gzip"
 									src="${project.downloaded.directory}/${package.src.file}"
 									dest="${project.app.directory}">
 									<patternset>

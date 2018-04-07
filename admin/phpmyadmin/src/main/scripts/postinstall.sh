@@ -1,4 +1,4 @@
-PMA_BLOWFISH_SECRET=`genpassword 40`
+PMA_BLOWFISH_SECRET=`genpassword 32`
 ensurepassword PMA_DB_PASSWORD
 interpolatetemplate_inplace "@{package.app}/config.inc.php"
 
@@ -13,7 +13,7 @@ if ! mysql_createdb "@{pma.db.name}" || ! mysql_createuser "@{pma.db.user}" "$PM
 fi
 
 # Initialize database tables
-if ! cat "@{package.app}/examples/create_tables.sql" | sed "s#phpmyadmin#@{pma.db.name}#g" | mysql_exec; then
+if ! cat "@{package.app}/sql/create_tables.sql" | sed "s#phpmyadmin#@{pma.db.name}#g" | mysql_exec; then
 	printerror "ERROR: failed to initialize '@{pma.db.name}' database"
 	exit 1
 fi
