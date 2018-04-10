@@ -43,6 +43,7 @@
 			${system.package.autoconf},
 			${system.package.automake},
 			${system.package.bison},
+			${system.package.curl},
 			${system.package.db4},
 			${system.package.gawk},
 			${system.package.gcc},
