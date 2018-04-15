@@ -1,0 +1,37 @@
+#set( $PRODUCT_APP = ${project.properties.getProperty('product.app')} )
+#set( $PACKAGE_PORT_AJP = ${project.properties.getProperty('package.port.ajp')} )
+#set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
+# Reverse proxy to Tomcat instance serving Alfresco Platform
+
+# Sharepoint root OPTIONS/PROPFIND method
+<LocationMatch ^/$>
+	RewriteEngine On
+	RewriteCond %{REQUEST_METHOD} ^(OPTIONS|PROPFIND)$
+	RewriteRule .* ajp://127.0.0.1:${PACKAGE_PORT_AJP}/alfresco-platform/AosResponder_ServerRoot [P,QSA]
+</LocationMatch>
+
+# Sharepoint and Alfresco reverse proxy
+<LocationMatch ^/(_vti_inf\.html|(_vti_bin|alfresco-platform)(/.*)?)$>
+	ProxyPassMatch ajp://127.0.0.1:${PACKAGE_PORT_AJP}/$1 timeout=60 ttl=300
+</LocationMatch>
+
+#if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
+# Sharepoint and WebDAV auth
+<LocationMatch ^/(_vti_bin|alfresco-platform/(webdav|aos))(/.*)?$>
+	AuthName "Alfresco"
+	AuthType Basic
+	AuthBasicProvider wsgi
+	WSGIAuthUserScript ${PRODUCT_APP}/system/python/scripts/cas_auth.wsgi
+	WSGIAuthGroupScript ${PRODUCT_APP}/system/python/scripts/cas_auth.wsgi
+	Require valid-user
+</LocationMatch>
+
+# Alfresco auth
+<LocationMatch ^/alfresco-platform/(?!(service|s|webdav|aos|_vti_bin|scripts|css|images|admin)(/|$))>
+	AuthType CAS
+	Require valid-user
+	CASScope /alfresco-platform
+	CASAuthNHeader X-CAS-User
+	CASScrubRequestHeaders On
+</LocationMatch>
+#end

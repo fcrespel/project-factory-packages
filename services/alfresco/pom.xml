@@ -30,14 +30,14 @@
 	</parent>
 
 	<artifactId>alfresco</artifactId>
-	<version>5.1.g-1-SNAPSHOT</version>
+	<version>5.2.g-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Alfresco</name>
 	<description>Alfresco Enterprise Content Management System</description>
 	
 	<modules>
-		<module>alfresco-explorer</module>
+		<module>alfresco-platform</module>
 		<module>alfresco-share</module>
 		<module>alfresco-solr</module>
 	</modules>
@@ -61,7 +61,7 @@
 				<plugin>
 					<groupId>org.alfresco.maven.plugin</groupId>
 					<artifactId>alfresco-maven-plugin</artifactId>
-					<version>1.1.0</version>
+					<version>1.1.1</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
