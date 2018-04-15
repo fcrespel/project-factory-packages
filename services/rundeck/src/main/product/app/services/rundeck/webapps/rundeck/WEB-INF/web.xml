@@ -18,11 +18,6 @@
 		<async-supported>true</async-supported>
 	</filter>
 	<filter>
-		<filter-name>AssetPipelineFilter</filter-name>
-		<filter-class>asset.pipeline.grails.AssetPipelineFilter</filter-class>
-		<async-supported>true</async-supported>
-	</filter>
-	<filter>
 		<filter-name>instrumentedFilter</filter-name>
 		<filter-class>com.codahale.metrics.servlet.InstrumentedFilter</filter-class>
 		<async-supported>true</async-supported>
@@ -139,6 +134,11 @@
 		</init-param>
 	</filter>
 	<filter>
+		<filter-name>AssetPipelineFilter</filter-name>
+		<filter-class>asset.pipeline.grails.AssetPipelineFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+	<filter>
 		<filter-name>urlMapping</filter-name>
 		<filter-class>org.codehaus.groovy.grails.web.mapping.filter.UrlMappingsFilter</filter-class>
 		<async-supported>true</async-supported>
@@ -225,24 +225,24 @@
 		<servlet-class>org.codehaus.groovy.grails.web.pages.GroovyPagesServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>metrics-admin-servlet</servlet-name>
-		<servlet-class>org.grails.plugins.metricsweb.DisablingAdminServlet</servlet-class>
-	</servlet>
-	<servlet>
 		<servlet-name>grails-errorhandler</servlet-name>
 		<servlet-class>org.codehaus.groovy.grails.web.servlet.ErrorHandlingServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>metrics-admin-servlet</servlet-name>
+		<servlet-class>org.grails.plugins.metricsweb.DisablingAdminServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>gsp</servlet-name>
 		<url-pattern>*.gsp</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>metrics-admin-servlet</servlet-name>
-		<url-pattern>/metrics/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
 		<servlet-name>grails-errorhandler</servlet-name>
 		<url-pattern>/grails-errorhandler</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>metrics-admin-servlet</servlet-name>
+		<url-pattern>/metrics/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>grails</servlet-name>
