@@ -8,7 +8,7 @@
 function drush
 {
 	local DRUPAL_APP="@{package.app}"
-	local DRUSH="$DRUPAL_APP/scripts/drush/drush"
+	local DRUSH="$DRUPAL_APP/scripts/drush.phar"
 	[ -x "$DRUSH" ] || chmod +x "$DRUSH"
 	"$DRUSH" --root="$DRUPAL_APP" --uri="http://$PRODUCT_DOMAIN/drupal/" --yes "$@"
 }
