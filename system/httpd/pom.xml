@@ -48,6 +48,8 @@
 			${system.package.mod_ssl},
 			${system.package.apr-devel},
 			${system.package.apr-util-devel},
+			${system.package.autoconf},
+			${system.package.automake},
 			${system.package.gcc},
 			${system.package.libtool},
 			${system.package.libcurl-devel},

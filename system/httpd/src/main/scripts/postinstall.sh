@@ -15,7 +15,7 @@ chmod +x "$MOD_AUTH_CAS_DIR/missing"
 # Make and install mod_auth_cas
 sed -i 's#SSL_library_init#SSL_CTX_new#g' "$MOD_AUTH_CAS_DIR/configure.ac" "$MOD_AUTH_CAS_DIR/configure"
 ( cd "$MOD_AUTH_CAS_DIR" && make distclean ) > /dev/null 2>&1
-if ! ( cd "$MOD_AUTH_CAS_DIR" && ./configure && make ); then
+if ! ( cd "$MOD_AUTH_CAS_DIR" && autoreconf -ivf && ./configure && make ); then
 	printerror "ERROR: failed to compile mod_auth_cas"
 	exit 1
 fi
