@@ -14,6 +14,10 @@ security:
     resource:
       userInfoUri: @{cas.url}oauth2.0/profile
       preferTokenInfo: false
+    logout:
+      userLogoutUri: @{cas.url}logout
+      redirectParam: service
+      redirectUri: @{product.scheme}://@{product.domain}/manager/
 logging:
   path: @{package.log}
 zuul:

@@ -1,15 +1,15 @@
 {
-  "@class": "org.jasig.cas.support.oauth.services.OAuthRegisteredService",
+  "@class": "org.apereo.cas.support.oauth.services.OAuthRegisteredService",
   "serviceId": "^https?://\\Q@{product.domain}\\E/manager/.*",
   "name": "@{product.id}-manager",
   "id": 900,
   "description": "@{product.name} Platform Manager",
   "evaluationOrder": 900,
   "attributeReleasePolicy": {
-    "@class": "org.jasig.cas.services.ReturnAllAttributeReleasePolicy"
+    "@class": "org.apereo.cas.services.ReturnAllAttributeReleasePolicy"
   },
   "accessStrategy": {
-    "@class": "org.jasig.cas.services.DefaultRegisteredServiceAccessStrategy",
+    "@class": "org.apereo.cas.services.DefaultRegisteredServiceAccessStrategy",
     "enabled": true,
     "ssoEnabled": true,
     "requiredAttributes": {
