@@ -1,15 +1,15 @@
 {
-  "@class": "org.jasig.cas.services.RegexRegisteredService",
+  "@class": "org.apereo.cas.services.RegexRegisteredService",
   "serviceId": "^https?://\\Q@{product.domain}\\E/.*",
   "name": "@{product.id}",
   "id": 1000,
   "description": "@{product.name}",
   "evaluationOrder": 1000,
   "attributeReleasePolicy": {
-    "@class": "org.jasig.cas.services.ReturnAllAttributeReleasePolicy"
+    "@class": "org.apereo.cas.services.ReturnAllAttributeReleasePolicy"
   },
   "accessStrategy": {
-    "@class": "org.jasig.cas.services.DefaultRegisteredServiceAccessStrategy",
+    "@class": "org.apereo.cas.services.DefaultRegisteredServiceAccessStrategy",
     "enabled": true,
     "ssoEnabled": true,
     "requiredAttributes": {

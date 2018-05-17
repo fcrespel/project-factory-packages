@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>cas</artifactId>
-	<version>4.2.4-7-SNAPSHOT</version>
+	<version>5.2.4-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - CAS</name>
@@ -43,93 +43,154 @@
 		<package.port.shutdown>${cas.port.shutdown}</package.port.shutdown>
 		<package.port.ajp>${cas.port.ajp}</package.port.ajp>
 		<package.port.http>${cas.port.http}</package.port.http>
-		<package.java.opts>${cas.java.opts}</package.java.opts>
+		<package.java.opts>${cas.java.opts} -Dcas.standalone.config=${package.data}/config</package.java.opts>
 		<package.dependencies>
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-mysql,
+			${package.prefix}-system-redis,
 			${package.prefix}-system-tomcat,
 			${package.prefix}-service-portal
 		</package.dependencies>
-		<cas.version>4.2.4</cas.version>
+		<java.version>1.8</java.version>
+		<cas.version>5.2.4</cas.version>
 		<cas.db.name>${product.id}_cas</cas.db.name>
 		<cas.db.user>${product.id}_cas</cas.db.user>
 		<cas.lang>${product.locale}</cas.lang>
-		<pac4j.version>1.8.8</pac4j.version>
+		<lombok.version>1.16.20</lombok.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apereo.cas</groupId>
+				<artifactId>cas-server-support-bom</artifactId>
+				<version>${cas.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 		<!-- CAS Server -->
 		<dependency>
-			<groupId>org.jasig.cas</groupId>
+			<groupId>org.apereo.cas</groupId>
 			<artifactId>cas-server-webapp</artifactId>
 			<version>${cas.version}</version>
 			<type>war</type>
 		</dependency>
+		<dependency>
+			<groupId>org.apereo.cas</groupId>
+			<artifactId>cas-server-core-configuration</artifactId>
+			<version>${cas.version}</version>
+		</dependency>
 
 		<!-- Authentication -->
 		<dependency>
-			<groupId>org.jasig.cas</groupId>
+			<groupId>org.apereo.cas</groupId>
+			<artifactId>cas-server-core-authentication</artifactId>
+			<version>${cas.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apereo.cas</groupId>
 			<artifactId>cas-server-support-basic</artifactId>
 			<version>${cas.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jasig.cas</groupId>
+			<groupId>org.apereo.cas</groupId>
+			<artifactId>cas-server-support-jdbc</artifactId>
+			<version>${cas.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apereo.cas</groupId>
 			<artifactId>cas-server-support-ldap</artifactId>
 			<version>${cas.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jasig.cas</groupId>
+			<groupId>org.apereo.cas</groupId>
+			<artifactId>cas-server-support-ldap-core</artifactId>
+			<version>${cas.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apereo.cas</groupId>
 			<artifactId>cas-server-support-radius</artifactId>
 			<version>${cas.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jasig.cas</groupId>
-			<artifactId>cas-server-integration-pac4j</artifactId>
+			<groupId>org.apereo.cas</groupId>
+			<artifactId>cas-server-support-pac4j-core</artifactId>
 			<version>${cas.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apereo.cas</groupId>
+			<artifactId>cas-server-support-pac4j-authentication</artifactId>
+			<version>${cas.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ldaptive</groupId>
+			<artifactId>ldaptive</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.pac4j</groupId>
 			<artifactId>pac4j-cas</artifactId>
-			<version>${pac4j.version}</version>
 		</dependency>
-		
+
 		<!-- Ticketing -->
 		<dependency>
-			<groupId>org.jasig.cas</groupId>
-			<artifactId>cas-server-support-jpa-ticket-registry</artifactId>
+			<groupId>org.apereo.cas</groupId>
+			<artifactId>cas-server-support-redis-ticket-registry</artifactId>
 			<version>${cas.version}</version>
 		</dependency>
-		
-		<!-- Integration -->
+
+		<!-- Services -->
 		<dependency>
-			<groupId>org.jasig.cas</groupId>
-			<artifactId>cas-server-support-oauth</artifactId>
+			<groupId>org.apereo.cas</groupId>
+			<artifactId>cas-server-support-json-service-registry</artifactId>
+			<version>${cas.version}</version>
+		</dependency>
+
+		<!-- Protocols -->
+		<dependency>
+			<groupId>org.apereo.cas</groupId>
+			<artifactId>cas-server-support-oauth-webflow</artifactId>
 			<version>${cas.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jasig.cas</groupId>
+			<groupId>org.apereo.cas</groupId>
+			<artifactId>cas-server-support-oidc</artifactId>
+			<version>${cas.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apereo.cas</groupId>
 			<artifactId>cas-server-support-rest</artifactId>
 			<version>${cas.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jasig.cas</groupId>
+			<groupId>org.apereo.cas</groupId>
 			<artifactId>cas-server-support-saml</artifactId>
 			<version>${cas.version}</version>
 		</dependency>
 
-		<!-- Apache Commons -->
+		<!-- Utilities -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-collections4</artifactId>
-			<version>4.1</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- Servlet API and JSP taglibs -->
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-web-api</artifactId>
-			<version>6.0</version>
-			<scope>provided</scope>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -204,6 +265,20 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<recompressZippedFiles>false</recompressZippedFiles>
+					<archive>
+						<compress>false</compress>
+						<manifestFile>${project.build.directory}/war/work/org.apereo.cas/cas-server-webapp/META-INF/MANIFEST.MF</manifestFile>
+					</archive>
+					<overlays>
+						<overlay>
+							<groupId>org.apereo.cas</groupId>
+							<artifactId>cas-server-webapp</artifactId>
+						</overlay>
+					</overlays>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

@@ -1,0 +1,192 @@
+cas:
+  # Dashboard and status pages
+  admin-pages-security:
+    ip: 127\.0\.0\.1
+    login-url: ${cas.server.prefix}/login
+    service: ${cas.server.prefix}/status/dashboard
+    users: file://@{package.data}/config/adminusers.properties
+  authn:
+    # Static auth (disabled)
+    accept:
+      users: ''
+    # Attribute repository
+    attribute-repository:
+      expire-in-minutes: 5
+      maximum-cache-size: 1000
+      # LDAP user/group attribute repository (extension)
+      ldap-user-group:
+        connection-strategy: DEFAULT
+        ldap-url: ldap://@{ldap.host}:@{ldap.port}
+        use-ssl: false
+        bind-dn: '@{ldap.root.dn}'
+        bind-credential: '%{LDAP_ROOT_PASSWORD}'
+        min-pool-size: 0
+        max-pool-size: 10
+        subtree-search: true
+        user-attributes:
+          '@{ldap.dn.attr}': '@{cas.attr.dn}'
+          '@{ldap.user.rdn.attr}': '@{cas.attr.uid}'
+          '@{ldap.user.commonname.attr}': '@{cas.attr.commonname}'
+          '@{ldap.user.displayname.attr}': '@{cas.attr.displayname}'
+          '@{ldap.user.firstname.attr}': '@{cas.attr.firstname}'
+          '@{ldap.user.lastname.attr}': '@{cas.attr.lastname}'
+          '@{ldap.user.mail.attr}': '@{cas.attr.mail}'
+          '@{ldap.user.telephone.attr}': '@{cas.attr.telephone}'
+          '@{ldap.user.organization.attr}': '@{cas.attr.organization}'
+        user-dn: '@{ldap.users.dn}'
+        user-filter: '(&(objectClass=@{ldap.user.class})(@{ldap.user.rdn.attr}={0}))'
+        group-attributes:
+          '@{ldap.group.rdn.attr}': '@{cas.attr.groups}'
+        group-dn: '@{ldap.groups.dn}'
+        group-filter: '(&(objectClass=@{ldap.group.class})(@{ldap.group.member.attr}={0}))'
+        group-member-mapping:
+          '@{cas.attr.dn}': '@{ldap.group.member.attr}'
+    # CAS REST auth (extension)
+    cas-rest:
+      order: 0
+      enabled: @{cas.rest.auth.enabled}
+      excluded-usernames-pattern: '@{cas.rest.auth.excludedUsernamesRegex}'
+      server-url: '@{cas.rest.auth.server}'
+      ticket-url: '@{cas.rest.auth.ticket.url}'
+    # LDAP auth
+    ldap:
+      -
+        order: 1
+        type: AUTHENTICATED
+        connection-strategy: DEFAULT
+        ldap-url: ldap://@{ldap.host}:@{ldap.port}
+        use-ssl: false
+        base-dn: '@{ldap.base.dn}'
+        bind-dn: '@{ldap.root.dn}'
+        bind-credential: '%{LDAP_ROOT_PASSWORD}'
+        min-pool-size: 0
+        max-pool-size: 10
+        principal-attribute-id: '@{ldap.user.rdn.attr}'
+        subtree-search: true
+        user-filter: '(&(objectClass=@{ldap.user.class})(@{ldap.user.rdn.attr}={user}))'
+    # Authentication listeners (extension)
+    listeners:
+      # LDAP synchronization
+      ldap-sync:
+        enabled: @{cas.ldap.sync.enabled}
+        connection-strategy: DEFAULT
+        ldap-url: ldap://@{ldap.host}:@{ldap.port}
+        use-ssl: false
+        base-dn: '@{ldap.base.dn}'
+        bind-dn: '@{ldap.root.dn}'
+        bind-credential: '%{LDAP_ROOT_PASSWORD}'
+        min-pool-size: 0
+        max-pool-size: 10
+        allow-password-sync: @{cas.ldap.sync.syncPassword}
+        dn-template: '@{ldap.user.rdn.attr}=%u,@{ldap.users.dn}'
+        group-dn: '@{cas.ldap.sync.groupdn}'
+        group-member-attr: '@{ldap.group.member.attr}'
+        group-member-is-dn: true
+        default-attributes:
+          objectClass:
+            - top
+            - person
+            - organizationalPerson
+            - '@{ldap.user.class}'
+          '@{ldap.user.commonname.attr}': '%u'
+          '@{ldap.user.lastname.attr}': '%u'
+          '@{ldap.user.organization.attr}': '@{cas.ldap.sync.organization}'
+        map-attributes:
+          '@{cas.attr.commonname}': '@{ldap.user.commonname.attr}'
+          '@{cas.attr.firstname}': '@{ldap.user.firstname.attr}'
+          '@{cas.attr.lastname}': '@{ldap.user.lastname.attr}'
+          '@{cas.attr.displayname}': '@{ldap.user.displayname.attr}'
+          '@{cas.attr.mail}': '@{ldap.user.mail.attr}'
+          '@{cas.attr.organization}': '@{ldap.user.organization.attr}'
+        override-attributes:
+          '@{ldap.user.password.attr}': '%p'
+    # OAuth 2.0 protocol
+    oauth:
+      throttler: authenticationThrottle
+    # OpenID Connect protocol
+    oidc:
+      claims-map:
+        email: '@{cas.attr.mail}'
+        family_name: '@{cas.attr.lastname}'
+        given_name: '@{cas.attr.firstname}'
+        name: '@{cas.attr.displayname}'
+        phone_number: '@{cas.attr.telephone}'
+      issuer: ${cas.server.prefix}/oidc
+      jwks-file: file://@{package.data}/keystore.jwks
+    # Radius auth
+    radius:
+      client:
+        accounting-port: @{cas.radius.auth.accountingPort}
+        authentication-port: @{cas.radius.auth.authenticationPort}
+        inet-address: '@{cas.radius.auth.server}'
+        shared-secret: '@{cas.radius.auth.secret}'
+        socket-timeout: 10
+      server:
+        protocol: @{cas.radius.auth.protocol}
+    # Global throttling
+    throttle:
+      failure:
+        threshold: 5
+        range-seconds: 10
+  host:
+    name: @{product.domain}
+  locale:
+    default-value: @{cas.lang}
+  logout:
+    follow-service-redirects: true
+  monitor:
+    endpoints:
+      enabled: true
+      sensitive: false
+  rest:
+    throttler: authenticationThrottle
+  saml-core:
+    issuer: @{product.domain}
+  server:
+    name: @{product.scheme}://@{product.domain}
+    prefix: ${cas.server.name}/@{project.artifactId}
+  service-registry:
+    # JSON service registry
+    json:
+      location: file://@{package.data}/services
+  tgc:
+    crypto:
+      encryption:
+        key: '%{CAS_TGC_ENCRYPTION_KEY}'
+        key-size: 256
+      signing:
+        key: '%{CAS_TGC_SIGNING_KEY}'
+        key-size: 512
+    remember-me-max-age: 604800
+  theme:
+    default-theme-name: projectfactory
+  ticket:
+    registry:
+      # Redis ticket registry
+      redis:
+        host: @{redis.host}
+        port: @{redis.port}
+        crypto:
+          enabled: true
+          encryption:
+            key: '%{CAS_REGISTRY_ENCRYPTION_KEY}'
+            key-size: 16
+          signing:
+            key: '%{CAS_REGISTRY_SIGNING_KEY}'
+            key-size: 512
+    tgt:
+      # Remember me
+      remember-me:
+        enabled: true
+        time-to-kill-in-seconds: 604800
+  webflow:
+    crypto:
+      encryption:
+        key: '%{CAS_WEBFLOW_ENCRYPTION_KEY}'
+        key-size: 16
+      signing:
+        key: '%{CAS_WEBFLOW_SIGNING_KEY}'
+        key-size: 512
+endpoints:
+  enabled: true
+  sensitive: false
