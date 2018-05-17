@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>cas-management</artifactId>
-	<version>4.2.4-2-SNAPSHOT</version>
+	<version>5.2.4-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Admin - CAS Management</name>
@@ -44,21 +44,28 @@
 		<package.port.shutdown>${cas-management.port.shutdown}</package.port.shutdown>
 		<package.port.ajp>${cas-management.port.ajp}</package.port.ajp>
 		<package.port.http>${cas-management.port.http}</package.port.http>
-		<package.java.opts>${cas-management.java.opts}</package.java.opts>
+		<package.java.opts>${cas-management.java.opts} -Dcas.standalone.config=${product.data}/services/cas/config</package.java.opts>
 		<package.dependencies>
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-tomcat,
 			${package.prefix}-service-portal
 		</package.dependencies>
-		<cas.version>4.2.4</cas.version>
+		<java.version>1.8</java.version>
+		<cas.version>5.2.4</cas.version>
+		<cas.lang>${product.locale}</cas.lang>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.jasig.cas</groupId>
+			<groupId>org.apereo.cas</groupId>
 			<artifactId>cas-management-webapp</artifactId>
 			<version>${cas.version}</version>
 			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apereo.cas</groupId>
+			<artifactId>cas-server-support-json-service-registry</artifactId>
+			<version>${cas.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -133,6 +140,20 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<recompressZippedFiles>false</recompressZippedFiles>
+					<archive>
+						<compress>false</compress>
+						<manifestFile>${project.build.directory}/war/work/org.apereo.cas/cas-management-webapp/META-INF/MANIFEST.MF</manifestFile>
+					</archive>
+					<overlays>
+						<overlay>
+							<groupId>org.apereo.cas</groupId>
+							<artifactId>cas-management-webapp</artifactId>
+						</overlay>
+					</overlays>
+				</configuration>
 				<executions>
 					<execution>
 						<id>process-classes-war-exploded</id>
