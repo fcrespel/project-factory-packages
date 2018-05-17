@@ -18,7 +18,7 @@ logging:
   path: @{package.log}
 authorization:
   userAttribute: "['id']"
-  groupAttribute: "['attributes']?.^[#this['groups']!=null]?.get('groups')"
+  groupAttribute: "['attributes']?.get('groups')"
   authorityMapping:
     ROLE_USER: GROUP_@{product.group.users}
     ROLE_ADMIN: GROUP_@{product.group.admins}
