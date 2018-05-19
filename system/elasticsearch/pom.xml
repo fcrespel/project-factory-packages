@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>elasticsearch</artifactId>
-	<version>2.4.4-1-SNAPSHOT</version>
+	<version>6.2.4-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory System - Elasticsearch</name>
@@ -38,7 +38,7 @@
 
 	<properties>
 		<package.disabled>${elasticsearch.disabled}</package.disabled>
-		<package.src.url>https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/${package.version}</package.src.url>
+		<package.src.url>https://artifacts.elastic.co/downloads/elasticsearch</package.src.url>
 		<package.src.file>elasticsearch-${package.version}.tar.gz</package.src.file>
 		<package.bind>${elasticsearch.bind}</package.bind>
 		<package.port.http>${elasticsearch.port.http}</package.port.http>

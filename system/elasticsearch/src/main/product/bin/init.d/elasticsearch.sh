@@ -27,9 +27,7 @@ ES_GROUP="@{package.group}"
 ES_HOME="@{package.app}"
 MAX_OPEN_FILES=65536
 MAX_MAP_COUNT=262144
-LOG_DIR="@{package.log}"
-DATA_DIR="@{package.data}"
-CONF_DIR="$ES_HOME/config"
+ES_PATH_CONF="$ES_HOME/config"
 PID_DIR="$ES_HOME/run"
 
 # Source service configuration
@@ -44,14 +42,10 @@ SERVICENAME="@{package.service}"
 PIDFILE="$PID_DIR/elasticsearch.pid"
 LOCKFILE="$PID_DIR/lockfile"
 
-export ES_HEAP_SIZE
-export ES_HEAP_NEWSIZE
-export ES_DIRECT_SIZE
 export ES_JAVA_OPTS
-export ES_GC_LOG_FILE
-export ES_STARTUP_SLEEP_TIME
 export JAVA_HOME
-export ES_INCLUDE
+export ES_PATH_CONF
+export ES_STARTUP_SLEEP_TIME
 
 checkJava() {
 	if [ -x "$JAVA_HOME/bin/java" ]; then
@@ -69,10 +63,6 @@ checkJava() {
 start() {
 	checkJava
 	[ -x $EXEC ] || exit 5
-	if [ -n "$MAX_LOCKED_MEMORY" -a -z "$ES_HEAP_SIZE" ]; then
-		echo "MAX_LOCKED_MEMORY is set - ES_HEAP_SIZE must also be set"
-		return 7
-	fi
 	if [ -n "$MAX_OPEN_FILES" ]; then
 		ulimit -n $MAX_OPEN_FILES
 	fi
@@ -93,7 +83,7 @@ start() {
 
 	cd $ES_HOME
 	echo -n $"Starting $SERVICENAME: "
-	start_daemon -u $ES_USER -p $PIDFILE $EXEC -p $PIDFILE -d -Des.default.path.home=$ES_HOME -Des.default.path.logs=$LOG_DIR -Des.default.path.data=$DATA_DIR -Des.default.path.conf=$CONF_DIR
+	start_daemon -u $ES_USER -p $PIDFILE $EXEC -p $PIDFILE -d
 	RETVAL=$?
 	if [ $RETVAL -eq 0 ]; then
 		touch $LOCKFILE
