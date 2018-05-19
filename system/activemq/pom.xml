@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>activemq</artifactId>
-	<version>5.14.1-1-SNAPSHOT</version>
+	<version>5.15.3-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory System - ActiveMQ</name>
