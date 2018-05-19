@@ -38,7 +38,7 @@ under the License.
  |  2. Global Level. This settings.xml file provides configuration for all Maven
  |                 users on a machine (assuming they're all using the same Maven
  |                 installation). It's normally provided in
- |                 ${D}{maven.home}/conf/settings.xml.
+ |                 ${D}{maven.conf}/settings.xml.
  |
  |                 NOTE: This location can be overridden with the CLI option:
  |
@@ -55,7 +55,7 @@ under the License.
   <!-- localRepository
    | The path to the local repository maven will use to store artifacts.
    |
-   | Default: ~/.m2/repository
+   | Default: ${D}{user.home}/.m2/repository
   -->
   <localRepository>${PACKAGE_DATA}/repository</localRepository>
 
