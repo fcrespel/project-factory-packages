@@ -25,13 +25,14 @@ fi
 EXEC="@{package.app}/bin/kibana"
 SERVICENAME="@{package.service}"
 KIBANA_USER="@{package.user}"
+CONFFILE="@{package.app}/config/kibana.yml"
 LOGFILE="@{package.log}/kibana.log"
 PIDFILE="@{package.app}/run/kibana.pid"
 LOCKFILE="@{package.app}/run/lockfile"
 
 start() {
 	echo -n $"Starting $SERVICENAME: "
-	start_daemon -u $KIBANA_USER -p $PIDFILE "$EXEC >$LOGFILE 2>&1 &"
+	start_daemon -u $KIBANA_USER -p $PIDFILE "$EXEC -c $CONFFILE >$LOGFILE 2>&1 &"
 	RETVAL=$?
 	if [ $RETVAL -eq 0 ]; then
 		touch $LOCKFILE

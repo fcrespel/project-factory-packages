@@ -8,14 +8,15 @@
 		<delete includeemptydirs="true">
 			<fileset dir="${project.app.directory}">
 				<include name="**/.idea/" />
+				<include name="**/optimize/bundles/" />
 			</fileset>
 		</delete>
-		<concat destfile="${project.app.directory}/src/ui/views/ui_app.jade" append="true"><![CDATA[
+		<concat destfile="${project.app.directory}/src/ui/ui_render/views/ui_app.jade" append="true"><![CDATA[
 block head
   link(rel='stylesheet', type='text/css', href='/portal/themes/current/css/kibana.css')
   script(type='text/javascript', src='/portal/toolbar.php?tab=kibana&format=js')
 ]]></concat>
-		<concat destfile="${project.app.directory}/src/ui/public/chrome/chrome.html" append="true"><![CDATA[
+		<concat destfile="${project.app.directory}/src/ui/public/chrome/directives/kbn_chrome.html" append="true"><![CDATA[
 <script type="text/javascript">
 add_platform_toolbar(); // Project Factory
 </script>

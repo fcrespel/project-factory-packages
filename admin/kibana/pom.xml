@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>kibana</artifactId>
-	<version>4.6.4-1-SNAPSHOT</version>
+	<version>6.2.4-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Admin - Kibana</name>
@@ -39,7 +39,7 @@
 	<properties>
 		<package.disabled>${kibana.disabled}</package.disabled>
 		<package.arch>${system.arch}</package.arch>
-		<package.src.url>https://download.elastic.co/kibana/kibana</package.src.url>
+		<package.src.url>https://artifacts.elastic.co/downloads/kibana</package.src.url>
 		<package.src.file>${package.src.file.arch}</package.src.file>
 		<package.src.file.i386>kibana-${kibana.version}-linux-x86.tar.gz</package.src.file.i386>
 		<package.src.file.x86_64>kibana-${kibana.version}-linux-x86_64.tar.gz</package.src.file.x86_64>
@@ -49,7 +49,7 @@
 			${package.prefix}-system-elasticsearch,
 			${package.prefix}-service-portal
 		</package.dependencies>
-		<kibana.version>4.6.4</kibana.version>
+		<kibana.version>6.2.4</kibana.version>
 	</properties>
 
 	<build>

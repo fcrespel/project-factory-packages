@@ -1,7 +1,10 @@
 # Fix script permissions
 chmod +x "@{package.app}/bin/kibana"
+chmod +x "@{package.app}/bin/kibana-keystore"
+chmod +x "@{package.app}/bin/kibana-plugin"
 
 # Fix directory permissions
+mkdir -p "@{package.app}/plugins"
 chown -R @{package.user}:@{package.group} "@{package.app}" "@{package.log}"
 
 # Enable service at startup
