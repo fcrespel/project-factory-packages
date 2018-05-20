@@ -206,6 +206,10 @@ production: &base
     # plain_url: "http://..."     # default: https://www.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon
     # ssl_url:   "https://..."    # default: https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon
 
+  $H$H Sidekiq
+  sidekiq:
+    log_format: default # (json is also supported)
+
   $H$H Auxiliary jobs
   # Periodically executed jobs, to self-heal GitLab, do external synchronizations, etc.
   # Please read here for more information: https://github.com/ondrejbartas/sidekiq-cron#adding-cron-job
@@ -493,7 +497,17 @@ production: &base
       # - { name: 'twitter',
       #     app_id: 'YOUR_APP_ID',
       #     app_secret: 'YOUR_APP_SECRET' }
-      #
+      # - { name: 'jwt',
+      #     app_secret: 'YOUR_APP_SECRET',
+      #     args: {
+      #             algorithm: 'HS256',
+      #             uid_claim: 'email',
+      #             required_claims: ["name", "email"],
+      #             info_map: { name: "name", email: "email" },
+      #             auth_url: 'https://example.com/',
+      #             valid_within: null,
+      #           }
+      #   }
       # - { name: 'saml',
       #     label: 'Our SAML Provider',
       #     groups_attribute: 'Groups',
@@ -667,10 +681,39 @@ test:
     enabled: true
   lfs:
     enabled: false
+    # The location where LFS objects are stored (default: shared/lfs-objects).
+    # storage_path: shared/lfs-objects
+    object_store:
+      enabled: false
+      remote_directory: lfs-objects # The bucket name
+      connection:
+        provider: AWS # Only AWS supported at the moment
+        aws_access_key_id: AWS_ACCESS_KEY_ID
+        aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+        region: us-east-1
   artifacts:
     path: tmp/tests/artifacts
+    enabled: true
+    # The location where build artifacts are stored (default: shared/artifacts).
+    # path: shared/artifacts
+    object_store:
+      enabled: false
+      remote_directory: artifacts # The bucket name
+      background_upload: false
+      connection:
+        provider: AWS # Only AWS supported at the moment
+        aws_access_key_id: AWS_ACCESS_KEY_ID
+        aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+        region: us-east-1
   uploads:
     storage_path: tmp/tests/public
+    object_store:
+      enabled: false
+      connection:
+        provider: AWS # Only AWS supported at the moment
+        aws_access_key_id: AWS_ACCESS_KEY_ID
+        aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+        region: us-east-1
   gitlab:
     host: localhost
     port: 80
@@ -745,6 +788,17 @@ test:
       - { name: 'twitter',
           app_id: 'YOUR_APP_ID',
           app_secret: 'YOUR_APP_SECRET' }
+      - { name: 'jwt',
+          app_secret: 'YOUR_APP_SECRET',
+          args: {
+                  algorithm: 'HS256',
+                  uid_claim: 'email',
+                  required_claims: ["name", "email"],
+                  info_map: { name: "name", email: "email" },
+                  auth_url: 'https://example.com/',
+                  valid_within: null,
+                }
+        }
       - { name: 'auth0',
           args: {
             client_id: 'YOUR_AUTH0_CLIENT_ID',
