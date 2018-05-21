@@ -1,8 +1,8 @@
 # Interpolate template
-interpolatetemplate_inplace "@{package.app}/conf/sonar-runner.properties"
+interpolatetemplate_inplace "@{package.app}/conf/sonar-scanner.properties"
 
 # Fix permissions
-chmod +x "@{package.app}/bin/sonar-runner"
+chmod +x "@{package.app}/bin/sonar-scanner"
 chown -R @{package.user}:@{package.group} "@{package.data}"
 chmod -R ug=rwX "@{package.data}"
 

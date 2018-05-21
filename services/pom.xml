@@ -56,7 +56,7 @@
 		<module>alfresco</module>
 		<module>drupal</module>
 		<module>sonarqube</module>
-		<module>sonarqube-runner</module>
+		<module>sonarqube-scanner</module>
 		<module>gitlab</module>
 		<module>rundeck</module>
 	</modules>

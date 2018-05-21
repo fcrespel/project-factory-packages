@@ -1,6 +1,6 @@
 <!--
   #[
-  Project Factory Services - SonarQube Runner
+  Project Factory Services - SonarQube Scanner
   ##
   Copyright (C) 2013 - 2018 Project Factory team and contributors
   ##
@@ -29,23 +29,42 @@
 		<version>3.4.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>sonarqube-runner</artifactId>
-	<version>2.4-2-SNAPSHOT</version>
+	<artifactId>sonarqube-scanner</artifactId>
+	<version>3.1.0-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>Project Factory Services - SonarQube Runner</name>
+	<name>Project Factory Services - SonarQube Scanner</name>
 	<description>Command-line tool to analyze source code</description>
 
 	<properties>
-		<package.disabled>${sonarqube-runner.disabled}</package.disabled>
-		<package.src.file>sonar-runner-dist-${package.version}.zip</package.src.file>
+		<package.disabled>${sonarqube-scanner.disabled}</package.disabled>
+		<package.src.file>sonar-scanner-cli-${sonarqube-scanner.version}.zip</package.src.file>
 		<package.dependencies>
 			${system.package.java8},
 			${system.package.java8-devel}
 		</package.dependencies>
+		<sonarqube-scanner.version>3.1.0.1141</sonarqube-scanner.version>
 	</properties>
 
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>rpm-maven-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>package-rpm</id>
+							<configuration>
+								<obsoletes>
+									<obsolete>${package.prefix}-${package.type}-sonarqube-runner</obsolete>
+								</obsoletes>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -61,9 +80,9 @@
 							<outputDirectory>${project.downloaded.directory}</outputDirectory>
 							<artifactItems>
 								<artifactItem>
-									<groupId>org.codehaus.sonar.runner</groupId>
-									<artifactId>sonar-runner-dist</artifactId>
-									<version>${package.version}</version>
+									<groupId>org.sonarsource.scanner.cli</groupId>
+									<artifactId>sonar-scanner-cli</artifactId>
+									<version>${sonarqube-scanner.version}</version>
 									<type>zip</type>
 								</artifactItem>
 							</artifactItems>
