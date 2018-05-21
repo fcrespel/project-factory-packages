@@ -31,6 +31,20 @@ chmod +x @{package.app}/bin/* @{package.app}/lib/support/init.d/gitlab @{package
 usermod -s /bin/bash @{package.user} > /dev/null 2>&1
 mkdir -p "@{package.root}/.ssh" && touch "@{package.root}/.ssh/authorized_keys"
 
+# Check if bundler is available
+BUNDLER=`rvm default do which bundle`
+if [ ! -x "$BUNDLER" ]; then
+	printerror "ERROR: the 'bundle' command is not available or not executable"
+	exit 1
+fi
+
+# Execute bundler to install required gems
+rvm default do bundle config build.nokogiri --use-system-libraries > /dev/null 2>&1
+if ! ( cd "@{package.app}" && rvm default do bundle install --jobs $NPROC --deployment --local ); then
+	printerror "ERROR: failed to install required Gems for GitLab"
+	exit 1
+fi
+
 # Build shell
 if ! ( chown -R @{package.user}:@{package.group} "@{package.app}/shell" && su -c "cd @{package.app}/shell && bin/compile" - @{package.user} ); then
 	printerror "ERROR: failed to build Gitlab Shell"
@@ -44,22 +58,12 @@ if ! ( chown -R @{package.user}:@{package.group} "@{package.app}/workhorse" && s
 fi
 
 # Build Gitaly
+if ! ( cd "@{package.app}/gitaly/ruby" && rvm default do bundle install --jobs $NPROC --deployment --local ); then
+	printerror "ERROR: failed to install required Gems for Gitaly"
+	exit 1
+fi
 if ! ( chown -R @{package.user}:@{package.group} "@{package.app}/gitaly" && su -c "cd @{package.app}/gitaly && make" - @{package.user} ); then
 	printerror "ERROR: failed to build Gitaly"
-	exit 1
-fi
-
-# Check if bundler is available
-BUNDLER=`rvm default do which bundle`
-if [ ! -x "$BUNDLER" ]; then
-	printerror "ERROR: the 'bundle' command is not available or not executable"
-	exit 1
-fi
-
-# Execute bundler to install required gems
-rvm default do bundle config build.nokogiri --use-system-libraries > /dev/null 2>&1
-if ! ( cd "@{package.app}" && rvm default do bundle install --jobs $NPROC --deployment --local ); then
-	printerror "ERROR: failed to install required Gems for GitLab"
 	exit 1
 fi
 

@@ -6,6 +6,7 @@
 				<include name="**/*.sh" />
 			</fileset>
 		</chmod>
+		<!-- GitLab bundle -->
 		<exec executable="${bundler.bin}" dir="${project.app.directory}" failonerror="true">
 			<arg value="config" />
 			<arg value="--local" />
@@ -29,6 +30,25 @@
 			<arg value="no_install" />
 		</exec>
 		<delete dir="${project.app.directory}/vendor/bundle" />
+		<!-- Gitaly bundle -->
+		<exec executable="${bundler.bin}" dir="${project.app.directory}/gitaly/ruby" failonerror="true">
+			<arg value="config" />
+			<arg value="--local" />
+			<arg value="path" />
+			<arg value="vendor/bundle" />
+		</exec>
+		<exec executable="${bundler.bin}" dir="${project.app.directory}/gitaly/ruby" failonerror="true">
+			<arg value="package" />
+			<arg value="--all" />
+			<arg value="--no-install" />
+		</exec>
+		<exec executable="${bundler.bin}" dir="${project.app.directory}/gitaly/ruby" failonerror="true">
+			<arg value="config" />
+			<arg value="--delete" />
+			<arg value="no_install" />
+		</exec>
+		<delete dir="${project.app.directory}/gitaly/ruby/vendor/bundle" />
+		<!-- Custom script embedding -->
 		<concat destfile="${project.app.directory}/app/assets/javascripts/main.js" append="true"><![CDATA[
 import './projectfactory.js';
 ]]></concat>
