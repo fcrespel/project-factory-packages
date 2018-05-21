@@ -1,7 +1,3 @@
-# Store configuration
-storevar SONARQUBE_DB_NAME "@{sonarqube.db.name}"
-storevar SONARQUBE_DB_USER "@{sonarqube.db.user}"
-
 # Prepare passwords
 ensurepassword SONARQUBE_DB_PASSWORD
 ROOT_PASSWORD_SALT=`genpassword | sha1sum | cut -d' ' -f 1`
@@ -22,10 +18,15 @@ sed -i "s#^DEF_APP_LONG_NAME=.*#DEF_APP_LONG_NAME=\"@{package.service}\"#g" "@{p
 # Copy bundled plugins
 cp @{package.app}/lib/bundled-plugins/*.jar @{package.data}/extensions/plugins/
 
-# Fix data directory and wrapper permissions
+# Fix permissions
+mkdir -p "@{package.app}/elasticsearch/plugins"
 chown -R @{package.user}:@{package.group} "@{package.app}" "@{package.data}" "@{package.log}"
 chmod +x "@{package.app}/bin/linux-x86-32/wrapper"
 chmod +x "@{package.app}/bin/linux-x86-64/wrapper"
+chmod +x "@{package.app}/elasticsearch/bin/elasticsearch"
+chmod +x "@{package.app}/elasticsearch/bin/elasticsearch-keystore"
+chmod +x "@{package.app}/elasticsearch/bin/elasticsearch-plugin"
+chmod +x "@{package.app}/elasticsearch/bin/elasticsearch-translog"
 
 # Create trust store if necessary
 create_truststore "@{package.app}/conf/trust.jks" @{package.user} @{package.group} "@{system.java8.app}/jre/lib/security/cacerts"
@@ -78,6 +79,5 @@ fi
 
 # Enable Nagios monitoring
 if type -t nagios_enable_service >/dev/null; then
-	nagios_enable_service "SonarQube AJP"
 	nagios_enable_service "SonarQube HTTP"
 fi

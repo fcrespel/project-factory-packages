@@ -1,6 +1,5 @@
 # Disable Nagios monitoring
 if type -t nagios_disable_service >/dev/null; then
-	nagios_disable_service "SonarQube AJP"
 	nagios_disable_service "SonarQube HTTP"
 fi
 

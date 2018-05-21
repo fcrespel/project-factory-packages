@@ -1,0 +1,23 @@
+#set( $PACKAGE_PORT_HTTP = ${project.properties.getProperty('package.port.http')} )
+#set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
+# Reverse proxy to Tomcat instance serving SonarQube
+
+<Location /sonarqube>
+	ProxyPass http://127.0.0.1:${PACKAGE_PORT_HTTP}/sonarqube timeout=60 ttl=300
+	ProxyPassReverse http://127.0.0.1:${PACKAGE_PORT_HTTP}/sonarqube
+
+#if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
+	AuthType CAS
+	Require valid-user
+	CASScope /sonarqube
+	CASAuthNHeader X-CAS-User
+	CASScrubRequestHeaders On
+#end
+</Location>
+
+#if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
+<Location /sonarqube/api/authentication/logout>
+	Header always add Set-Cookie "MOD_AUTH_CAS=; Path=/sonarqube; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age: 0; HttpOnly"
+	Header always add Set-Cookie "MOD_AUTH_CAS_S=; Path=/sonarqube; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age: 0; Secure; HttpOnly"
+</Location>
+#end

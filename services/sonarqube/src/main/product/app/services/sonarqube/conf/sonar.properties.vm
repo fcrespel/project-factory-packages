@@ -2,6 +2,7 @@
 #set( $PRODUCT_SCHEME = ${project.properties.getProperty('product.scheme')} )
 #set( $PACKAGE_APP = ${project.properties.getProperty('package.app')} )
 #set( $PACKAGE_DATA = ${project.properties.getProperty('package.data')} )
+#set( $PACKAGE_LOG = ${project.properties.getProperty('package.log')} )
 #set( $PACKAGE_BIND = ${project.properties.getProperty('package.bind')} )
 #set( $PACKAGE_PORT_HTTP = ${project.properties.getProperty('package.port.http')} )
 #set( $PACKAGE_PORT_AJP = ${project.properties.getProperty('package.port.ajp')} )
@@ -26,6 +27,9 @@
 #set( $LDAP_GROUP_MEMBER_ATTR = ${project.properties.getProperty('ldap.group.member.attr')} )
 #set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
 #set( $CAS_URL = ${project.properties.getProperty('cas.url')} )
+#set( $CAS_ATTR_DISPLAYNAME = ${project.properties.getProperty('cas.attr.displayname')} )
+#set( $CAS_ATTR_MAIL = ${project.properties.getProperty('cas.attr.mail')} )
+#set( $CAS_ATTR_GROUPS = ${project.properties.getProperty('cas.attr.groups')} )
 # SonarQube configuration
 
 #--------------------------------------------------------------------------------------------------
@@ -33,7 +37,7 @@
 
 sonar.jdbc.username=${SONARQUBE_DB_USER}
 sonar.jdbc.password=%{SONARQUBE_DB_PASSWORD}
-sonar.jdbc.url=jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${SONARQUBE_DB_NAME}?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance
+sonar.jdbc.url=jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${SONARQUBE_DB_NAME}?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance&useSSL=false
 
 #----- Connection pool settings
 sonar.jdbc.maxActive=20
@@ -47,16 +51,36 @@ sonar.jdbc.timeBetweenEvictionRunsMillis=30000
 #--------------------------------------------------------------------------------------------------
 # WEB SERVER
 
-sonar.web.javaOpts=-server ${PACKAGE_JAVA_OPTS} -XX:+HeapDumpOnOutOfMemoryError -Djava.net.preferIPv4Stack=true -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Djruby.management.enabled=false -Djavax.net.ssl.trustStore=${PACKAGE_APP}/conf/trust.jks
+sonar.web.javaOpts=${PACKAGE_JAVA_OPTS} -XX:+HeapDumpOnOutOfMemoryError -Djava.net.preferIPv4Stack=true -Djava.awt.headless=true -Djavax.net.ssl.trustStore=${PACKAGE_APP}/conf/trust.jks
 sonar.web.host=${PACKAGE_BIND}
 sonar.web.context=/sonarqube
 sonar.web.port=${PACKAGE_PORT_HTTP}
-sonar.ajp.port=${PACKAGE_PORT_AJP}
 
 
 #--------------------------------------------------------------------------------------------------
-# SEARCH INDEX
+# SSO AUTHENTICATION
 
+#if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
+sonar.web.sso.enable=true
+#else
+sonar.web.sso.enable=false
+#end
+sonar.web.sso.loginHeader=X-CAS-User
+sonar.web.sso.nameHeader=CAS_${CAS_ATTR_DISPLAYNAME}
+sonar.web.sso.emailHeader=CAS_${CAS_ATTR_MAIL}
+sonar.web.sso.groupsHeader=CAS_${CAS_ATTR_GROUPS}
+
+
+#--------------------------------------------------------------------------------------------------
+# COMPUTE ENGINE
+
+#sonar.ce.javaOpts=
+
+
+#--------------------------------------------------------------------------------------------------
+# ELASTICSEARCH
+
+#sonar.search.javaOpts=
 sonar.search.port=0
 
 
@@ -68,25 +92,33 @@ http.proxyPort=${PROXY_PORT}
 
 
 #--------------------------------------------------------------------------------------------------
+# LOGGING
+
+#sonar.log.level=INFO
+#sonar.log.level.app=INFO
+#sonar.log.level.web=INFO
+#sonar.log.level.ce=INFO
+#sonar.log.level.es=INFO
+sonar.path.logs=${PACKAGE_LOG}
+
+
+#--------------------------------------------------------------------------------------------------
 # OTHERS
 
 sonar.notifications.delay=60
 sonar.path.data=${PACKAGE_DATA}/data
 sonar.path.temp=${PACKAGE_DATA}/temp
+sonar.telemetry.enable=false
 
 
 #--------------------------------------------------------------------------------------------------
 # SECURITY REALM
 
 #if( ${CAS_ENABLED} == "1" || ${CAS_ENABLED} == "true" )
-sonar.security.realm=cas
+# CAS authentication is now handled by header-based SSO configuration above
 #else
 sonar.security.realm=LDAP
 #end
-sonar.security.savePassword=false
-sonar.security.localUsers=${BOT_USER}
-sonar.authenticator.createUsers=true
-sonar.authenticator.updateUserAttributes=true
 sonar.forceAuthentication=true
 
 # LDAP configuration
@@ -98,14 +130,3 @@ ldap.user.emailAttribute=${LDAP_USER_MAIL_ATTR}
 ldap.group.baseDn=${LDAP_GROUPS_DN}
 ldap.group.request=(&(objectClass=${LDAP_GROUP_CLASS})(${LDAP_GROUP_MEMBER_ATTR}={dn}))
 ldap.group.idAttribute=${LDAP_GROUP_RDN_ATTR}
-
-# CAS configuration
-sonar.cas.protocol=saml11
-sonar.cas.sonarServerUrl=${PRODUCT_SCHEME}://${PRODUCT_DOMAIN}/sonarqube
-sonar.cas.casServerUrlPrefix=${CAS_URL}
-sonar.cas.casServerLoginUrl=${CAS_URL}login
-sonar.cas.casServerLogoutUrl=${CAS_URL}logout
-sonar.cas.saml11.toleranceMilliseconds=10000
-sonar.cas.saml11.attribute.name=displayName
-sonar.cas.saml11.attribute.email=mail
-sonar.cas.saml11.attribute.groups=groups,roles
