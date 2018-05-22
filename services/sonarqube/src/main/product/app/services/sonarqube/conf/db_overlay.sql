@@ -10,6 +10,10 @@ INSERT INTO `users` (`id`, `login`, `name`, `email`, `crypted_password`, `salt`,
 (3, '@{bot.user}', 'System Bot', '@{bot.user}@@{product.domain}', '%{BOT_PASSWORD_SALTED}', '%{BOT_PASSWORD_SALT}', 1, UNIX_TIMESTAMP() * 1000, UNIX_TIMESTAMP() * 1000, NULL, '@{bot.user}', 'sonarqube', 0, 0, 1);
 
 
+INSERT INTO `user_tokens` (`login`, `name`, `token_hash`, `created_at`) VALUES
+('@{bot.user}', '@{bot.user}', '%{BOT_TOKEN_SHA384}', UNIX_TIMESTAMP() * 1000);
+
+
 INSERT INTO `groups` (`id`, `name`, `description`, `created_at`, `updated_at`, `organization_uuid`) VALUES
 (3, '@{product.group.admins}', '@{product.name} Admins', SYSDATE(), SYSDATE(), 'AWOEsZN9_iellEQuyHxC'),
 (4, '@{product.group.supervisors}', '@{product.name} Supervisors', SYSDATE(), SYSDATE(), 'AWOEsZN9_iellEQuyHxC'),

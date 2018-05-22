@@ -4,6 +4,7 @@ ROOT_PASSWORD_SALT=`genpassword | sha1sum | cut -d' ' -f 1`
 ROOT_PASSWORD_SALTED=`echo -n "--$ROOT_PASSWORD_SALT--$ROOT_PASSWORD--" | sha1sum | cut -d' ' -f 1`
 BOT_PASSWORD_SALT=`genpassword | sha1sum | cut -d' ' -f 1`
 BOT_PASSWORD_SALTED=`echo -n "--$BOT_PASSWORD_SALT--$BOT_PASSWORD--" | sha1sum | cut -d' ' -f 1`
+BOT_TOKEN_SHA384=`echo -n "$BOT_PASSWORD_MD5" | sha384sum | cut -d' ' -f 1`
 
 # Interpolate templates
 interpolatetemplate_inplace "@{package.app}/conf/sonar.properties"

@@ -12,6 +12,19 @@
 	CASScope /sonarqube
 	CASAuthNHeader X-CAS-User
 	CASScrubRequestHeaders On
+	<IfVersion < 2.4>
+		SetEnvIf User-Agent "^Scanner" IS_SCANNER
+		Order allow,deny
+		Allow from env=IS_SCANNER
+		Require valid-user
+		Satisfy any
+	</IfVersion>
+	<IfVersion >= 2.4>
+		<RequireAny>
+			Require expr %{HTTP_USER_AGENT} =~ /^Scanner/
+			Require valid-user
+		</RequireAny>
+	</IfVersion>
 #end
 </Location>
 
