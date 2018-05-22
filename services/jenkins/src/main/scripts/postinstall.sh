@@ -1,6 +1,6 @@
 # Interpolate template
 interpolatetemplate_inplace "@{package.app}/conf/tomcat-users.xml"
-interpolatetemplate_inplace "@{package.data}/hudson.plugins.sonar.SonarPublisher.xml"
+interpolatetemplate_inplace "@{package.data}/hudson.plugins.sonar.SonarGlobalConfiguration.xml"
 interpolatetemplate_inplace "@{package.data}/hudson.plugins.testlink.TestLinkBuilder.xml"
 interpolatetemplate_inplace "@{package.data}/org.jenkinsci.plugins.rundeck.RundeckNotifier.xml"
 interpolatetemplate_inplace "@{package.data}/users/bot/config.xml"
