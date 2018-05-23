@@ -26,11 +26,11 @@
 	<parent>
 		<groupId>fr.project-factory.packages.services</groupId>
 		<artifactId>services</artifactId>
-		<version>3.4.0-SNAPSHOT</version>
+		<version>3.4.0</version>
 	</parent>
 
 	<artifactId>jenkins-slave</artifactId>
-	<version>3.20-1-SNAPSHOT</version>
+	<version>3.20-1</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Jenkins Slave</name>

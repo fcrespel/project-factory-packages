@@ -26,11 +26,11 @@
 	<parent>
 		<groupId>fr.project-factory.packages.services</groupId>
 		<artifactId>services</artifactId>
-		<version>3.4.0-SNAPSHOT</version>
+		<version>3.4.0</version>
 	</parent>
 
 	<artifactId>portal</artifactId>
-	<version>3.4.0-1-SNAPSHOT</version>
+	<version>3.4.0-1</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Portal</name>
@@ -42,7 +42,7 @@
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-php
 		</package.dependencies>
-		<portal.version>${package.version}-SNAPSHOT</portal.version>
+		<portal.version>${package.version}</portal.version>
 	</properties>
 	
 	<build>
