@@ -17,6 +17,22 @@ chown -R @{package.user}:@{package.group} "@{package.data}" "@{package.log}"
 # Create trust store if necessary
 create_truststore "@{package.app}/conf/trust.jks" @{package.user} @{package.group}
 
+# Start MySQL if necessary
+if ! startservice @{mysql.service}; then
+	exit 1
+fi
+
+# Create database and user if necessary
+if ! mysql_createdb "@{cas.db.name}" || ! mysql_createuser "@{cas.db.user}" "$CAS_DB_PASSWORD" "@{cas.db.name}"; then
+	exit 1
+fi
+
+# Initialize database
+if ! cat "@{package.app}/conf/db_schema.sql" | mysql_exec "@{cas.db.name}"; then
+	printerror "ERROR: failed to initialize CAS database"
+	exit 1
+fi
+
 # Enable service at startup
 if ! enableservice @{package.service}; then
 	exit 1
