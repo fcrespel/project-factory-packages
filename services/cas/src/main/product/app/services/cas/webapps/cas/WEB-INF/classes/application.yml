@@ -43,15 +43,33 @@ cas:
           '@{cas.attr.dn}': '@{ldap.group.member.attr}'
     # CAS REST auth (extension)
     cas-rest:
-      order: 0
+      order: 1
       enabled: @{cas.rest.auth.enabled}
       excluded-usernames-pattern: '@{cas.rest.auth.excludedUsernamesRegex}'
       server-url: '@{cas.rest.auth.server}'
       ticket-url: '@{cas.rest.auth.ticket.url}'
+    # JDBC auth
+    jdbc:
+      search:
+        -
+          order: 0
+          dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+          driver-class: com.mysql.jdbc.Driver
+          field-password: token_hash
+          field-user: '( expires_at IS NULL or expires_at > CURRENT_TIMESTAMP ) AND uid'
+          health-query: 'SELECT 1'
+          url: 'jdbc:mysql://@{mysql.host}:@{mysql.port}/@{cas.db.name}?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true&useSSL=false'
+          user: '@{cas.db.user}'
+          password: '%{CAS_DB_PASSWORD}'
+          password-encoder:
+            type: DEFAULT
+            character-encoding: UTF-8
+            encoding-algorithm: SHA-384
+          table-users: user_tokens
     # LDAP auth
     ldap:
       -
-        order: 1
+        order: 2
         type: AUTHENTICATED
         connection-strategy: DEFAULT
         ldap-url: ldap://@{ldap.host}:@{ldap.port}
@@ -138,6 +156,9 @@ cas:
     endpoints:
       enabled: true
       sensitive: false
+  person-directory:
+    principal-resolution-failure-fatal: true
+    return-null: true
   rest:
     throttler: authenticationThrottle
   saml-core:
