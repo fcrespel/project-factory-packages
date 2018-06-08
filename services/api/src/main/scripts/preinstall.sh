@@ -1,3 +1,8 @@
+if [ -z "$CAS_DB_PASSWORD" ]; then
+	printerror "ERROR: missing CAS_DB_PASSWORD configuration value, please install the '@{package.prefix}-service-cas' package first or configure it manually."
+	exit 1
+fi
+
 # Disable Nagios monitoring
 if type -t nagios_disable_service >/dev/null; then
 	nagios_disable_service "Platform API AJP"

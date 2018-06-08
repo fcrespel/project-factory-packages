@@ -1,3 +1,10 @@
+spring:
+  datasource:
+    username: @{cas.db.user}
+    password: %{CAS_DB_PASSWORD}
+    url: "jdbc:mysql://@{mysql.host}:@{mysql.port}/@{cas.db.name}?useSSL=false"
+  jpa:
+    databasePlatform: org.hibernate.dialect.MySQL5InnoDBDialect
 server:
   port: @{package.port.http}
 security:
