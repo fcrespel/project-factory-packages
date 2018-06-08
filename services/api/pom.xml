@@ -49,6 +49,8 @@
 			${package.prefix}-system-tomcat
 		</package.dependencies>
 		<api.version>${package.version}-SNAPSHOT</api.version>
+		<cas.db.name>${product.id}_cas</cas.db.name>
+		<cas.db.user>${product.id}_cas</cas.db.user>
 	</properties>
 
 	<build>
