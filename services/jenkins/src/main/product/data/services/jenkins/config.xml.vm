@@ -182,7 +182,7 @@
         <hudson.views.LastSuccessColumn/>
         <hudson.views.LastFailureColumn/>
         <hudson.views.LastDurationColumn/>
-        <hudson.plugins.favorite.column.FavoriteColumn plugin="favorite@2.3.1"/>
+        <hudson.plugins.favorite.column.FavoriteColumn plugin="favorite@2.3.2"/>
         <org.jenkins.ci.plugins.column.console.LastBuildColumn plugin="console-column-plugin@1.5"/>
         <hudson.views.BuildButtonColumn/>
       </columns>
@@ -200,7 +200,7 @@
         <comparator class="hudson.util.CaseInsensitiveComparator" reference="../../../listView/jobNames/comparator"/>
       </jobNames>
       <jobFilters>
-        <hudson.plugins.favorite.filter.FavoriteFilter plugin="favorite@2.3.1"/>
+        <hudson.plugins.favorite.filter.FavoriteFilter plugin="favorite@2.3.2"/>
       </jobFilters>
       <columns>
         <hudson.views.StatusColumn/>
@@ -209,7 +209,7 @@
         <hudson.views.LastSuccessColumn/>
         <hudson.views.LastFailureColumn/>
         <hudson.views.LastDurationColumn/>
-        <hudson.plugins.favorite.column.FavoriteColumn plugin="favorite@2.3.1"/>
+        <hudson.plugins.favorite.column.FavoriteColumn plugin="favorite@2.3.2"/>
         <org.jenkins.ci.plugins.column.console.LastBuildColumn plugin="console-column-plugin@1.5"/>
         <hudson.views.BuildButtonColumn/>
       </columns>
