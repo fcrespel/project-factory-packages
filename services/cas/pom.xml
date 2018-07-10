@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>cas</artifactId>
-	<version>5.2.5-1-SNAPSHOT</version>
+	<version>5.2.6-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - CAS</name>
@@ -52,7 +52,7 @@
 			${package.prefix}-service-portal
 		</package.dependencies>
 		<java.version>1.8</java.version>
-		<cas.version>5.2.5</cas.version>
+		<cas.version>5.2.6</cas.version>
 		<cas.db.name>${product.id}_cas</cas.db.name>
 		<cas.db.user>${product.id}_cas</cas.db.user>
 		<cas.lang>${product.locale}</cas.lang>
@@ -93,11 +93,6 @@
 		<dependency>
 			<groupId>org.apereo.cas</groupId>
 			<artifactId>cas-server-core-configuration</artifactId>
-			<version>${cas.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apereo.cas</groupId>
-			<artifactId>cas-server-core-services-api</artifactId>
 			<version>${cas.version}</version>
 		</dependency>
 
@@ -166,26 +161,6 @@
 		</dependency>
 
 		<!-- Protocols -->
-		<dependency>
-			<groupId>org.apereo.cas</groupId>
-			<artifactId>cas-server-support-oauth</artifactId>
-			<version>${cas.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apereo.cas</groupId>
-			<artifactId>cas-server-support-oauth-api</artifactId>
-			<version>${cas.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apereo.cas</groupId>
-			<artifactId>cas-server-support-oauth-core</artifactId>
-			<version>${cas.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apereo.cas</groupId>
-			<artifactId>cas-server-support-oauth-services</artifactId>
-			<version>${cas.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.apereo.cas</groupId>
 			<artifactId>cas-server-support-oauth-webflow</artifactId>
