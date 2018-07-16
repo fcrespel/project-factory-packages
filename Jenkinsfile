@@ -38,7 +38,7 @@ pipeline {
                 expression { params.build_system == true }
               }
               steps {
-                sh "mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f system/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-el7-x86_64.properties -P !deb"
+                sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f system/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-el7-x86_64.properties -P !deb'"
               }
             }
             stage('Build Admin') {
@@ -46,7 +46,7 @@ pipeline {
                 expression { params.build_admin == true }
               }
               steps {
-                sh "mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f admin/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-el7-x86_64.properties -P !deb"
+                sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f admin/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-el7-x86_64.properties -P !deb'"
               }
             }
             stage('Build Services') {
@@ -54,7 +54,7 @@ pipeline {
                 expression { params.build_services == true }
               }
               steps {
-                sh "mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f services/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-el7-x86_64.properties -P !deb"
+                sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f services/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-el7-x86_64.properties -P !deb'"
               }
             }
           }
@@ -76,7 +76,7 @@ pipeline {
                 expression { params.build_system == true }
               }
               steps {
-                sh "mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f packages/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-debian9-amd64.properties -P !rpm"
+                sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f packages/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-debian9-amd64.properties -P !rpm'"
               }
             }
             stage('Build Admin') {
@@ -84,7 +84,7 @@ pipeline {
                 expression { params.build_admin == true }
               }
               steps {
-                sh "mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f admin/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-debian9-amd64.properties -P !rpm"
+                sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f admin/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-debian9-amd64.properties -P !rpm'"
               }
             }
             stage('Build Services') {
@@ -92,7 +92,7 @@ pipeline {
                 expression { params.build_services == true }
               }
               steps {
-                sh "mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f services/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-debian9-amd64.properties -P !rpm"
+                sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f services/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-debian9-amd64.properties -P !rpm'"
               }
             }
           }
@@ -114,7 +114,7 @@ pipeline {
                 expression { params.build_system == true }
               }
               steps {
-                sh "mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f system/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-opensuse423-x86_64.properties -P !deb"
+                sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f system/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-opensuse423-x86_64.properties -P !deb'"
               }
             }
             stage('Build Admin') {
@@ -122,7 +122,7 @@ pipeline {
                 expression { params.build_admin == true }
               }
               steps {
-                sh "mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f admin/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-opensuse423-x86_64.properties -P !deb"
+                sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f admin/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-opensuse423-x86_64.properties -P !deb'"
               }
             }
             stage('Build Services') {
@@ -130,7 +130,7 @@ pipeline {
                 expression { params.build_services == true }
               }
               steps {
-                sh "mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f services/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-opensuse423-x86_64.properties -P !deb"
+                sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f services/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-opensuse423-x86_64.properties -P !deb'"
               }
             }
           }
@@ -152,7 +152,7 @@ pipeline {
                 expression { params.build_system == true }
               }
               steps {
-                sh "mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f system/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-ubuntu1604-amd64.properties -P !rpm"
+                sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f system/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-ubuntu1604-amd64.properties -P !rpm'"
               }
             }
             stage('Build Admin') {
@@ -160,7 +160,7 @@ pipeline {
                 expression { params.build_admin == true }
               }
               steps {
-                sh "mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f admin/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-ubuntu1604-amd64.properties -P !rpm"
+                sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f admin/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-ubuntu1604-amd64.properties -P !rpm'"
               }
             }
             stage('Build Services') {
@@ -168,7 +168,7 @@ pipeline {
                 expression { params.build_services == true }
               }
               steps {
-                sh "mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f services/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-ubuntu1604-amd64.properties -P !rpm"
+                sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -U -fae -f services/pom.xml clean install -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-ubuntu1604-amd64.properties -P !rpm'"
               }
             }
           }
