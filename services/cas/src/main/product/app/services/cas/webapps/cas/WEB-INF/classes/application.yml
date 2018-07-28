@@ -44,6 +44,7 @@ cas:
     # CAS REST auth (extension)
     cas-rest:
       order: 1
+      name: cas-rest
       enabled: @{cas.rest.auth.enabled}
       excluded-usernames-pattern: '@{cas.rest.auth.excludedUsernamesRegex}'
       server-url: '@{cas.rest.auth.server}'
@@ -53,6 +54,7 @@ cas:
       search:
         -
           order: 0
+          name: user-token
           dialect: org.hibernate.dialect.MySQL5InnoDBDialect
           driver-class: com.mysql.jdbc.Driver
           field-password: token_hash
@@ -68,8 +70,10 @@ cas:
           table-users: user_tokens
     # LDAP auth
     ldap:
+      # Internal LDAP server (required)
       -
-        order: 2
+        order: 3
+        name: ldap
         type: AUTHENTICATED
         connection-strategy: DEFAULT
         ldap-url: ldap://@{ldap.host}:@{ldap.port}
@@ -82,11 +86,29 @@ cas:
         principal-attribute-id: '@{ldap.user.rdn.attr}'
         subtree-search: true
         user-filter: '(&(objectClass=@{ldap.user.class})(@{ldap.user.rdn.attr}={user}))'
+      # External LDAP server (optional)
+      -
+        order: 2
+        name: ldap-ext
+        type: @{cas.ldap.auth.type}
+        connection-strategy: DEFAULT
+        ldap-url: @{cas.ldap.auth.url}
+        use-ssl: false
+        base-dn: '@{cas.ldap.auth.base.dn}'
+        bind-dn: '@{cas.ldap.auth.bind.dn}'
+        bind-credential: '%{CAS_LDAP_BIND_PASSWORD}'
+        min-pool-size: 0
+        max-pool-size: 10
+        principal-attribute-id: '@{cas.ldap.auth.user.rdn.attr}'
+        principal-attribute-list: '@{cas.ldap.auth.user.commonname.attr}:@{cas.attr.commonname},@{cas.ldap.auth.user.firstname.attr}:@{cas.attr.firstname},@{cas.ldap.auth.user.lastname.attr}:@{cas.attr.lastname},@{cas.ldap.auth.user.displayname.attr}:@{cas.attr.displayname},@{cas.ldap.auth.user.mail.attr}:@{cas.attr.mail},@{cas.ldap.auth.user.organization.attr}:@{cas.attr.organization}'
+        subtree-search: true
+        user-filter: '(&(objectClass=@{cas.ldap.auth.user.class})(@{cas.ldap.auth.user.rdn.attr}={user}))'
     # Authentication listeners (extension)
     listeners:
       # LDAP synchronization
       ldap-sync:
         enabled: @{cas.ldap.sync.enabled}
+        excluded-handlers-pattern: '@{cas.ldap.sync.excludedHandlersRegex}'
         connection-strategy: DEFAULT
         ldap-url: ldap://@{ldap.host}:@{ldap.port}
         use-ssl: false
@@ -133,6 +155,7 @@ cas:
       jwks-file: file://@{package.data}/keystore.jwks
     # Radius auth
     radius:
+      name: radius
       client:
         accounting-port: @{cas.radius.auth.accountingPort}
         authentication-port: @{cas.radius.auth.authenticationPort}
@@ -146,6 +169,16 @@ cas:
       failure:
         threshold: 5
         range-seconds: 10
+  # Authentication events
+  events:
+    jpa:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+      driver-class: com.mysql.jdbc.Driver
+      health-query: 'SELECT 1'
+      url: 'jdbc:mysql://@{mysql.host}:@{mysql.port}/@{cas.db.name}?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true&useSSL=false'
+      user: '@{cas.db.user}'
+      password: '%{CAS_DB_PASSWORD}'
   host:
     name: @{product.domain}
   locale:
