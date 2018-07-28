@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>cas</artifactId>
-	<version>5.2.6-1-SNAPSHOT</version>
+	<version>5.2.6-2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - CAS</name>
@@ -179,6 +179,13 @@
 		<dependency>
 			<groupId>org.apereo.cas</groupId>
 			<artifactId>cas-server-support-saml</artifactId>
+			<version>${cas.version}</version>
+		</dependency>
+
+		<!-- Events -->
+		<dependency>
+			<groupId>org.apereo.cas</groupId>
+			<artifactId>cas-server-support-events-jpa</artifactId>
 			<version>${cas.version}</version>
 		</dependency>
 

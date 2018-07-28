@@ -1,6 +1,5 @@
-package org.apereo.cas.authentication.listener;
+package org.apereo.cas.authentication.principal.resolvers.listener;
 
-import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -11,14 +10,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import javax.naming.NameNotFoundException;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
+import org.apereo.cas.authentication.AuthenticationHandler;
 import org.apereo.cas.authentication.Credential;
-import org.apereo.cas.authentication.HandlerResult;
-import org.apereo.cas.authentication.PreventedException;
 import org.apereo.cas.authentication.UsernamePasswordCredential;
 import org.apereo.cas.authentication.principal.Principal;
 import org.ldaptive.Connection;
@@ -40,7 +39,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * LDAP Synchronization Authentication Listener.
+ * LDAP Synchronization principal resolver listener.
  * 
  * This listener uses the authentication credentials and the authenticated principal
  * to synchronize attributes with an LDAP directory.
@@ -50,7 +49,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
-public class LdapSyncAuthenticationListener implements AuthenticationListener {
+public class LdapSyncPrincipalResolverListener implements PrincipalResolverListener {
 
 	private static final Random random;
 
@@ -65,6 +64,7 @@ public class LdapSyncAuthenticationListener implements AuthenticationListener {
 	private String groupMemberAttr = "member";
 	private boolean groupMemberIsDN = true;
 	private boolean allowPasswordSync = false;
+	private Pattern excludedHandlersPattern;
 
 	static {
 		Random randomLocal = null;
@@ -77,14 +77,14 @@ public class LdapSyncAuthenticationListener implements AuthenticationListener {
 	}
 
 	@Override
-	public HandlerResult postAuthenticate(Credential credential, HandlerResult result) throws GeneralSecurityException, PreventedException {
-		Principal principal = result.getPrincipal();
-		if (principal == null)
-			return result;
+	public Principal preResolve(Credential credential, Principal principal, AuthenticationHandler handler) {
+		if (excludedHandlersPattern != null && excludedHandlersPattern.matcher(handler.getName()).find()) {
+			log.debug("Skipping LDAP sync for authentication handler '{}'", handler.getName());
+			return principal;
+		}
 
-		Connection conn;
 		try {
-			conn = connectionFactory.getConnection();
+			Connection conn = connectionFactory.getConnection();
 			try {
 				// Build the user DN
 				String userDN = dnTemplate.replaceAll("%u", LdapAttribute.escapeValue(principal.getId().toLowerCase(Locale.ROOT)));
@@ -98,10 +98,9 @@ public class LdapSyncAuthenticationListener implements AuthenticationListener {
 			}
 		} catch (LdapException e) {
 			log.error("LDAP sync failed", e);
-			throw new PreventedException("LDAP sync failed: " + e.getMessage(), e);
 		}
 
-		return result;
+		return principal;
 	}
 
 	/**

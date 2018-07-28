@@ -1,5 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 org.apereo.cas.config.CasRestAuthenticationConfiguration,\
 org.apereo.cas.config.LdapUserGroupAttributeRepositoryConfiguration,\
-org.apereo.cas.config.LdapSyncAuthenticationListenerConfiguration,\
-org.apereo.cas.config.PersonDirectoryPrincipalResolverConfiguration
+org.apereo.cas.config.LdapSyncPrincipalResolverListenerConfiguration,\
+org.apereo.cas.config.PrincipalResolverConfiguration

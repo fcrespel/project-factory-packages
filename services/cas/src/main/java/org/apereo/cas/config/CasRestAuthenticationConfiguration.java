@@ -1,12 +1,9 @@
 package org.apereo.cas.config;
 
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.apereo.cas.authentication.AuthenticationEventExecutionPlanConfigurer;
 import org.apereo.cas.authentication.AuthenticationHandler;
-import org.apereo.cas.authentication.ExtAuthenticationHandler;
-import org.apereo.cas.authentication.listener.AuthenticationListener;
+import org.apereo.cas.authentication.handler.FilteringAuthenticationHandler;
 import org.apereo.cas.authentication.principal.DefaultPrincipalFactory;
 import org.apereo.cas.authentication.principal.PrincipalFactory;
 import org.apereo.cas.authentication.principal.PrincipalResolver;
@@ -51,9 +48,6 @@ public class CasRestAuthenticationConfiguration {
 	@Autowired
 	@Qualifier("servicesManager")
 	private ServicesManager servicesManager;
-
-	@Autowired
-	private List<AuthenticationListener> authenticationListeners;
 
 	@Bean
 	public PrincipalFactory casRestPrincipalFactory() {
@@ -100,9 +94,8 @@ public class CasRestAuthenticationConfiguration {
 		pac4jHandler.setProfileCreator(casRestProfileCreator());
 		pac4jHandler.setTypedIdUsed(false);
 
-		final ExtAuthenticationHandler extHandler = new ExtAuthenticationHandler(pac4jHandler);
+		final FilteringAuthenticationHandler extHandler = new FilteringAuthenticationHandler(pac4jHandler);
 		extHandler.setExcludedUsernamesPattern(casRestAuthProperties.getExcludedUsernamesPattern());
-		extHandler.setAuthenticationListeners(authenticationListeners);
 		return extHandler;
 	}
 
