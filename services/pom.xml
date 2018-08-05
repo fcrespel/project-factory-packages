@@ -42,23 +42,23 @@
 	</properties>
 
 	<modules>
-		<module>portal</module>
+		<module>alfresco</module>
 		<module>api</module>
-		<module>manager</module>
 		<module>cas</module>
-		<module>svn</module>
-		<module>redmine</module>
+		<module>drupal</module>
+		<module>gitlab</module>
 		<module>jenkins</module>
 		<module>jenkins-slave</module>
+		<module>manager</module>
 		<module>nexus</module>
-		<module>testlink</module>
 		<module>osqa</module>
-		<module>alfresco</module>
-		<module>drupal</module>
+		<module>portal</module>
+		<module>redmine</module>
+		<module>rundeck</module>
 		<module>sonarqube</module>
 		<module>sonarqube-scanner</module>
-		<module>gitlab</module>
-		<module>rundeck</module>
+		<module>svn</module>
+		<module>testlink</module>
 	</modules>
 
 </project>

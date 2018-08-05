@@ -45,8 +45,8 @@
 		<module>cas-management</module>
 		<module>kibana</module>
 		<module>nagios</module>
-		<module>phpmyadmin</module>
 		<module>phpldapadmin</module>
+		<module>phpmyadmin</module>
 		<module>piwik</module>
 	</modules>
 
