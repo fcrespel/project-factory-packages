@@ -38,8 +38,8 @@
 	
 	<properties>
 		<package.disabled>${osqa.disabled}</package.disabled>
-		<package.src.url>https://github.com/fcrespel/osqa.git</package.src.url>
-		<package.src.branch>master</package.src.branch>
+		<package.src.url>https://github.com/fcrespel/osqa/archive</package.src.url>
+		<package.src.file>2c3ba81e19fd6d84ab208ad90a48fd81e4780c29.zip</package.src.file>
 		<package.dependencies>
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-mysql,
@@ -121,20 +121,31 @@
 		</pluginManagement>
 		<plugins>
 			<plugin>
-				<artifactId>maven-scm-plugin</artifactId>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>process-resources-scm-checkout</id>
+						<id>process-resources-extract</id>
 						<phase>process-resources</phase>
 						<goals>
-							<goal>checkout</goal>
+							<goal>run</goal>
 						</goals>
 						<configuration>
-							<checkoutDirectory>${project.app.directory}</checkoutDirectory>
-							<connectionUrl>scm:git:${package.src.url}</connectionUrl>
-							<scmVersionType>branch</scmVersionType>
-							<scmVersion>${package.src.branch}</scmVersion>
-							<excludes>.git/**,log/**,forum/upfiles/**</excludes>
+							<skip>${package.disabled}</skip>
+							<target>
+								<unzip
+									src="${project.downloaded.directory}/${package.src.file}"
+									dest="${project.app.directory}">
+									<patternset>
+										<exclude name="*/log/**" />
+										<exclude name="*/forum/upfiles/**" />
+									</patternset>
+									<cutdirsmapper dirs="1" />
+								</unzip>
+							</target>
 						</configuration>
 					</execution>
 				</executions>
