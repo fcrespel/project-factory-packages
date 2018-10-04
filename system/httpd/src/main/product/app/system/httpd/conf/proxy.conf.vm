@@ -36,6 +36,9 @@
 	RequestHeader set X-Forwarded-Proto "http"
 	RequestHeader set X-Forwarded-Port "${HTTPD_VHOST_PORT_HTTP}"
 	Include ${HTTPD_APP}/conf/proxy_common.conf
+	RewriteCond %{HTTP:UPGRADE} ^WebSocket$ [NC,OR]
+	RewriteCond %{HTTP:CONNECTION} ^Upgrade$ [NC]
+	RewriteRule .* ws://${HTTPD_HOST}:${HTTPD_PORT_HTTP}%{REQUEST_URI} [P,QSA,L]
 	ProxyPass / http://${HTTPD_HOST}:${HTTPD_PORT_HTTP}/ nocanon
 	ProxyPassReverse / http://${HTTPD_HOST}:${HTTPD_PORT_HTTP}/
 #end
@@ -65,6 +68,9 @@
 	RequestHeader set X-Forwarded-Proto "https"
 	RequestHeader set X-Forwarded-Port "${HTTPD_VHOST_PORT_HTTPS}"
 	Include ${HTTPD_APP}/conf/proxy_common.conf
+	RewriteCond %{HTTP:UPGRADE} ^WebSocket$ [NC,OR]
+	RewriteCond %{HTTP:CONNECTION} ^Upgrade$ [NC]
+	RewriteRule .* ws://${HTTPD_HOST}:${HTTPD_PORT_HTTPS}%{REQUEST_URI} [P,QSA,L]
 	ProxyPass / http://${HTTPD_HOST}:${HTTPD_PORT_HTTPS}/ nocanon
 	ProxyPassReverse / http://${HTTPD_HOST}:${HTTPD_PORT_HTTPS}/
 
