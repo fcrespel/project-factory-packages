@@ -38,7 +38,7 @@
 
 	<properties>
 		<package.disabled>${sonarqube.disabled}</package.disabled>
-		<package.src.url>https://sonarsource.bintray.com/Distribution/sonarqube</package.src.url>
+		<package.src.url>https://binaries.sonarsource.com/Distribution/sonarqube</package.src.url>
 		<package.src.file>sonarqube-${package.version}.zip</package.src.file>
 		<package.bind>${sonarqube.bind}</package.bind>
 		<package.port.shutdown>${sonarqube.port.shutdown}</package.port.shutdown>
