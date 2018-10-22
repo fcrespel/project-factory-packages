@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>ruby</artifactId>
-	<version>2.3.7-1-SNAPSHOT</version>
+	<version>2.3.8-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory System - Ruby</name>
@@ -65,13 +65,13 @@
 			${system.package.sqlite-devel},
 			${system.package.zlib-devel}
 		</package.dependencies>
-		<rvm.version>1.29.3</rvm.version>
+		<rvm.version>1.29.4</rvm.version>
 		<rvm.src.url>https://github.com/rvm/rvm/archive</rvm.src.url>
 		<rvm.src.file>${rvm.version}.tar.gz</rvm.src.file>
-		<ruby.version>2.3.7</ruby.version>
+		<ruby.version>2.3.8</ruby.version>
 		<ruby.src.url>https://cache.ruby-lang.org/pub/ruby</ruby.src.url>
 		<ruby.src.file>ruby-${ruby.version}.tar.bz2</ruby.src.file>
-		<rubygems.version>2.7.6</rubygems.version>
+		<rubygems.version>2.7.7</rubygems.version>
 		<rubygems.src.url>https://rubygems.org/rubygems</rubygems.src.url>
 		<rubygems.src.file>rubygems-${rubygems.version}.tgz</rubygems.src.file>
 		<ruby.gems>rake rack passenger bundler</ruby.gems>
@@ -95,19 +95,19 @@
 			<dependency>
 				<groupId>rubygems</groupId>
 				<artifactId>rack</artifactId>
-				<version>2.0.4</version>
+				<version>2.0.5</version>
 				<type>gem</type>
 			</dependency>
 			<dependency>
 				<groupId>rubygems</groupId>
 				<artifactId>passenger</artifactId>
-				<version>5.2.2</version>
+				<version>5.3.5</version>
 				<type>gem</type>
 			</dependency>
 			<dependency>
 				<groupId>rubygems</groupId>
 				<artifactId>bundler</artifactId>
-				<version>1.16.1</version>
+				<version>1.16.6</version>
 				<type>gem</type>
 			</dependency>
 		</dependencies>
