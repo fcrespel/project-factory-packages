@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>drupal</artifactId>
-	<version>7.59-1-SNAPSHOT</version>
+	<version>7.60-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Drupal</name>
@@ -70,7 +70,7 @@
 			entityreference_prepopulate-7.x-1.7
 			facetapi-7.x-1.5
 			facetapi_collapsible-7.x-1.1
-			filefield_paths-7.x-1.0
+			filefield_paths-7.x-1.1
 			http_proxy-7.x-1.0
 			imce-7.x-1.11
 			imce_mkdir-7.x-1.0
