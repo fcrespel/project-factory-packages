@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>go</artifactId>
-	<version>1.9.6-1</version>
+	<version>1.10.4-1</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory System - Go</name>
@@ -39,12 +39,12 @@
 	<properties>
 		<package.disabled>${go.disabled}</package.disabled>
 		<package.arch>${system.arch}</package.arch>
-		<package.src.url>https://storage.googleapis.com/golang</package.src.url>
+		<package.src.url>https://dl.google.com/go</package.src.url>
 		<package.src.file>${package.src.file.arch}</package.src.file>
 		<package.src.file.i386>go${go.version}.linux-386.tar.gz</package.src.file.i386>
 		<package.src.file.x86_64>go${go.version}.linux-amd64.tar.gz</package.src.file.x86_64>
 		<package.src.file.amd64>go${go.version}.linux-amd64.tar.gz</package.src.file.amd64>
-		<go.version>1.9.6</go.version>
+		<go.version>1.10.4</go.version>
 	</properties>
 
 	<build>
@@ -69,7 +69,6 @@
 									src="${project.downloaded.directory}/${package.src.file}"
 									dest="${project.app.directory}">
 									<patternset>
-										<exclude name="*/blog/**" />
 										<exclude name="*/doc/**" />
 									</patternset>
 									<cutdirsmapper dirs="1" />
