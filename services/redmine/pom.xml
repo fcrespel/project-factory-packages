@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>redmine</artifactId>
-	<version>3.4.6-1</version>
+	<version>3.4.6-2</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Redmine</name>
@@ -43,7 +43,7 @@
 		<package.dependencies>
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-mysql,
-			${package.prefix}-system-ruby >= 2.3.0,
+			${package.prefix}-system-ruby >= 2.4.0,
 			${package.prefix}-service-portal,
 			${system.package.libxml2-devel},
 			${system.package.libxslt-devel},
