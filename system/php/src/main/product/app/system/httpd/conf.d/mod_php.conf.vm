@@ -17,5 +17,5 @@ LoadModule php5_module ${PHP5_MODULE}
 
 DirectoryIndex index.php
 
-php_value include_path ".:${PACKAGE_APP}/pear/php"
+php_value include_path ".:${PACKAGE_APP}/composer/vendor/jasig/phpcas"
 php_value session.save_path "${PACKAGE_DATA}/sessions"

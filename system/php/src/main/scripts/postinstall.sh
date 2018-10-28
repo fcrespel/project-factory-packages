@@ -1,10 +1,3 @@
-PEAR_CFG="@{product.root}/.pearrc"
-
-# Configure PEAR
-pear config-create "@{package.app}" "$PEAR_CFG" > /dev/null
-pear -c "$PEAR_CFG" config-set auto_discover 1 > /dev/null
-chown @{product.user}:@{product.group} "$PEAR_CFG"
-
 # Extract Composer binaries
 tar -C "@{package.app}/composer/vendor" -xf "@{package.app}/composer/vendor/bin.tar"
 
