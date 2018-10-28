@@ -1,98 +1,10 @@
 <project>
 	<property name="php.bin" value="php" />
-	<property name="pear.bin" value="pear" />
-	<property name="pear.dir" value="${project.app.directory}" />
 	<property name="composer.bin" value="${project.app.directory}/composer.phar" />
 	<property name="composer.dir" value="${project.app.directory}/composer" />
 	<propertyregex property="composer.packages.flat" input="${composer.packages}" regexp="\s+" replace=" " global="true" defaultValue="${composer.packages}" />
 
-	<target name="install" depends="init-pear,install-pear-packages,clean-pear,init-composer,install-composer-packages,clean-composer" />
-
-	<target name="init-pear">
-		<tempfile property="pear.tmp" destDir="${java.io.tmpdir}" prefix="pear" />
-		<property name="pear.cfg" value="${pear.tmp}/.pearrc" />
-		<mkdir dir="${pear.tmp}" />
-		<mkdir dir="${pear.tmp}/cache" />
-		<mkdir dir="${pear.tmp}/download" />
-		<mkdir dir="${pear.tmp}/temp" />
-		<exec executable="${pear.bin}" failonerror="true">
-			<arg value="config-create" />
-			<arg value="${pear.dir}" />
-			<arg value="${pear.cfg}" />
-		</exec>
-		<exec executable="${pear.bin}" failonerror="true">
-			<arg value="-c" />
-			<arg value="${pear.cfg}" />
-			<arg value="channel-update" />
-			<arg value="pear.php.net" />
-		</exec>
-		<exec executable="${pear.bin}" failonerror="true">
-			<arg value="-c" />
-			<arg value="${pear.cfg}" />
-			<arg value="config-set" />
-			<arg value="auto_discover" />
-			<arg value="1" />
-		</exec>
-		<exec executable="${pear.bin}" failonerror="true">
-			<arg value="-c" />
-			<arg value="${pear.cfg}" />
-			<arg value="config-set" />
-			<arg value="download_dir" />
-			<arg value="${pear.tmp}/download" />
-		</exec>
-		<exec executable="${pear.bin}" failonerror="true">
-			<arg value="-c" />
-			<arg value="${pear.cfg}" />
-			<arg value="config-set" />
-			<arg value="temp_dir" />
-			<arg value="${pear.tmp}/temp" />
-		</exec>
-		<exec executable="${pear.bin}" failonerror="true">
-			<arg value="-c" />
-			<arg value="${pear.cfg}" />
-			<arg value="config-set" />
-			<arg value="cache_dir" />
-			<arg value="${pear.tmp}/cache" />
-		</exec>
-	</target>
-
-	<target name="install-pear-packages">
-		<for list="${pear.packages}" delimiter="&#9;&#10; " trim="true" param="pear.package">
-			<sequential>
-				<echo message="==> Installing PEAR package @{pear.package}" />
-				<if>
-					<matches string="@{pear.package}" pattern="^https?://" />
-					<then>
-						<basename file="@{pear.package}" property="pear.package.file" />
-						<get src="@{pear.package}" dest="${pear.tmp}/download/${pear.package.file}" />
-						<exec executable="${pear.bin}" failonerror="true">
-							<arg value="-c" />
-							<arg value="${pear.cfg}" />
-							<arg value="install" />
-							<arg value="${pear.tmp}/download/${pear.package.file}" />
-						</exec>
-					</then>
-					<else>
-						<exec executable="${pear.bin}" failonerror="true">
-							<arg value="-c" />
-							<arg value="${pear.cfg}" />
-							<arg value="install" />
-							<arg value="@{pear.package}" />
-						</exec>
-					</else>
-				</if>
-			</sequential>
-		</for>
-	</target>
-
-	<target name="clean-pear">
-		<exec executable="${pear.bin}" failonerror="false">
-			<arg value="-c" />
-			<arg value="${pear.cfg}" />
-			<arg value="clear-cache" />
-		</exec>
-		<delete dir="${pear.tmp}" />
-	</target>
+	<target name="install" depends="init-composer,install-composer-packages,clean-composer" />
 
 	<target name="init-composer">
 		<mkdir dir="${composer.dir}" />
