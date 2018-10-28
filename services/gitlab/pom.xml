@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>gitlab</artifactId>
-	<version>10.7.5-1-SNAPSHOT</version>
+	<version>11.4.0-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - GitLab</name>
@@ -43,15 +43,15 @@
 		<package.src.file>archive.zip?ref=v${package.version}</package.src.file>
 		<package.dependencies>
 			${package.prefix}-system-git,
-			${package.prefix}-system-go,
+			${package.prefix}-system-go >= 1.10.0,
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-mysql,
 			${package.prefix}-system-redis,
-			${package.prefix}-system-ruby >= 2.3.0,
+			${package.prefix}-system-ruby >= 2.4.0,
 			${package.prefix}-service-portal,
 			${system.package.cmake},
-			${system.package.nodejs} >= 4.3.0,
-			${system.package.yarn} >= 0.17.0,
+			${system.package.nodejs} >= 6.0.0,
+			${system.package.yarn} >= 1.2.0,
 			${system.package.libxml2-devel},
 			${system.package.libxslt-devel},
 			${system.package.libicu-devel},
@@ -60,13 +60,13 @@
 		<gitlab.db.name>${product.id}_gitlab</gitlab.db.name>
 		<gitlab.db.user>${product.id}_gitlab</gitlab.db.user>
 		<gitlab.bundler.exclude>development:test:postgres:aws:kerberos</gitlab.bundler.exclude>
-		<gitlab.shell.version>7.1.2</gitlab.shell.version>
+		<gitlab.shell.version>8.3.3</gitlab.shell.version>
 		<gitlab.shell.url>https://gitlab.com/gitlab-org/gitlab-shell/repository</gitlab.shell.url>
 		<gitlab.shell.file>archive.zip?ref=v${gitlab.shell.version}</gitlab.shell.file>
-		<gitlab.workhorse.version>4.1.0</gitlab.workhorse.version>
+		<gitlab.workhorse.version>7.0.0</gitlab.workhorse.version>
 		<gitlab.workhorse.url>https://gitlab.com/gitlab-org/gitlab-workhorse/repository</gitlab.workhorse.url>
 		<gitlab.workhorse.file>archive.zip?ref=v${gitlab.workhorse.version}</gitlab.workhorse.file>
-		<gitlab.gitaly.version>0.96.1</gitlab.gitaly.version>
+		<gitlab.gitaly.version>0.125.1</gitlab.gitaly.version>
 		<gitlab.gitaly.url>https://gitlab.com/gitlab-org/gitaly/repository</gitlab.gitaly.url>
 		<gitlab.gitaly.file>archive.zip?ref=v${gitlab.gitaly.version}</gitlab.gitaly.file>
 	</properties>

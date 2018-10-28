@@ -138,7 +138,7 @@ if ! ( cd "@{package.app}" && rvm default do bundle exec rake gettext:compile );
 fi
 
 # Compile assets and clean up cache
-if ! ( cd "@{package.app}" && rvm default do bundle exec rake yarn:install gitlab:assets:clean gitlab:assets:compile cache:clear RAILS_RELATIVE_URL_ROOT=/gitlab ); then
+if ! ( cd "@{package.app}" && rvm default do bundle exec rake yarn:install gitlab:assets:clean gitlab:assets:compile cache:clear RAILS_RELATIVE_URL_ROOT=/gitlab NODE_ENV=production ); then
 	printerror "ERROR: failed to compile assets and clean up cache for GitLab"
 	exit 1
 fi
@@ -158,6 +158,7 @@ su -s /bin/bash - @{package.user} -c "git config --global user.email gitlab@@{pr
 su -s /bin/bash - @{package.user} -c "git config --global core.autocrlf input"
 su -s /bin/bash - @{package.user} -c "git config --global gc.auto 0"
 su -s /bin/bash - @{package.user} -c "git config --global repack.writeBitmaps true"
+su -s /bin/bash - @{package.user} -c "git config --global receive.advertisePushOptions true"
 
 # Enable service at startup
 if ! enableservice @{package.service}; then

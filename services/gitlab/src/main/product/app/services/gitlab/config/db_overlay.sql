@@ -36,7 +36,9 @@ SET `default_projects_limit` = 100,
 `signup_enabled` = 0,
 `version_check_enabled` = 0,
 `usage_ping_enabled` = 0,
-`default_group_visibility` = 0;
+`default_group_visibility` = 0
+`hide_third_party_offers` = 1
+`instance_statistics_visibility_private` = 1;
 
 UPDATE `application_settings`
 SET `after_sign_out_path` = '@{cas.url}logout?service=@{product.scheme}%3A%2F%2F@{product.domain}%2Fgitlab%2F'
