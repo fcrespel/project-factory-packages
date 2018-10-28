@@ -30,24 +30,6 @@ auth_file: "@{package.root}/.ssh/authorized_keys"
 # Default is hooks in the gitlab-shell directory.
 # custom_hooks_dir: "/home/git/gitlab-shell/hooks"
 
-# Redis settings used for pushing commit notices to gitlab
-redis:
-  bin: @{product.app}/system/redis/bin/redis-cli
-  host: @{redis.host}
-  port: @{redis.port}
-  # pass: redispass # Allows you to specify the password for Redis
-  database: 0
-  # socket: /var/run/redis/redis.sock # Comment out this line if you want to use TCP or Sentinel
-  namespace: resque:gitlab
-  # sentinels:
-  #   -
-  #     host: 127.0.0.1
-  #     port: 26380
-  #   -
-  #     host: 127.0.0.1
-  #     port: 26381
-
-
 # Log file.
 # Default is gitlab-shell.log in the root directory.
 log_file: "@{package.log}/gitlab-shell.log"
@@ -62,10 +44,3 @@ log_level: INFO
 # Set to true to see real usernames in the logs instead of key ids, which is easier to follow, but
 # incurs an extra API call on every gitlab-shell command.
 audit_usernames: false
-
-# Git trace log file.
-# If set, git commands receive GIT_TRACE* environment variables
-# See https://git-scm.com/book/es/v2/Git-Internals-Environment-Variables#Debugging for documentation
-# An absolute path starting with / – the trace output will be appended to that file.
-# It needs to exist so we can check permissions and avoid to throwing warnings to the users.
-git_trace_log_file:

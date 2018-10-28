@@ -45,7 +45,7 @@ production: &base
     https: false
 #end
 
-    # Uncommment this line below if your ssh host is different from HTTP/HTTPS one
+    # Uncomment this line below if your ssh host is different from HTTP/HTTPS one
     # (you'd obviously need to replace ssh.host_example.com with your own host).
     # Otherwise, ssh host will be set to the `host:` value above
     # ssh_host: ssh.host_example.com
@@ -94,6 +94,11 @@ production: &base
     $H$H   3 - Light
     $H$H   4 - Blue
     $H$H   5 - Green
+    $H$H   6 - Light Indigo
+    $H$H   7 - Light Blue
+    $H$H   8 - Light Green
+    $H$H   9 - Red
+    $H$H   10 - Light Red
     default_theme: 3 # default: 1
 
     $H$H Automatic issue closing
@@ -101,7 +106,7 @@ production: &base
     # This happens when the commit is pushed or merged into the default branch of a project.
     # When not specified the default issue_closing_pattern as specified below will be used.
     # Tip: you can test your closing pattern at http://rubular.com.
-    # issue_closing_pattern: '((?:[Cc]los(?:e[sd]?|ing)|[Ff]ix(?:e[sd]|ing)?|[Rr]esolv(?:e[sd]?|ing)|[Ii]mplement(?:s|ed|ing)?)(:?) +(?:(?:issues? +)?%{issue_ref}(?:(?:, *| +and +)?)|([A-Z][A-Z0-9_]+-\d+))+)'
+    # issue_closing_pattern: '\b((?:[Cc]los(?:e[sd]?|ing)|\b[Ff]ix(?:e[sd]|ing)?|\b[Rr]esolv(?:e[sd]?|ing)|\b[Ii]mplement(?:s|ed|ing)?)(:?) +(?:(?:issues? +)?%{issue_ref}(?:(?:, *| +and +)?)|([A-Z][A-Z0-9_]+-\d+))+)'
 
     $H$H Default project features settings
     default_projects_features:
@@ -157,22 +162,67 @@ production: &base
     enabled: true
     # The location where build artifacts are stored (default: shared/artifacts).
     path: ${PACKAGE_DATA}/shared/artifacts
+    # object_store:
+    #   enabled: false
+    #   remote_directory: artifacts # The bucket name
+    #   background_upload: false # Temporary option to limit automatic upload (Default: true)
+    #   proxy_download: false # Passthrough all downloads via GitLab instead of using Redirects to Object Storage
+    #   connection:
+    #     provider: AWS # Only AWS supported at the moment
+    #     aws_access_key_id: AWS_ACCESS_KEY_ID
+    #     aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+    #     region: us-east-1
+    #     aws_signature_version: 4 # For creation of signed URLs. Set to 2 if provider does not support v4.
+    #     endpoint: 'https://s3.amazonaws.com' # default: nil - Useful for S3 compliant services such as DigitalOcean Spaces
+
 
   $H$H Git LFS
   lfs:
     enabled: true
     # The location where LFS objects are stored (default: shared/lfs-objects).
     storage_path: ${PACKAGE_DATA}/shared/lfs-objects
+    object_store:
+      enabled: false
+      remote_directory: lfs-objects # Bucket name
+      # direct_upload: false # Use Object Storage directly for uploads instead of background uploads if enabled (Default: false)
+      # background_upload: false # Temporary option to limit automatic upload (Default: true)
+      # proxy_download: false # Passthrough all downloads via GitLab instead of using Redirects to Object Storage
+      connection:
+        provider: AWS
+        aws_access_key_id: AWS_ACCESS_KEY_ID
+        aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+        region: us-east-1
+        # Use the following options to configure an AWS compatible host
+        # host: 'localhost' # default: s3.amazonaws.com
+        # endpoint: 'http://127.0.0.1:9000' # default: nil
+        # aws_signature_version: 4 # For creation of signed URLs. Set to 2 if provider does not support v4.
+        # path_style: true # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 
   $H$H Uploads (attachments, avatars, etc...)
   uploads:
     # The location where uploads objects are stored (default: public/).
     # storage_path: public/
     # base_dir: uploads/-/system
+    object_store:
+      enabled: false
+      remote_directory: uploads # Bucket name
+      # direct_upload: false # Use Object Storage directly for uploads instead of background uploads if enabled (Default: false)
+      # background_upload: false # Temporary option to limit automatic upload (Default: true)
+      # proxy_download: false # Passthrough all downloads via GitLab instead of using Redirects to Object Storage
+      connection:
+        provider: AWS
+        aws_access_key_id: AWS_ACCESS_KEY_ID
+        aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+        aws_signature_version: 4 # For creation of signed URLs. Set to 2 if provider does not support v4.
+        region: us-east-1
+        # host: 'localhost' # default: s3.amazonaws.com
+        # endpoint: 'http://127.0.0.1:9000' # default: nil
+        # path_style: true # Use 'host/bucket_name/object' instead of 'bucket_name.host/object'
 
   $H$H GitLab Pages
   pages:
     enabled: false
+    access_control: false
     # The location where pages are stored (default: shared/pages).
     path: ${PACKAGE_DATA}/shared/pages
 
@@ -190,6 +240,8 @@ production: &base
     artifacts_server: true
     # external_http: ["1.1.1.1:80", "[2001::1]:80"] # If defined, enables custom domain support in GitLab Pages
     # external_https: ["1.1.1.1:443", "[2001::1]:443"] # If defined, enables custom domain and certificate support in GitLab Pages
+    admin:
+      address: unix:/home/git/gitlab/tmp/sockets/private/pages-admin.socket # TCP connections are supported too (e.g. tcp://host:port)
 
   $H$H Mattermost
   $H$H For enabling Add to Mattermost button
@@ -227,6 +279,9 @@ production: &base
     # once per hour you will have concurrent 'git fsck' jobs.
     repository_check_worker:
       cron: "20 * * * *"
+    # Archive live traces which have not been archived yet
+    ci_archive_traces_cron_worker:
+      cron: "17 * * * *"
     # Send admin emails once a week
     admin_email_worker:
       cron: "0 0 * * 0"
@@ -718,8 +773,8 @@ test:
     host: localhost
     port: 80
 
-    # When you run tests we clone and setup gitlab-shell
-    # In order to setup it correctly you need to specify
+    # When you run tests we clone and set up gitlab-shell
+    # In order to set it up correctly you need to specify
     # your system username you use to run GitLab
     # user: YOUR_USERNAME
   pages:
@@ -753,7 +808,7 @@ test:
       project_key: PROJECT
 
   omniauth:
-    enabled: true
+    # enabled: true
     allow_single_sign_on: true
     external_providers: []
 
