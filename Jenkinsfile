@@ -37,7 +37,7 @@ pipeline {
             expression { params.build_centos7 == true }
           }
           stages {
-            stage('Build System') {
+            stage('CentOS 7 System') {
               when {
                 expression { params.build_system == true }
               }
@@ -45,7 +45,7 @@ pipeline {
                 sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -Dgpg.homedir=/var/maven/.gnupg -fae -f system/pom.xml ${params.mvn_opts} ${params.mvn_goals} -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-el7-x86_64.properties -P !deb'"
               }
             }
-            stage('Build Admin') {
+            stage('CentOS 7 Admin') {
               when {
                 expression { params.build_admin == true }
               }
@@ -53,7 +53,7 @@ pipeline {
                 sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -Dgpg.homedir=/var/maven/.gnupg -fae -f admin/pom.xml ${params.mvn_opts} ${params.mvn_goals} -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-el7-x86_64.properties -P !deb'"
               }
             }
-            stage('Build Services') {
+            stage('CentOS 7 Services') {
               when {
                 expression { params.build_services == true }
               }
@@ -75,15 +75,15 @@ pipeline {
             expression { params.build_debian9 == true }
           }
           stages {
-            stage('Build System') {
+            stage('Debian 9 System') {
               when {
                 expression { params.build_system == true }
               }
               steps {
-                sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -Dgpg.homedir=/var/maven/.gnupg -fae -f packages/pom.xml ${params.mvn_opts} ${params.mvn_goals} -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-debian9-amd64.properties -P !rpm'"
+                sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -Dgpg.homedir=/var/maven/.gnupg -fae -f system/pom.xml ${params.mvn_opts} ${params.mvn_goals} -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-debian9-amd64.properties -P !rpm'"
               }
             }
-            stage('Build Admin') {
+            stage('Debian 9 Admin') {
               when {
                 expression { params.build_admin == true }
               }
@@ -91,7 +91,7 @@ pipeline {
                 sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -Dgpg.homedir=/var/maven/.gnupg -fae -f admin/pom.xml ${params.mvn_opts} ${params.mvn_goals} -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-debian9-amd64.properties -P !rpm'"
               }
             }
-            stage('Build Services') {
+            stage('Debian 9 Services') {
               when {
                 expression { params.build_services == true }
               }
@@ -113,7 +113,7 @@ pipeline {
             expression { params.build_opensuse423 == true }
           }
           stages {
-            stage('Build System') {
+            stage('openSUSE 42.3 System') {
               when {
                 expression { params.build_system == true }
               }
@@ -121,7 +121,7 @@ pipeline {
                 sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -Dgpg.homedir=/var/maven/.gnupg -fae -f system/pom.xml ${params.mvn_opts} ${params.mvn_goals} -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-opensuse423-x86_64.properties -P !deb'"
               }
             }
-            stage('Build Admin') {
+            stage('openSUSE 42.3 Admin') {
               when {
                 expression { params.build_admin == true }
               }
@@ -129,7 +129,7 @@ pipeline {
                 sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -Dgpg.homedir=/var/maven/.gnupg -fae -f admin/pom.xml ${params.mvn_opts} ${params.mvn_goals} -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-opensuse423-x86_64.properties -P !deb'"
               }
             }
-            stage('Build Services') {
+            stage('openSUSE 42.3 Services') {
               when {
                 expression { params.build_services == true }
               }
@@ -151,7 +151,7 @@ pipeline {
             expression { params.build_ubuntu1604 == true }
           }
           stages {
-            stage('Build System') {
+            stage('Ubuntu 16.04 System') {
               when {
                 expression { params.build_system == true }
               }
@@ -159,7 +159,7 @@ pipeline {
                 sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -Dgpg.homedir=/var/maven/.gnupg -fae -f system/pom.xml ${params.mvn_opts} ${params.mvn_goals} -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-ubuntu1604-amd64.properties -P !rpm'"
               }
             }
-            stage('Build Admin') {
+            stage('Ubuntu 16.04 Admin') {
               when {
                 expression { params.build_admin == true }
               }
@@ -167,7 +167,7 @@ pipeline {
                 sh "/bin/bash -l -c 'mvn -Duser.home=/var/maven -Dbuild.dir=/var/maven/build -Dgpg.homedir=/var/maven/.gnupg -fae -f admin/pom.xml ${params.mvn_opts} ${params.mvn_goals} -Dproperties.product.groupId=${params.product_groupId} -Dproperties.product.artifactId=${params.product_artifactId} -Dproperties.product.version=${params.product_version} -Dproperties.product.file=${params.product_file} -Dproperties.system.file=system-ubuntu1604-amd64.properties -P !rpm'"
               }
             }
-            stage('Build Services') {
+            stage('Ubuntu 16.04 Services') {
               when {
                 expression { params.build_services == true }
               }
