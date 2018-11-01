@@ -36,8 +36,8 @@ SET `default_projects_limit` = 100,
 `signup_enabled` = 0,
 `version_check_enabled` = 0,
 `usage_ping_enabled` = 0,
-`default_group_visibility` = 0
-`hide_third_party_offers` = 1
+`default_group_visibility` = 0,
+`hide_third_party_offers` = 1,
 `instance_statistics_visibility_private` = 1;
 
 UPDATE `application_settings`
