@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>gitlab</artifactId>
-	<version>11.4.4-1-SNAPSHOT</version>
+	<version>11.4.8-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - GitLab</name>
@@ -63,7 +63,7 @@
 		<gitlab.shell.version>8.3.3</gitlab.shell.version>
 		<gitlab.shell.url>https://gitlab.com/gitlab-org/gitlab-shell/repository</gitlab.shell.url>
 		<gitlab.shell.file>archive.zip?ref=v${gitlab.shell.version}</gitlab.shell.file>
-		<gitlab.workhorse.version>7.0.0</gitlab.workhorse.version>
+		<gitlab.workhorse.version>7.0.1</gitlab.workhorse.version>
 		<gitlab.workhorse.url>https://gitlab.com/gitlab-org/gitlab-workhorse/repository</gitlab.workhorse.url>
 		<gitlab.workhorse.file>archive.zip?ref=v${gitlab.workhorse.version}</gitlab.workhorse.file>
 		<gitlab.gitaly.version>0.125.1</gitlab.gitaly.version>
