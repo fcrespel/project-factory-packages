@@ -15,9 +15,11 @@
 #set( $CAS_URL = ${project.properties.getProperty('cas.url')} )
 #set( $SYSTEM_JAVA7_APP = ${project.properties.getProperty('system.java7.app')} )
 #set( $SYSTEM_JAVA8_APP = ${project.properties.getProperty('system.java8.app')} )
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.1' encoding='UTF-8'?>
 <hudson>
-  <disabledAdministrativeMonitors/>
+  <disabledAdministrativeMonitors>
+    <string>hudson.diagnosis.ReverseProxySetupMonitor</string>
+  </disabledAdministrativeMonitors>
   <version>${PACKAGE_VERSION}</version>
   <numExecutors>2</numExecutors>
   <mode>NORMAL</mode>

@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<org.jenkinsci.plugins.rundeck.RundeckNotifier_-RundeckDescriptor plugin="rundeck@3.5.4">
+<org.jenkinsci.plugins.rundeck.RundeckNotifier_-RundeckDescriptor plugin="rundeck@3.6.4">
   <rundeckInstances class="linked-hash-map">
     <entry>
-      <string>Default</string>
+      <string>@{product.name}</string>
       <org.rundeck.api.RundeckClient>
         <url>@{product.scheme}://@{product.domain}/rundeck/</url>
         <apiVersion>12</apiVersion>
