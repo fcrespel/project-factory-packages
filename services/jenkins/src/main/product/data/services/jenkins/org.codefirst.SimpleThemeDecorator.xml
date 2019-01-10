@@ -1,0 +1,11 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<org.codefirst.SimpleThemeDecorator plugin="simple-theme-plugin@0.5.1">
+  <elements>
+    <org.jenkinsci.plugins.simpletheme.CssUrlThemeElement>
+      <url>/portal/themes/current/css/jenkins.css</url>
+    </org.jenkinsci.plugins.simpletheme.CssUrlThemeElement>
+    <org.jenkinsci.plugins.simpletheme.JsUrlThemeElement>
+      <url>/portal/toolbar.php?tab=jenkins&amp;format=js</url>
+    </org.jenkinsci.plugins.simpletheme.JsUrlThemeElement>
+  </elements>
+</org.codefirst.SimpleThemeDecorator>

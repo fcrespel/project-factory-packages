@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<hudson.plugins.sonar.SonarRunnerInstallation_-DescriptorImpl plugin="sonar@2.7.1">
+<?xml version='1.1' encoding='UTF-8'?>
+<hudson.plugins.sonar.SonarRunnerInstallation_-DescriptorImpl plugin="sonar@2.8.1">
   <installations>
     <hudson.plugins.sonar.SonarRunnerInstallation>
       <name>sonar-scanner</name>
