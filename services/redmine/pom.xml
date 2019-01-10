@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>redmine</artifactId>
-	<version>3.4.6-2</version>
+	<version>3.4.7-1</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Redmine</name>
@@ -62,14 +62,14 @@
 			redmine_embedded_flash=https://github.com/fcrespel/redmine_embedded_flash/archive/1.0.0.zip
 			redmine_jenkins=https://github.com/jbox-web/redmine_jenkins/archive/9122eba1266a96c69c38168608d05e3efa6fdc31.zip
 			redmine_ldap_sync=https://github.com/thorin/redmine_ldap_sync/archive/2.0.8.zip
-			redmine_lightbox2=https://github.com/paginagmbh/redmine_lightbox2/archive/v0.4.3.zip
+			redmine_lightbox2=https://github.com/paginagmbh/redmine_lightbox2/archive/v0.4.4.zip
 			redmine_monitoring_controlling=https://github.com/alexmonteiro/Redmine-Monitoring-Controlling/archive/3eaf10245ba73ddd8f67f4cc8c6b8a18c18300fe.zip
 			redmine_omniauth_cas=https://github.com/fcrespel/redmine_omniauth_cas/archive/6f6affe47ef5c7918c2c38cb8e1c8facefbfd9d6.zip
 			redmine_private_wiki=https://github.com/f0y/redmine_private_wiki/archive/f36984dea8eb48443127c4626d5e248108e366a6.zip
 			redmine_scm=https://github.com/alminium/redmine_scm/archive/6a8eda066f15c815bcbcdf74e63170a01e7b228d.zip
 			redmine_tags=https://github.com/ixti/redmine_tags/archive/41926ed41e03bdd21ae6e129b8f918fddd873cf3.zip
 			redmine_testlinklink=http://iij.dl.sourceforge.jp/rp-testlinklink/57441/rp-testlinklink-1.0.0.zip
-			redmine_wiki_extensions=https://github.com/haru/redmine_wiki_extensions/archive/0.8.1.zip
+			redmine_wiki_extensions=https://github.com/haru/redmine_wiki_extensions/archive/0.8.2.zip
 		</redmine.plugins>
 	</properties>
 	
