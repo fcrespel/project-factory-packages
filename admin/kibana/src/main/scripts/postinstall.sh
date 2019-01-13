@@ -1,7 +1,5 @@
 # Fix script permissions
-chmod +x "@{package.app}/bin/kibana"
-chmod +x "@{package.app}/bin/kibana-keystore"
-chmod +x "@{package.app}/bin/kibana-plugin"
+chmod +x @{package.app}/bin/*
 
 # Fix directory permissions
 mkdir -p "@{package.app}/plugins"
