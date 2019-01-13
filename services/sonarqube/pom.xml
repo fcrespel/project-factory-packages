@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>sonarqube</artifactId>
-	<version>6.7.3-1-SNAPSHOT</version>
+	<version>6.7.6-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - SonarQube</name>
@@ -54,7 +54,7 @@
 		</package.dependencies>
 		<sonarqube.db.name>${product.id}_sonarqube</sonarqube.db.name>
 		<sonarqube.db.user>${product.id}_sonarqube</sonarqube.db.user>
-		<sonarqube.plugin.l10n-fr.version>1.14.2</sonarqube.plugin.l10n-fr.version>
+		<sonarqube.plugin.l10n-fr.version>1.15.1</sonarqube.plugin.l10n-fr.version>
 		<sonarqube.plugin.l10n-fr.url>https://github.com/ZoeThivet/sonar-l10n-fr/releases/download/${sonarqube.plugin.l10n-fr.version}</sonarqube.plugin.l10n-fr.url>
 		<sonarqube.plugin.l10n-fr.file>sonar-l10n-fr-plugin-${sonarqube.plugin.l10n-fr.version}.jar</sonarqube.plugin.l10n-fr.file>
 	</properties>
