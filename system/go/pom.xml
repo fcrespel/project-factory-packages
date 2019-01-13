@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>go</artifactId>
-	<version>1.10.4-1-SNAPSHOT</version>
+	<version>1.10.7-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory System - Go</name>
@@ -44,7 +44,7 @@
 		<package.src.file.i386>go${go.version}.linux-386.tar.gz</package.src.file.i386>
 		<package.src.file.x86_64>go${go.version}.linux-amd64.tar.gz</package.src.file.x86_64>
 		<package.src.file.amd64>go${go.version}.linux-amd64.tar.gz</package.src.file.amd64>
-		<go.version>1.10.4</go.version>
+		<go.version>1.10.7</go.version>
 	</properties>
 
 	<build>
