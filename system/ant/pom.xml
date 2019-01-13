@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>ant</artifactId>
-	<version>1.9.11-1-SNAPSHOT</version>
+	<version>1.9.13-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory System - Ant</name>
