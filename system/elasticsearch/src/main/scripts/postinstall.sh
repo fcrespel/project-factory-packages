@@ -1,9 +1,7 @@
 # Fix script permissions
-chmod +x "@{package.app}/bin/elasticsearch"
-chmod +x "@{package.app}/bin/elasticsearch-env"
-chmod +x "@{package.app}/bin/elasticsearch-keystore"
-chmod +x "@{package.app}/bin/elasticsearch-plugin"
-chmod +x "@{package.app}/bin/elasticsearch-translog"
+chmod +x @{package.app}/bin/*
+chmod +x @{package.app}/bin/x-pack/*
+chmod +x @{package.app}/modules/x-pack-ml/platform/linux-x86_64/bin/*
 
 # Fix directory permissions
 mkdir -p "@{package.app}/plugins"
