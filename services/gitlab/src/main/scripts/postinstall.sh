@@ -138,7 +138,7 @@ if ! ( cd "@{package.app}" && rvm default do bundle exec rake gettext:compile );
 fi
 
 # Compile assets and clean up cache
-if ! ( cd "@{package.app}" && rvm default do bundle exec rake yarn:install gitlab:assets:clean gitlab:assets:compile cache:clear RAILS_RELATIVE_URL_ROOT=/gitlab NODE_ENV=production ); then
+if ! ( cd "@{package.app}" && rvm default do bundle exec rake yarn:install gitlab:assets:clean gitlab:assets:compile cache:clear RAILS_RELATIVE_URL_ROOT=/gitlab NODE_ENV=production NODE_OPTIONS="--max_old_space_size=4096" ); then
 	printerror "ERROR: failed to compile assets and clean up cache for GitLab"
 	exit 1
 fi
