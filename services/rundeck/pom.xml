@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>rundeck</artifactId>
-	<version>2.11.5-1-SNAPSHOT</version>
+	<version>3.0.13-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Rundeck</name>
@@ -39,8 +39,8 @@
 	<properties>
 		<package.disabled>${rundeck.disabled}</package.disabled>
 		<package.root>${package.data}</package.root>
-		<package.src.url>http://download.rundeck.org/war</package.src.url>
-		<package.src.file>rundeck-${package.version}.war</package.src.file>
+		<package.src.url>https://download.rundeck.org/war</package.src.url>
+		<package.src.file>rundeck-${rundeck.version}.war</package.src.file>
 		<package.src.bundle>${package.bundle.tomcat}</package.src.bundle>
 		<package.bind>${rundeck.bind}</package.bind>
 		<package.port.shutdown>${rundeck.port.shutdown}</package.port.shutdown>
@@ -52,6 +52,7 @@
 			${package.prefix}-system-mysql,
 			${package.prefix}-service-portal
 		</package.dependencies>
+		<rundeck.version>${package.version}-20190123</rundeck.version>
 		<rundeck.db.name>${product.id}_rundeck</rundeck.db.name>
 		<rundeck.db.user>${product.id}_rundeck</rundeck.db.user>
 	</properties>
@@ -162,12 +163,9 @@
 								<unzip
 									src="${project.downloaded.directory}/${package.src.file}"
 									dest="${project.app.directory}/webapps/${project.artifactId}">
-									<patternset>
-										<exclude name="WEB-INF/classes/gsp_rundeck_common_css_gsp*" />
-									</patternset>
 								</unzip>
 								<unzip
-									src="${project.app.directory}/webapps/${project.artifactId}/WEB-INF/lib/rundeck-core-${package.version}.jar"
+									src="${project.app.directory}/webapps/${project.artifactId}/WEB-INF/lib/rundeck-core-${rundeck.version}.jar"
 									dest="${project.data.directory}/tools/bin">
 									<patternset>
 										<include name="com/dtolabs/rundeck/core/cli/templates/**" />
