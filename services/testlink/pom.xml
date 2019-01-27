@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>testlink</artifactId>
-	<version>1.9.11-2</version>
+	<version>1.9.18-1</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - TestLink</name>
@@ -38,8 +38,8 @@
 	
 	<properties>
 		<package.disabled>${testlink.disabled}</package.disabled>
-		<package.src.url>http://downloads.sourceforge.net/project/testlink/TestLink%201.9/TestLink%20${package.version}</package.src.url>
-		<package.src.file>testlink-${package.version}.tar.gz</package.src.file>
+		<package.src.url>https://github.com/TestLinkOpenSourceTRMS/testlink-code/archive</package.src.url>
+		<package.src.file>${package.version}.zip</package.src.file>
 		<package.dependencies>
 			${package.prefix}-system-httpd,
 			${package.prefix}-system-php,
@@ -68,15 +68,17 @@
 						<configuration>
 							<skip>${package.disabled}</skip>
 							<target>
-								<untar compression="gzip"
+								<unzip
 									src="${project.downloaded.directory}/${package.src.file}"
 									dest="${project.app.directory}">
 									<patternset>
-										<exclude name="*/*/upload_area/**" />
-										<exclude name="*/*/logs/**" />
+										<exclude name="*/upload_area/**" />
+										<exclude name="*/logs/**" />
 									</patternset>
-									<cutdirsmapper dirs="2" />
-								</untar>
+									<cutdirsmapper dirs="1" />
+								</unzip>
+								<replace file="${project.app.directory}/config.inc.php"
+									token="custom_css = null" value="custom_css = 'projectfactory.css'" />
 							</target>
 						</configuration>
 					</execution>

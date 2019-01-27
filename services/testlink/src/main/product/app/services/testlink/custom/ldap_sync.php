@@ -24,7 +24,7 @@ function ldap_sync() {
 		return true;
 	
 	// Print LDAP info
-	echo "Synchronizing users with LDAP root DN " . $authCfg['ldap_root_dn'] . " ...\n";
+	echo "Synchronizing users with LDAP root DN " . $authCfg['ldap'][1]['ldap_root_dn'] . " ...\n";
 	
 	// Connect to the database
 	$dbResult = doDBConnect($db);
@@ -78,25 +78,26 @@ function ldap_sync() {
  */
 function ldap_find_all_users() {
 	$authCfg = config_get('authentication');
-	$searchFilter = $authCfg['ldap_organization'];
-	$searchAttrs = array('dn', $authCfg['ldap_uid_field']);
-	if (isset($authCfg['ldap_firstname_field']))
-		$searchAttrs[] = $authCfg['ldap_firstname_field'];
-	if (isset($authCfg['ldap_lastname_field']))
-		$searchAttrs[] = $authCfg['ldap_lastname_field'];
-	if (isset($authCfg['ldap_mail_field']))
-		$searchAttrs[] = $authCfg['ldap_mail_field'];
+	$ldapCfg = $authCfg['ldap'][1];
+	$searchFilter = $ldapCfg['ldap_organization'];
+	$searchAttrs = array('dn', $ldapCfg['ldap_uid_field']);
+	if (isset($ldapCfg['ldap_firstname_field']))
+		$searchAttrs[] = $ldapCfg['ldap_firstname_field'];
+	if (isset($ldapCfg['ldap_lastname_field']))
+		$searchAttrs[] = $ldapCfg['ldap_lastname_field'];
+	if (isset($ldapCfg['ldap_mail_field']))
+		$searchAttrs[] = $ldapCfg['ldap_mail_field'];
 	
 	$users = false;
-	$connect = ldap_connect_bind();
+	$connect = ldap_connect_bind($ldapCfg);
 	if ($connect->status == 0) {
-		$results = ldap_search($connect->handler, $authCfg['ldap_root_dn'], $searchFilter, $searchAttrs );
+		$results = ldap_search($connect->handler, $ldapCfg['ldap_root_dn'], $searchFilter, $searchAttrs );
 		$entries = ldap_get_entries($connect->handler, $results);
 		$users = array();
 		for ($i = 0; $i < $entries['count']; $i++) {
 			$entry = $entries[$i];
-			if (isset($entry[$authCfg['ldap_uid_field']]) && !empty($entry[$authCfg['ldap_uid_field']])) {
-				$users[$entry[$authCfg['ldap_uid_field']][0]] = $entry;
+			if (isset($entry[$ldapCfg['ldap_uid_field']]) && !empty($entry[$ldapCfg['ldap_uid_field']])) {
+				$users[$entry[$ldapCfg['ldap_uid_field']][0]] = $entry;
 			}
 		}
 	} else {
@@ -127,12 +128,13 @@ function db_find_all_users($db) {
  */
 function map_ldap_user_to_db($ldapUser, &$dbUser) {
 	$authCfg = config_get('authentication');
+	$ldapCfg = $authCfg['ldap'][1];
 	$isUpdated = false;
 	$map = array(
-		'login' => strtolower($authCfg['ldap_uid_field']),
-		'firstName' => isset($authCfg['ldap_firstname_field']) ? strtolower($authCfg['ldap_firstname_field']) : '',
-		'lastName' => isset($authCfg['ldap_lastname_field']) ? strtolower($authCfg['ldap_lastname_field']) : '',
-		'emailAddress' => isset($authCfg['ldap_mail_field']) ? strtolower($authCfg['ldap_mail_field']) : '',
+		'login' => strtolower($ldapCfg['ldap_uid_field']),
+		'firstName' => isset($ldapCfg['ldap_firstname_field']) ? strtolower($ldapCfg['ldap_firstname_field']) : '',
+		'lastName' => isset($ldapCfg['ldap_lastname_field']) ? strtolower($ldapCfg['ldap_lastname_field']) : '',
+		'emailAddress' => isset($ldapCfg['ldap_mail_field']) ? strtolower($ldapCfg['ldap_mail_field']) : '',
 	);
 	foreach ($map as $dbKey => $ldapKey) {
 		if (isset($ldapUser[$ldapKey]) && !empty($ldapUser[$ldapKey]) && !empty($ldapUser[$ldapKey][0]) && strcmp($dbUser->$dbKey, $ldapUser[$ldapKey][0]) != 0) {

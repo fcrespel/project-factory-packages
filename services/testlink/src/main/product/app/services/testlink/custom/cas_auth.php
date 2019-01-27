@@ -104,10 +104,13 @@ function doSSOCASLogin(&$dbHandler, $authCfg = null)
 		$login_exists = _getSSOCASUser($dbHandler, $user, $login, $authCfg);
 		if ($login_exists && $user->isActive)
 		{
-			// Need to do set COOKIE following Mantis model
-			$auth_cookie_name = config_get('auth_cookie');
-			$expireOnBrowserClose = false;
-			setcookie($auth_cookie_name, $user->getSecurityCookie(), $expireOnBrowserClose, '/');			
+			$ckCfg = config_get('cookie');
+
+			$ckObj = new stdClass();
+			$ckObj->name = config_get('auth_cookie');
+			$ckObj->value = $user->getSecurityCookie();
+			$ckObj->expire = $expireOnBrowserClose = false;
+			tlSetCookie($ckObj);
 
 			// Disallow two sessions within one browser
 			if (isset($_SESSION['currentUser']) && !is_null($_SESSION['currentUser']))
