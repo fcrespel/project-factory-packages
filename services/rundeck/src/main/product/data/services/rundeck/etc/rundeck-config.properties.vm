@@ -1,0 +1,38 @@
+#set( $PRODUCT_NAME = ${project.properties.getProperty('product.name')} )
+#set( $PRODUCT_SCHEME = ${project.properties.getProperty('product.scheme')} )
+#set( $PRODUCT_DOMAIN = ${project.properties.getProperty('product.domain')} )
+#set( $PACKAGE_DATA = ${project.properties.getProperty('package.data')} )
+#set( $RUNDECK_DB_NAME = ${project.properties.getProperty('rundeck.db.name')} )
+#set( $RUNDECK_DB_USER = ${project.properties.getProperty('rundeck.db.user')} )
+#set( $MYSQL_HOST = ${project.properties.getProperty('mysql.host')} )
+#set( $MYSQL_PORT = ${project.properties.getProperty('mysql.port')} )
+#set( $CAS_ENABLED = ${project.properties.getProperty('cas.enabled')} )
+#set( $CAS_ATTR_GROUPS = ${project.properties.getProperty('cas.attr.groups')} )
+
+#loglevel.default is the default log level for jobs: ERROR,WARN,INFO,VERBOSE,DEBUG
+loglevel.default=INFO
+rdeck.base=${PACKAGE_DATA}
+
+#rss.enabled if set to true enables RSS feeds that are public (non-authenticated)
+rss.enabled=false
+grails.serverURL=${PRODUCT_SCHEME}://${PRODUCT_DOMAIN}/rundeck
+grails.mail.default.from=rundeck@${PRODUCT_DOMAIN}
+
+dataSource.dbCreate=update
+dataSource.url=jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${RUNDECK_DB_NAME}?autoReconnect=true&useSSL=false
+dataSource.driverClassName=com.mysql.jdbc.Driver
+dataSource.username=${RUNDECK_DB_USER}
+dataSource.password=%{RUNDECK_DB_PASSWORD}
+
+rundeck.projectsStorageType=db
+rundeck.security.authorization.preauthenticated.enabled=true
+rundeck.security.authorization.preauthenticated.attributeName=REMOTE_USER_GROUPS
+rundeck.security.authorization.preauthenticated.delimiter=,
+rundeck.security.authorization.preauthenticated.userNameHeader=X-CAS-User
+rundeck.security.authorization.preauthenticated.userRolesHeader=CAS_${CAS_ATTR_GROUPS.toUpperCase()}
+rundeck.security.authorization.preauthenticated.redirectLogout=${CAS_ENABLED}
+rundeck.security.authorization.preauthenticated.redirectUrl=/cas/logout?service=${PRODUCT_SCHEME}://${PRODUCT_DOMAIN}/rundeck/
+
+rundeck.log4j.config.file=${PACKAGE_DATA}/etc/log4j.properties
+
+rundeck.ui.plugin.enableAllPages=true
