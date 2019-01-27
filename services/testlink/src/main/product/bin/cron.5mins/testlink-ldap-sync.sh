@@ -8,7 +8,7 @@ TESTLINK_DIR="@{package.app}"
 SYNC_SCRIPT="$TESTLINK_DIR/custom/ldap_sync.php"
 PHP="/usr/bin/php"
 
-PHP_INCLUDE_PATH=".:@{product.app}/system/php/pear/php"
+PHP_INCLUDE_PATH=".:@{product.app}/system/php/composer/vendor/jasig/phpcas"
 LOG_FILE="@{package.log}/ldap_sync.log"
 DATE=`date --rfc-3339=seconds`
 
