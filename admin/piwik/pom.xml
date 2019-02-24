@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>piwik</artifactId>
-	<version>2.16.2-1</version>
+	<version>2.16.2-2</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Admin - Piwik</name>
