@@ -4,7 +4,9 @@ if [ -z "$LDAP_ROOT_PASSWORD" ]; then
 fi
 
 # Disable cron job
-touch "@{product.bin}/cron.5mins/testlink-ldap-sync.sh.lock"
+if type -t cron_disable_job >/dev/null; then
+	cron_disable_job "@{product.bin}/cron.5mins/testlink-ldap-sync.sh"
+fi
 
 # Disable Nagios monitoring
 if type -t nagios_disable_service >/dev/null; then
