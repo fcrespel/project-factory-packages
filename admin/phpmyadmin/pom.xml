@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>phpmyadmin</artifactId>
-	<version>4.8.4-1-SNAPSHOT</version>
+	<version>4.8.5-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Admin - phpMyAdmin</name>
