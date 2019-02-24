@@ -119,3 +119,8 @@ fi
 if type -t nagios_enable_service >/dev/null; then
 	nagios_enable_service "Drupal"
 fi
+
+# Enable cron job
+if type -t cron_enable_job >/dev/null; then
+	cron_enable_job "@{product.bin}/cron.hourly/drupal-cron.sh"
+fi
