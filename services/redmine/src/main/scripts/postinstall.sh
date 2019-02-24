@@ -91,8 +91,9 @@ if type -t nagios_enable_service >/dev/null; then
 fi
 
 # Enable cron jobs
-rm -f "@{product.bin}/cron.5mins/redmine-jenkins-sync.sh.lock"
-rm -f "@{product.bin}/cron.5mins/redmine-ldap-sync.sh.lock"
-rm -f "@{product.bin}/cron.daily/redmine-reminders.sh.lock"
-rm -f "@{product.bin}/cron.daily/redmine-attachments-prune.sh.lock"
-rm -f "@{product.bin}/cron.hourly/redmine-repo-sync.sh.lock"
+if type -t cron_enable_job >/dev/null; then
+	cron_enable_job "@{product.bin}/cron.5mins/redmine-ldap-sync.sh"
+	cron_enable_job "@{product.bin}/cron.daily/redmine-reminders.sh"
+	cron_enable_job "@{product.bin}/cron.daily/redmine-attachments-prune.sh"
+	cron_enable_job "@{product.bin}/cron.hourly/redmine-repo-sync.sh"
+fi
