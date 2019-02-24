@@ -1,5 +1,7 @@
 # Disable cron job
-touch "@{product.bin}/cron.daily/osqa-notifications.sh.lock"
+if type -t cron_disable_job >/dev/null; then
+	cron_disable_job "@{product.bin}/cron.daily/osqa-notifications.sh"
+fi
 
 # Disable Nagios monitoring
 if type -t nagios_disable_service >/dev/null; then
