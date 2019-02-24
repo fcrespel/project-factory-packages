@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>osqa</artifactId>
-	<version>0.9.0-9.20130930git-SNAPSHOT</version>
+	<version>0.9.0-10.20130930git-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - OSQA</name>
