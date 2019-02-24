@@ -4,4 +4,6 @@ if [ -z "$LDAP_ROOT_PASSWORD" ]; then
 fi
 
 # Disable cron job
-touch "@{product.bin}/cron.5mins/svn-ldap-sync.sh.lock"
+if type -t cron_disable_job >/dev/null; then
+	cron_disable_job "@{product.bin}/cron.5mins/svn-ldap-sync.sh"
+fi

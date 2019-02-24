@@ -19,4 +19,6 @@ reloadservice @{httpd.service}
 reloadservice @{nagios.service}
 
 # Enable cron job
-rm -f "@{product.bin}/cron.5mins/svn-ldap-sync.sh.lock"
+if type -t cron_enable_job >/dev/null; then
+	cron_enable_job "@{product.bin}/cron.5mins/svn-ldap-sync.sh"
+fi
