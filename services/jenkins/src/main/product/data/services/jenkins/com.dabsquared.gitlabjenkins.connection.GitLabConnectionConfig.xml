@@ -4,7 +4,7 @@
   <connections>
     <com.dabsquared.gitlabjenkins.connection.GitLabConnection>
       <name>GitLab</name>
-      <url>https://dev.project-factory.fr/gitlab/</url>
+      <url>@{product.scheme}://@{product.domain}/gitlab/</url>
       <apiTokenId></apiTokenId>
       <clientBuilder class="com.dabsquared.gitlabjenkins.gitlab.api.impl.AutodetectGitLabClientBuilder">
         <id>autodetect</id>
