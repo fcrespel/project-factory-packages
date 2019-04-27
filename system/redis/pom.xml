@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>redis</artifactId>
-	<version>4.0.11-1-SNAPSHOT</version>
+	<version>4.0.14-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory System - Redis</name>
