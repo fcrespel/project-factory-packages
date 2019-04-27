@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>kibana</artifactId>
-	<version>6.5.4-1</version>
+	<version>6.7.1-1</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Admin - Kibana</name>
@@ -49,7 +49,7 @@
 			${package.prefix}-system-elasticsearch,
 			${package.prefix}-service-portal
 		</package.dependencies>
-		<kibana.version>6.5.4</kibana.version>
+		<kibana.version>6.7.1</kibana.version>
 	</properties>
 
 	<build>
