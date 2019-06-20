@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>sonarqube</artifactId>
-	<version>6.7.6-1-SNAPSHOT</version>
+	<version>6.7.7-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - SonarQube</name>
