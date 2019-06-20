@@ -36,3 +36,4 @@ rundeck.security.authorization.preauthenticated.redirectUrl=/cas/logout?service=
 rundeck.log4j.config.file=${PACKAGE_DATA}/etc/log4j.properties
 
 rundeck.ui.plugin.enableAllPages=true
+rundeck.api.tokens.duration.max=0

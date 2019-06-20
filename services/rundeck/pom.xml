@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>rundeck</artifactId>
-	<version>3.0.21-1-SNAPSHOT</version>
+	<version>3.0.23-1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Rundeck</name>
@@ -52,7 +52,7 @@
 			${package.prefix}-system-mysql,
 			${package.prefix}-service-portal
 		</package.dependencies>
-		<rundeck.version>${package.version}-20190424</rundeck.version>
+		<rundeck.version>${package.version}-20190619</rundeck.version>
 		<rundeck.db.name>${product.id}_rundeck</rundeck.db.name>
 		<rundeck.db.user>${product.id}_rundeck</rundeck.db.user>
 	</properties>
