@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>jenkins</artifactId>
-	<version>2.164.2-1</version>
+	<version>2.176.1-1</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Services - Jenkins</name>
@@ -177,7 +177,7 @@
 								<artifactItem>
 									<groupId>org.jvnet.hudson.plugins</groupId>
 									<artifactId>analysis-core</artifactId>
-									<version>1.95</version>
+									<version>1.96</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -213,7 +213,7 @@
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -225,115 +225,115 @@
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-bitbucket-pipeline</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-commons</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-config</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-core-js</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-dashboard</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>blueocean-display-url</artifactId>
-									<version>2.2.0</version>
+									<version>2.3.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-events</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-git-pipeline</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-github-pipeline</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-i18n</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-jira</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-jwt</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-personalization</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-pipeline-api-impl</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-pipeline-editor</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-pipeline-scm-api</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-rest</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-rest-impl</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>blueocean-web</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -345,7 +345,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>branch-api</artifactId>
-									<version>2.4.0</version>
+									<version>2.5.2</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -363,7 +363,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>cloudbees-folder</artifactId>
-									<version>6.8</version>
+									<version>6.9</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -387,7 +387,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>config-file-provider</artifactId>
-									<version>3.6</version>
+									<version>3.6.2</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -411,19 +411,19 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>copyartifact</artifactId>
-									<version>1.42</version>
+									<version>1.42.1</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>credentials</artifactId>
-									<version>2.1.18</version>
+									<version>2.2.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>credentials-binding</artifactId>
-									<version>1.18</version>
+									<version>1.19</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -453,7 +453,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>docker-commons</artifactId>
-									<version>1.14</version>
+									<version>1.15</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -466,6 +466,12 @@
 									<groupId>org.jvnet.hudson.plugins</groupId>
 									<artifactId>dry</artifactId>
 									<version>3.0.0</version>
+									<type>hpi</type>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.jenkins-ci.plugins</groupId>
+									<artifactId>dtkit-api</artifactId>
+									<version>2.1.1</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -495,13 +501,13 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>git</artifactId>
-									<version>3.9.4</version>
+									<version>3.10.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>git-client</artifactId>
-									<version>2.7.7</version>
+									<version>2.8.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -525,7 +531,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>github-branch-source</artifactId>
-									<version>2.5.0</version>
+									<version>2.5.3</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -537,13 +543,19 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>gradle</artifactId>
-									<version>1.31</version>
+									<version>1.32</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>greenballs</artifactId>
 									<version>1.15</version>
+									<type>hpi</type>
+								</artifactItem>
+								<artifactItem>
+									<groupId>io.jenkins.plugins</groupId>
+									<artifactId>h2-api</artifactId>
+									<version>1.4.199</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -573,7 +585,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>jackson2-api</artifactId>
-									<version>2.9.8</version>
+									<version>2.9.9</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -597,19 +609,19 @@
 								<artifactItem>
 									<groupId>io.jenkins.blueocean</groupId>
 									<artifactId>jenkins-design-language</artifactId>
-									<version>1.15.0</version>
+									<version>1.17.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>jira</artifactId>
-									<version>3.0.6</version>
+									<version>3.0.7</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>jobConfigHistory</artifactId>
-									<version>2.20</version>
+									<version>2.22</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -633,7 +645,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>junit</artifactId>
-									<version>1.27</version>
+									<version>1.28</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -669,7 +681,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>matrix-auth</artifactId>
-									<version>2.4.1</version>
+									<version>2.4.2</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -687,7 +699,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.main</groupId>
 									<artifactId>maven-plugin</artifactId>
-									<version>3.2</version>
+									<version>3.3</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -699,7 +711,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>metrics</artifactId>
-									<version>4.0.2.3</version>
+									<version>4.0.2.4</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -717,7 +729,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>performance</artifactId>
-									<version>3.16</version>
+									<version>3.17</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -735,7 +747,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>pipeline-graph-analysis</artifactId>
-									<version>1.9</version>
+									<version>1.10</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -747,7 +759,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>pipeline-maven</artifactId>
-									<version>3.6.10</version>
+									<version>3.7.1</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -759,7 +771,7 @@
 								<artifactItem>
 									<groupId>org.jenkinsci.plugins</groupId>
 									<artifactId>pipeline-model-api</artifactId>
-									<version>1.3.8</version>
+									<version>1.3.9</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -771,13 +783,13 @@
 								<artifactItem>
 									<groupId>org.jenkinsci.plugins</groupId>
 									<artifactId>pipeline-model-definition</artifactId>
-									<version>1.3.8</version>
+									<version>1.3.9</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.jenkinsci.plugins</groupId>
 									<artifactId>pipeline-model-extensions</artifactId>
-									<version>1.3.8</version>
+									<version>1.3.9</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -795,7 +807,7 @@
 								<artifactItem>
 									<groupId>org.jenkinsci.plugins</groupId>
 									<artifactId>pipeline-stage-tags-metadata</artifactId>
-									<version>1.3.8</version>
+									<version>1.3.9</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -813,7 +825,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>plot</artifactId>
-									<version>2.1.0</version>
+									<version>2.1.1</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -855,19 +867,19 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>rundeck</artifactId>
-									<version>3.6.4</version>
+									<version>3.6.5</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>scm-api</artifactId>
-									<version>2.4.1</version>
+									<version>2.5.1</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>script-security</artifactId>
-									<version>1.58</version>
+									<version>1.60</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -885,7 +897,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>sonar</artifactId>
-									<version>2.8.1</version>
+									<version>2.9</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -897,19 +909,19 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>ssh-credentials</artifactId>
-									<version>1.16</version>
+									<version>1.17</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>ssh-slaves</artifactId>
-									<version>1.29.4</version>
+									<version>1.30.0</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>structs</artifactId>
-									<version>1.18</version>
+									<version>1.19</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -933,7 +945,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>token-macro</artifactId>
-									<version>2.7</version>
+									<version>2.8</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -957,19 +969,19 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins.workflow</groupId>
 									<artifactId>workflow-api</artifactId>
-									<version>2.33</version>
+									<version>2.35</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins.workflow</groupId>
 									<artifactId>workflow-basic-steps</artifactId>
-									<version>2.15</version>
+									<version>2.18</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins.workflow</groupId>
 									<artifactId>workflow-cps</artifactId>
-									<version>2.67</version>
+									<version>2.70</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -981,7 +993,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins.workflow</groupId>
 									<artifactId>workflow-durable-task-step</artifactId>
-									<version>2.30</version>
+									<version>2.31</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -999,13 +1011,13 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins.workflow</groupId>
 									<artifactId>workflow-scm-step</artifactId>
-									<version>2.7</version>
+									<version>2.9</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins.workflow</groupId>
 									<artifactId>workflow-step-api</artifactId>
-									<version>2.19</version>
+									<version>2.20</version>
 									<type>hpi</type>
 								</artifactItem>
 								<artifactItem>
@@ -1023,7 +1035,7 @@
 								<artifactItem>
 									<groupId>org.jenkins-ci.plugins</groupId>
 									<artifactId>xunit</artifactId>
-									<version>2.3.3</version>
+									<version>2.3.5</version>
 									<type>hpi</type>
 								</artifactItem>
 							</artifactItems>
