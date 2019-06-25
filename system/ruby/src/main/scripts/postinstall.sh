@@ -7,19 +7,28 @@ find "@{package.app}/rvm/scripts" -type f -exec chmod +x '{}' \;
 rvm_quiet autolibs read-fail
 rvm_quiet repair symlinks
 
-# Install Ruby if necessary
-if ! rvm install @{ruby.version} --disable-binary --rubygems ignore; then
-	printerror "ERROR: failed to install Ruby @{ruby.version}"
-	exit 1
-fi
+# Install Ruby and gems
+for RUBY_VERSION in @{ruby.versions}; do
+	# Install Ruby
+	if ! rvm install "$RUBY_VERSION" --disable-binary --rubygems ignore; then
+		printerror "ERROR: failed to install Ruby $RUBY_VERSION"
+		exit 1
+	fi
+	# Create alias
+	if ! rvm alias create "${RUBY_VERSION%.*}.x" "$RUBY_VERSION"; then
+		printerror "ERROR: failed to create alias for Ruby version $RUBY_VERSION"
+		exit 1
+	fi
+	# Install gems
+	if ! installgems "$RUBY_VERSION" "$RUBY_GEMS"; then
+		exit 1
+	fi
+done
 rvm_quiet cleanup sources
-if ! rvm alias create default @{ruby.version}; then
-	printerror "ERROR: failed to set default Ruby version to @{ruby.version}"
-	exit 1
-fi
 
-# Install gems
-if ! installgems "$RUBY_GEMS"; then
+# Create default alias
+if ! rvm alias create default @{ruby.default.version}; then
+	printerror "ERROR: failed to set default Ruby version to @{ruby.default.version}"
 	exit 1
 fi
 
