@@ -14,7 +14,7 @@ if [ -e "$REDMINE_DIR" ]; then
 (
 	cd "$REDMINE_DIR"
 	echo "[$DATE]" >> "$LOG_FILE"
-	RAILS_ENV=production rvm default do bundle exec rake redmine:fetch_changesets >> "$LOG_FILE" 2>&1
+	RAILS_ENV=production rvm @{ruby.version} do bundle exec rake redmine:fetch_changesets >> "$LOG_FILE" 2>&1
 	echo >> "$LOG_FILE"
 )
 fi

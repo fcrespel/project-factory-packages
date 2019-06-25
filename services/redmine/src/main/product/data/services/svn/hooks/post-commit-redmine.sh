@@ -11,7 +11,7 @@ if [ -e "$REDMINE_DIR" ]; then
 (
 	cd "$REDMINE_DIR"
 	echo "Notifying Redmine ..."
-	RAILS_ENV=production rvm default do bundle exec rake redmine:fetch_changesets
+	RAILS_ENV=production rvm @{ruby.version} do bundle exec rake redmine:fetch_changesets
 )
 fi
 

@@ -12,6 +12,6 @@ REDMINE_DIR="@{package.app}"
 if [ -e "$REDMINE_DIR" ]; then
 (
 	cd "$REDMINE_DIR"
-	RAILS_ENV=production rvm default do bundle exec rake redmine:send_reminders days=$DAYS > /dev/null 2>&1
+	RAILS_ENV=production rvm @{ruby.version} do bundle exec rake redmine:send_reminders days=$DAYS > /dev/null 2>&1
 )
 fi
