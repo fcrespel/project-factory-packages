@@ -50,6 +50,7 @@
 			${system.package.imagemagick},
 			${system.package.imagemagick-devel}
 		</package.dependencies>
+		<ruby.version>2.4.x</ruby.version>
 		<redmine.db.name>${product.id}_redmine</redmine.db.name>
 		<redmine.db.user>${product.id}_redmine</redmine.db.user>
 		<redmine.bundler.exclude>development:test</redmine.bundler.exclude>
