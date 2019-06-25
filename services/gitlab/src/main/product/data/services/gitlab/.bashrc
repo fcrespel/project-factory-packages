@@ -8,3 +8,5 @@ if [ -d @{product.root}/bin/profile.d ]; then
 	done
 	unset i
 fi
+
+rvm use @{ruby.version} > /dev/null 2>&1

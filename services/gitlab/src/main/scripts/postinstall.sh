@@ -24,23 +24,34 @@ if [ ! -e "@{package.app}/config/secrets.yml" ]; then
 	cp "@{package.app}/config/secrets.yml.example" "@{package.app}/config/secrets.yml"
 fi
 
+# Fix hook symlinks
+for HOOK in pre-receive post-receive update; do
+	ln -sf gitlab-shell-hook @{package.app}/gitaly/ruby/git-hooks/$HOOK
+done
+
 # Fix execute permissions
-chmod +x @{package.app}/bin/* @{package.app}/lib/support/init.d/gitlab @{package.app}/shell/bin/* @{package.app}/shell/hooks/* @{package.app}/gitaly/ruby/bin/*
+chmod +x @{package.app}/bin/* \
+	@{package.app}/lib/support/init.d/gitlab \
+	@{package.app}/shell/bin/* \
+	@{package.app}/shell/hooks/* \
+	@{package.app}/gitaly/ruby/bin/* \
+	@{package.app}/gitaly/ruby/git-hooks/* \
+	@{package.app}/gitaly/ruby/gitlab-shell/hooks/*
 
 # Configure user
 usermod -s /bin/bash @{package.user} > /dev/null 2>&1
 mkdir -p "@{package.root}/.ssh" && touch "@{package.root}/.ssh/authorized_keys"
 
 # Check if bundler is available
-BUNDLER=`rvm default do which bundle`
+BUNDLER=`rvm @{ruby.version} do which bundle`
 if [ ! -x "$BUNDLER" ]; then
 	printerror "ERROR: the 'bundle' command is not available or not executable"
 	exit 1
 fi
 
 # Execute bundler to install required gems
-rvm default do bundle config build.nokogiri --use-system-libraries > /dev/null 2>&1
-if ! ( cd "@{package.app}" && rvm default do bundle install --jobs $NPROC --deployment --local ); then
+rvm @{ruby.version} do bundle config build.nokogiri --use-system-libraries > /dev/null 2>&1
+if ! ( cd "@{package.app}" && rvm @{ruby.version} do bundle install --jobs $NPROC --deployment --local ); then
 	printerror "ERROR: failed to install required Gems for GitLab"
 	exit 1
 fi
@@ -58,7 +69,7 @@ if ! ( chown -R @{package.user}:@{package.group} "@{package.app}/workhorse" && s
 fi
 
 # Build Gitaly
-if ! ( cd "@{package.app}/gitaly/ruby" && rvm default do bundle install --jobs $NPROC --deployment --local ); then
+if ! ( cd "@{package.app}/gitaly/ruby" && rvm @{ruby.version} do bundle install --jobs $NPROC --deployment --local ); then
 	printerror "ERROR: failed to install required Gems for Gitaly"
 	exit 1
 fi
@@ -102,7 +113,7 @@ if ! mysql_upgradedb "@{gitlab.db.name}"; then
 fi
 
 # Migrate schema and data
-if ! ( cd "@{package.app}" && rvm default do bundle exec rake db:migrate ); then
+if ! ( cd "@{package.app}" && rvm @{ruby.version} do bundle exec rake db:migrate ); then
 	printerror "ERROR: failed to migrate GitLab database"
 	exit 1
 fi
@@ -126,19 +137,19 @@ sed -i 's#encoding: utf8$#encoding: @{mysql.charset}#g' "@{package.app}/config/d
 sed -i 's#collation: utf8_general_ci$#collation: @{mysql.collation}#g' "@{package.app}/config/database.yml"
 
 # Update MySQL strings limits
-if ! ( cd "@{package.app}" && rvm default do bundle exec rake add_limits_mysql ); then
+if ! ( cd "@{package.app}" && rvm @{ruby.version} do bundle exec rake add_limits_mysql ); then
 	printerror "ERROR: failed to set MySQL strings limits for GitLab"
 	exit 1
 fi
 
 # Compile GetText PO files
-if ! ( cd "@{package.app}" && rvm default do bundle exec rake gettext:compile ); then
+if ! ( cd "@{package.app}" && rvm @{ruby.version} do bundle exec rake gettext:compile ); then
 	printerror "ERROR: failed to compile GetText PO files for GitLab"
 	exit 1
 fi
 
 # Compile assets and clean up cache
-if ! ( cd "@{package.app}" && rvm default do bundle exec rake yarn:install gitlab:assets:clean gitlab:assets:compile cache:clear RAILS_RELATIVE_URL_ROOT=/gitlab NODE_ENV=production NODE_OPTIONS="--max_old_space_size=4096" ); then
+if ! ( cd "@{package.app}" && rvm @{ruby.version} do bundle exec rake yarn:install gitlab:assets:clean gitlab:assets:compile cache:clear RAILS_RELATIVE_URL_ROOT=/gitlab NODE_ENV=production NODE_OPTIONS="--max_old_space_size=4096" ); then
 	printerror "ERROR: failed to compile assets and clean up cache for GitLab"
 	exit 1
 fi

@@ -14,7 +14,7 @@ if [ -e "$GITLAB_DIR" ]; then
 (
 	cd "$GITLAB_DIR"
 	echo "[$DATE]" >> "$LOG_FILE"
-	rvm default do bundle exec rake gitlab:backup:create RAILS_ENV=production >> "$LOG_FILE" 2>&1
+	rvm @{ruby.version} do bundle exec rake gitlab:backup:create RAILS_ENV=production >> "$LOG_FILE" 2>&1
 	echo >> "$LOG_FILE"
 )
 fi
