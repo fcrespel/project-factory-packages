@@ -37,7 +37,7 @@ build_packages_centos7:
     variables:
       - $BUILD_CENTOS7 == 'true'
   script:
-    - ./mvnw -fae ${MAVEN_CLI_OPTS} ${MAVEN_GOALS} -Dproperties.product.groupId=${PRODUCT_GROUPID} -Dproperties.product.artifactId=${PRODUCT_ARTIFACTID} -Dproperties.product.version=${PRODUCT_VERSION} -Dproperties.product.file=${PRODUCT_FILE} -Dproperties.system.file=system-el7-x86_64.properties -P !deb
+    - /bin/bash -l -c "./mvnw -fae ${MAVEN_CLI_OPTS} ${MAVEN_GOALS} -Dproperties.product.groupId=${PRODUCT_GROUPID} -Dproperties.product.artifactId=${PRODUCT_ARTIFACTID} -Dproperties.product.version=${PRODUCT_VERSION} -Dproperties.product.file=${PRODUCT_FILE} -Dproperties.system.file=system-el7-x86_64.properties -P !deb"
 
 build_packages_debian9:
   stage: build_packages
@@ -46,7 +46,7 @@ build_packages_debian9:
     variables:
       - $BUILD_DEBIAN9 == 'true'
   script:
-    - ./mvnw -fae ${MAVEN_CLI_OPTS} ${MAVEN_GOALS} -Dproperties.product.groupId=${PRODUCT_GROUPID} -Dproperties.product.artifactId=${PRODUCT_ARTIFACTID} -Dproperties.product.version=${PRODUCT_VERSION} -Dproperties.product.file=${PRODUCT_FILE} -Dproperties.system.file=system-debian9-amd64.properties -P !rpm
+    - /bin/bash -l -c "./mvnw -fae ${MAVEN_CLI_OPTS} ${MAVEN_GOALS} -Dproperties.product.groupId=${PRODUCT_GROUPID} -Dproperties.product.artifactId=${PRODUCT_ARTIFACTID} -Dproperties.product.version=${PRODUCT_VERSION} -Dproperties.product.file=${PRODUCT_FILE} -Dproperties.system.file=system-debian9-amd64.properties -P !rpm"
 
 build_packages_opensuse423:
   stage: build_packages
@@ -55,7 +55,7 @@ build_packages_opensuse423:
     variables:
       - $BUILD_OPENSUSE423 == 'true'
   script:
-    - ./mvnw -fae ${MAVEN_CLI_OPTS} ${MAVEN_GOALS} -Dproperties.product.groupId=${PRODUCT_GROUPID} -Dproperties.product.artifactId=${PRODUCT_ARTIFACTID} -Dproperties.product.version=${PRODUCT_VERSION} -Dproperties.product.file=${PRODUCT_FILE} -Dproperties.system.file=system-opensuse423-x86_64.properties -P !deb
+    - /bin/bash -l -c "./mvnw -fae ${MAVEN_CLI_OPTS} ${MAVEN_GOALS} -Dproperties.product.groupId=${PRODUCT_GROUPID} -Dproperties.product.artifactId=${PRODUCT_ARTIFACTID} -Dproperties.product.version=${PRODUCT_VERSION} -Dproperties.product.file=${PRODUCT_FILE} -Dproperties.system.file=system-opensuse423-x86_64.properties -P !deb"
 
 build_packages_ubuntu1604:
   stage: build_packages
@@ -64,4 +64,4 @@ build_packages_ubuntu1604:
     variables:
       - $BUILD_UBUNTU1604 == 'true'
   script:
-    - ./mvnw -fae ${MAVEN_CLI_OPTS} ${MAVEN_GOALS} -Dproperties.product.groupId=${PRODUCT_GROUPID} -Dproperties.product.artifactId=${PRODUCT_ARTIFACTID} -Dproperties.product.version=${PRODUCT_VERSION} -Dproperties.product.file=${PRODUCT_FILE} -Dproperties.system.file=system-ubuntu1604-amd64.properties -P !rpm
+    - /bin/bash -l -c "./mvnw -fae ${MAVEN_CLI_OPTS} ${MAVEN_GOALS} -Dproperties.product.groupId=${PRODUCT_GROUPID} -Dproperties.product.artifactId=${PRODUCT_ARTIFACTID} -Dproperties.product.version=${PRODUCT_VERSION} -Dproperties.product.file=${PRODUCT_FILE} -Dproperties.system.file=system-ubuntu1604-amd64.properties -P !rpm"
