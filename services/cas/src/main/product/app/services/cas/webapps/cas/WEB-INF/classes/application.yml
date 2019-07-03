@@ -160,7 +160,7 @@ cas:
         accounting-port: @{cas.radius.auth.accountingPort}
         authentication-port: @{cas.radius.auth.authenticationPort}
         inet-address: '@{cas.radius.auth.server}'
-        shared-secret: '@{cas.radius.auth.secret}'
+        shared-secret: '%{CAS_RADIUS_AUTH_SECRET}'
         socket-timeout: 10
       server:
         protocol: @{cas.radius.auth.protocol}
