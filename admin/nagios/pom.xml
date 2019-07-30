@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>nagios</artifactId>
-	<version>3.5.1-6</version>
+	<version>3.5.1-7</version>
 	<packaging>pom</packaging>
 
 	<name>Project Factory Admin - Nagios</name>

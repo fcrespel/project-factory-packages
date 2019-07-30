@@ -4,8 +4,11 @@ storevar NAGIOS_CMD "@{package.data}/cmd/nagios.cmd"
 # Create sudoers config
 SUDOERS_FILE="@{system.sudo.data}/@{product.id}"
 [ -e "$SUDOERS_FILE" ] || touch "$SUDOERS_FILE"
-if ! grep -q "Defaults:@{package.user}" "$SUDOERS_FILE"; then
+if ! grep -q "Defaults:@{package.user} !requiretty" "$SUDOERS_FILE"; then
 	echo "Defaults:@{package.user} !requiretty" >> "$SUDOERS_FILE"
+fi
+if ! grep -q "Defaults:@{package.user} env_keep" "$SUDOERS_FILE"; then
+	echo "Defaults:@{package.user} env_keep+=\"http_proxy https_proxy no_proxy\"" >> "$SUDOERS_FILE"
 fi
 
 # Allow executing the check_updates plugin as root
